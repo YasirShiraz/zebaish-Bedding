@@ -1,8 +1,65 @@
 @import "tailwindcss";
 
+/* Light Theme - Kidilio Brand Colors (Solid Only - No Gradients) */
+:root[data-theme="light"] {
+  --background: #ffffff;
+  --foreground: #1e293b;
+  /* Primary Brand Color - Deep Blue (from logo main text) */
+  --primary: #1e40af;
+  --primary-hover: #1e3a8a;
+  /* Secondary Brand Color - Light Blue (from logo first dot) */
+  --secondary: #3b82f6;
+  /* Accent Color - Orange (from logo second dot) */
+  --accent: #f97316;
+  --card-bg: #f8fafc;
+  --card-hover: #f1f5f9;
+  --border: #e2e8f0;
+  --text-primary: #1e293b;
+  --text-secondary: #475569;
+  --text-muted: #64748b;
+  --shadow-sm: 0 1px 2px 0 rgba(30, 64, 175, 0.05);
+  --shadow-md: 0 4px 6px -1px rgba(30, 64, 175, 0.1), 0 2px 4px -1px rgba(30, 64, 175, 0.06);
+  --shadow-lg: 0 10px 15px -3px rgba(30, 64, 175, 0.1), 0 4px 6px -2px rgba(30, 64, 175, 0.05);
+  --shadow-xl: 0 20px 25px -5px rgba(30, 64, 175, 0.1), 0 10px 10px -5px rgba(30, 64, 175, 0.04);
+}
+
+/* Dark Theme - Kidilio Brand Colors (Solid Only - No Gradients) */
+:root[data-theme="dark"] {
+  --background: #0a0a0f;
+  --foreground: #ededed;
+  /* Primary Brand Color - Deep Blue (lighter for dark mode contrast) */
+  --primary: #3b82f6;
+  --primary-hover: #60a5fa;
+  /* Secondary Brand Color - Light Blue */
+  --secondary: #3b82f6;
+  /* Accent Color - Orange (lighter for dark mode contrast) */
+  --accent: #fb923c;
+  --card-bg: #1a1a24;
+  --card-hover: #252535;
+  --border: #2d2d3a;
+  --text-primary: #f1f5f9;
+  --text-secondary: #cbd5e1;
+  --text-muted: #94a3b8;
+  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.3);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.4), 0 2px 4px -1px rgba(0, 0, 0, 0.3);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.5), 0 4px 6px -2px rgba(0, 0, 0, 0.4);
+  --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.6), 0 10px 10px -5px rgba(0, 0, 0, 0.5);
+}
+
+/* Default to light theme if no data-theme attribute */
 :root {
   --background: #ffffff;
-  --foreground: #171717;
+  --foreground: #1e293b;
+  --primary: #1e40af;
+  --primary-hover: #1e3a8a;
+  --secondary: #3b82f6;
+  --accent: #f97316;
+  --card-bg: #f8fafc;
+  --card-hover: #f1f5f9;
+  --border: #e2e8f0;
+  --text-primary: #1e293b;
+  --text-secondary: #475569;
+  --text-muted: #64748b;
 }
 
 @theme inline {
@@ -12,15 +69,256 @@
   --font-mono: var(--font-geist-mono);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
-}
+/* Tailwind dark mode configuration */
+@variant dark (&:where([data-theme="dark"], [data-theme="dark"] *));
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-sans), Arial, Helvetica, sans-serif;
+}
+
+/* Smooth scrolling */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+:root[data-theme="light"] ::-webkit-scrollbar-track {
+  background: #f1f5f9;
+}
+
+:root[data-theme="light"] ::-webkit-scrollbar-thumb {
+  background: var(--primary);
+  border-radius: 5px;
+}
+
+:root[data-theme="light"] ::-webkit-scrollbar-thumb:hover {
+  background: var(--primary-hover);
+}
+
+:root[data-theme="dark"] ::-webkit-scrollbar-track {
+  background: #1a1a24;
+}
+
+:root[data-theme="dark"] ::-webkit-scrollbar-thumb {
+  background: var(--primary);
+  border-radius: 5px;
+}
+
+:root[data-theme="dark"] ::-webkit-scrollbar-thumb:hover {
+  background: var(--primary-hover);
+}
+
+/* Focus styles */
+:root[data-theme="light"] *:focus-visible {
+  outline: 2px solid var(--primary);
+  outline-offset: 2px;
+  box-shadow: 0 0 0 4px rgba(30, 64, 175, 0.1);
+}
+
+:root[data-theme="dark"] *:focus-visible {
+  outline: 2px solid var(--primary);
+  outline-offset: 2px;
+  box-shadow: 0 0 0 4px rgba(96, 165, 250, 0.2);
+}
+
+/* Link transitions */
+a {
+  transition: color 0.2s ease-in-out;
+}
+
+/* Button hover effects */
+button {
+  transition: all 0.2s ease-in-out;
+}
+
+/* Fade in on scroll animations */
+.fade-in-on-scroll {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+}
+
+.fade-in-on-scroll.animate-in {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Fade in up animation */
+@keyframes fade-in-up {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-in-up {
+  animation: fade-in-up 0.8s ease-out forwards;
+}
+
+.animate-fade-in-up-delay {
+  animation: fade-in-up 0.8s ease-out 0.2s forwards;
+  opacity: 0;
+}
+
+.animate-fade-in-up-delay-2 {
+  animation: fade-in-up 0.8s ease-out 0.4s forwards;
+  opacity: 0;
+}
+
+/* Smooth transitions for all interactive elements */
+* {
+  transition-property: color, background-color, border-color, text-decoration-color, fill, stroke, opacity, box-shadow, transform, filter, backdrop-filter;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  transition-duration: 150ms;
+}
+
+/* Brand color utilities for light mode */
+[data-theme="light"] .bg-primary {
+  background: var(--primary);
+}
+
+[data-theme="light"] .bg-secondary {
+  background: var(--secondary);
+}
+
+[data-theme="light"] .bg-accent {
+  background: var(--accent);
+}
+
+[data-theme="light"] .text-primary {
+  color: var(--text-primary);
+}
+
+[data-theme="light"] .text-secondary {
+  color: var(--text-secondary);
+}
+
+[data-theme="light"] .text-muted {
+  color: var(--text-muted);
+}
+
+[data-theme="light"] .bg-card {
+  background: var(--card-bg);
+}
+
+[data-theme="light"] .bg-card-hover:hover {
+  background: var(--card-hover);
+}
+
+[data-theme="light"] .border-theme {
+  border-color: var(--border);
+}
+
+[data-theme="light"] .shadow-theme-sm {
+  box-shadow: var(--shadow-sm);
+}
+
+[data-theme="light"] .shadow-theme-md {
+  box-shadow: var(--shadow-md);
+}
+
+[data-theme="light"] .shadow-theme-lg {
+  box-shadow: var(--shadow-lg);
+}
+
+[data-theme="light"] .shadow-theme-xl {
+  box-shadow: var(--shadow-xl);
+}
+
+/* Brand color utilities for dark mode */
+[data-theme="dark"] .bg-primary {
+  background: var(--primary);
+}
+
+[data-theme="dark"] .bg-secondary {
+  background: var(--secondary);
+}
+
+[data-theme="dark"] .bg-accent {
+  background: var(--accent);
+}
+
+[data-theme="dark"] .text-primary {
+  color: var(--text-primary);
+}
+
+[data-theme="dark"] .text-secondary {
+  color: var(--text-secondary);
+}
+
+[data-theme="dark"] .text-muted {
+  color: var(--text-muted);
+}
+
+[data-theme="dark"] .bg-card {
+  background: var(--card-bg);
+}
+
+[data-theme="dark"] .bg-card-hover:hover {
+  background: var(--card-hover);
+}
+
+[data-theme="dark"] .border-theme {
+  border-color: var(--border);
+}
+
+[data-theme="dark"] .shadow-theme-sm {
+  box-shadow: var(--shadow-sm);
+}
+
+[data-theme="dark"] .shadow-theme-md {
+  box-shadow: var(--shadow-md);
+}
+
+[data-theme="dark"] .shadow-theme-lg {
+  box-shadow: var(--shadow-lg);
+}
+
+[data-theme="dark"] .shadow-theme-xl {
+  box-shadow: var(--shadow-xl);
+}
+
+/* Enhanced hover effects */
+.group:hover .group-hover\:scale-110 {
+  transform: scale(1.1);
+}
+
+/* Stagger animation delays */
+[style*="animation-delay"] {
+  animation-fill-mode: both;
+}
+
+/* Brand Color Utility Classes (Solid Colors Only) */
+.bg-brand-primary {
+  background: var(--primary);
+}
+
+.bg-brand-secondary {
+  background: var(--secondary);
+}
+
+.bg-brand-accent {
+  background: var(--accent);
+}
+
+.text-brand-primary {
+  color: var(--primary);
+}
+
+.text-brand-secondary {
+  color: var(--secondary);
+}
+
+.text-brand-accent {
+  color: var(--accent);
 }
