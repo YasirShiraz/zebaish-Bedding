@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 100">
+  <defs>
+    <linearGradient id="goldGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#C5A059;stop-opacity:1" />
+      <stop offset="50%" style="stop-color:#E6C888;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#C5A059;stop-opacity:1" />
+    </linearGradient>
+    <style>
+      @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&amp;family=Lato:wght@300&amp;display=swap');
+    </style>
+  </defs>
+  
+  <!-- Icon: Stylized Z with a leaf/feather accent -->
+  <g transform="translate(10, 10) scale(0.8)">
+     <path d="M10,10 L80,10 L20,90 L90,90" fill="none" stroke="url(#goldGradient)" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
+     <path d="M80,10 Q95,10 95,25 Q95,40 80,40" fill="none" stroke="url(#goldGradient)" stroke-width="4" opacity="0.8"/>
+  </g>
+
+  <!-- Text with currentColor to adapt to text color of parent -->
+  <text x="100" y="55" font-family="'Playfair Display', serif" font-weight="700" font-size="45" fill="currentColor">
+    ZEBAISH
+  </text>
+  <text x="105" y="85" font-family="'Lato', sans-serif" font-weight="300" font-size="20" letter-spacing="8" fill="currentColor" opacity="0.8">
+    CORNER
+  </text>
+</svg>

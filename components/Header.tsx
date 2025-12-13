@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { useState, useRef, useEffect } from "react";
 import ThemeSwitcher from "@/components/ThemeSwitcher";
 import Cart from "@/components/Cart";
@@ -17,7 +18,7 @@ export default function Header() {
   const [searchQuery, setSearchQuery] = useState("");
   const searchRef = useRef<HTMLDivElement>(null);
   const [mounted, setMounted] = useState(false);
-  
+
   useEffect(() => {
     setMounted(true);
   }, []);
@@ -47,11 +48,8 @@ export default function Header() {
   }, [isSearchOpen]);
 
   const navLinks = [
-    { href: "/", label: "Home" },
-    { href: "/about", label: "About" },
+    { href: "/", label: "Shop" },
     { href: "/products", label: "Products" },
-    { href: "/services", label: "Services" },
-    { href: "/blog", label: "Blog" },
     { href: "/contact", label: "Contact" },
   ];
 
@@ -60,19 +58,19 @@ export default function Header() {
       {/* Top Bar */}
       <div className="border-b border-gray-200 bg-gray-50 dark:border-gray-800 dark:bg-gray-900">
         <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-2 text-xs sm:px-6 lg:px-8">
-          <div className="flex items-center space-x-4">
+          <div className="flex items-center space-x-2 sm:space-x-4">
             <a
-              href="mailto:info@kidilo.cn"
-              className="text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white"
+              href="mailto:zebaishbedding@gmail.com"
+              className="hidden text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white sm:block"
             >
-              Email: info@kidilo.cn
+              Email: zebaishbedding@gmail.com
             </a>
             <span className="hidden text-gray-400 sm:inline">|</span>
             <a
-              href="tel:+8613548125510"
-              className="hidden text-gray-600 hover:text-gray-900 sm:block dark:text-gray-400 dark:hover:text-white"
+              href="tel:+923453177990"
+              className="text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white"
             >
-              WhatsApp/WeChat/Phone: +86 135 4812 5510
+              <span className="hidden sm:inline">Order Hotline: </span>+92 345 3177990
             </a>
           </div>
           <div className="flex items-center space-x-4">
@@ -104,11 +102,16 @@ export default function Header() {
       <nav className="mx-auto flex max-w-7xl items-center justify-between px-4 py-4 sm:px-6 lg:px-8">
         <Link
           href="/"
-          className="flex items-center space-x-2 transition-transform "
+          className="flex items-center space-x-2 transition-transform hover:scale-105"
         >
-          <span className="text-2xl font-bold text-gray-900 dark:text-white">
-            <img src="/images/logo.webp" alt="logo" className="w-26" />
-          </span>
+          <Image
+            src="/images/logo-text.svg"
+            alt="Zebaish Corner"
+            width={160}
+            height={60}
+            className="h-12 w-auto sm:h-14"
+            priority
+          />
         </Link>
 
         {/* Desktop Navigation */}
@@ -128,7 +131,7 @@ export default function Header() {
         <div className="flex items-center space-x-4">
           {/* Theme Switcher */}
           <ThemeSwitcher />
-          
+
           {/* Search Icon */}
           <button
             onClick={() => setIsSearchOpen(!isSearchOpen)}
@@ -260,18 +263,50 @@ export default function Header() {
                 {link.label}
               </Link>
             ))}
+
+            {/* Login/Signup Button - Mobile Only */}
+            <div className="mt-4 space-y-2">
+              {mounted && isAuthenticated ? (
+                <Link
+                  href="/profile"
+                  className="block rounded-lg bg-black px-4 py-3 text-center text-sm font-semibold text-white hover:bg-gray-800 dark:bg-white dark:text-black dark:hover:bg-gray-200"
+                  onClick={() => setIsMenuOpen(false)}
+                >
+                  My Account
+                </Link>
+              ) : (
+                <div className="flex gap-2">
+                  <Link
+                    href="/login"
+                    className="flex-1 rounded-lg border border-gray-300 px-4 py-3 text-center text-sm font-semibold text-gray-900 hover:bg-gray-50 dark:border-gray-700 dark:text-white dark:hover:bg-gray-800"
+                    onClick={() => setIsMenuOpen(false)}
+                  >
+                    Login
+                  </Link>
+                  <Link
+                    href="/signup"
+                    className="flex-1 rounded-lg bg-black px-4 py-3 text-center text-sm font-semibold text-white hover:bg-gray-800 dark:bg-white dark:text-black dark:hover:bg-gray-200"
+                    onClick={() => setIsMenuOpen(false)}
+                  >
+                    Sign Up
+                  </Link>
+                </div>
+              )}
+            </div>
+
             <div className="mt-4 space-y-2 border-t border-gray-200 pt-4 dark:border-gray-800">
               <a
-                href="mailto:info@kidilo.cn"
-                className="block px-3 py-2 text-sm text-gray-600 dark:text-gray-400"
+                href="mailto:zebaishbedding@gmail.com"
+                className="text-xs hover:text-gray-200 transition-colors"
+                aria-label="Email us at zebaishbedding@gmail.com"
               >
-                info@kidilo.cn
+                zebaishbedding@gmail.com
               </a>
               <a
-                href="tel:+8613548125510"
+                href="tel:+923453177990"
                 className="block px-3 py-2 text-sm text-gray-600 dark:text-gray-400"
               >
-                +86 135 4812 5510
+                +92 345 3177990
               </a>
             </div>
           </div>

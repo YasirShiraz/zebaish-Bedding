@@ -4,72 +4,67 @@ import Image from "next/image";
 export default function Blog() {
   const blogPosts = [
     {
-      title: "Introduction: Best Newborn Stroller – The Ultimate Guide",
+      title: "The Ultimate Guide to Choosing the Right Duvet for Every Season",
       excerpt:
-        "The best newborn stroller is an essential item for parents. Discover what makes a stroller perfect for your newborn baby.",
-      date: "2024-01-15",
-      category: "Product Guide",
-      link: "/blog/best-newborn-stroller-guide",
-      image: "/images/003_2025 Stylish Stroller High-fashion Design Foldable Traveling Pushchair With Shoc.webp",
+        "Struggling to find the perfect duvet? Discover how to choose the right tog rating and material for year-round comfort.",
+      date: "2024-02-15",
+      category: "Buying Guide",
+      link: "/blog/choosing-right-duvet",
+      image: "/images/bedding/new/duvet_01.png",
     },
     {
-      title:
-        "Kidilo: Your Trusted Partner for Premium Baby Gear, Including Top-Quality Kidilo Stroller",
+      title: "Why Thread Count Matters: Decoding Bed Sheet Quality",
       excerpt:
-        "When it comes to reliable and safe baby products, Kidilo stands out as a leading manufacturer. Learn about our premium stroller collection.",
-      date: "2024-01-10",
-      category: "Company News",
-      link: "/blog/kidilo-premium-baby-gear",
-      image: "/images/004_Kidilo H2D 2-in-1 Convertible Cribs and Strollers Flat Padded Sleep Surface Bed .webp",
+        "Is higher thread count always better? We debunk common myths and explain what really makes sheets soft and durable.",
+      date: "2024-02-10",
+      category: "Fabric Care",
+      link: "/blog/thread-count-guide",
+      image: "/images/bedding/new/sheet_01.png",
     },
     {
-      title:
-        "Kidilo Launches New Baby Walkers to Support Safe First Steps",
+      title: "5 Tips for Creating a Relaxing Bedroom Sanctuary",
       excerpt:
-        "Kidilo, a leading Baby Carriage Chinese manufacturer and trusted brand, announces the launch of new baby walkers designed to support safe first steps.",
-      date: "2024-01-05",
-      category: "Product Launch",
-      link: "/blog/new-baby-walkers-launch",
-      image: "/images/008_3-in-1 Stroller with Car Seat Global Standards Safety Baby Carriage With Univers.webp",
+        "Transform your bedroom into a stress-free haven with these simple interior design and bedding tips.",
+      date: "2024-01-25",
+      category: "Interior Design",
+      link: "/blog/bedroom-sanctuary-tips",
+      image: "/images/zebaish1 (1).jpg",
     },
     {
-      title:
-        "Baby Crib Market Sees New Growth: Eco-Friendly and Multi-Functional Designs Take the Spotlight",
+      title: "The Benefits of Silk vs. Cotton Pillowcases",
       excerpt:
-        "With the growing popularity of 'refined parenting,' the baby crib market is experiencing new growth trends focusing on eco-friendly and multi-functional designs.",
-      date: "2023-12-20",
-      category: "Market Insights",
-      link: "/blog/baby-crib-market-growth",
-      image: "/images/015_3-in-1 Foldable Crib Stroller Lightweight Aluminum Alloy Frame Newborn Bassinet .webp",
+        "Which is better for your skin and hair? We compare the two most popular pillowcase materials.",
+      date: "2024-01-12",
+      category: "Wellness",
+      link: "/blog/silk-vs-cotton-pillowcases",
+      image: "/images/bedding/new/pillow_01.jpg",
     },
   ];
 
   return (
     <div className="bg-white dark:bg-black">
       {/* Hero Section */}
-     <section className="relative h-[400px] overflow-hidden">
-               <div className="absolute inset-0">
-                 <Image
-                   src="/images/kidilo-building.jpg.webp"
-                   alt="Kidilo Building"
-                   fill
-                   className="object-cover blur-sm"
-                 />
-                 <div className="absolute inset-0 bg-black/50"></div>
-               </div>
-               <div className="relative mx-auto flex h-full max-w-7xl items-center px-4 sm:px-6 lg:px-8">
-                 <div>
-                   <h1 className="text-5xl font-bold text-white sm:text-6xl lg:text-7xl">
-                   Latest News & Insights
-                   </h1>
-                   <p className="mt-4 text-xl text-white sm:text-2xl">
-                    Stay updated with the latest news from our factory and the global
-        baby products <br /> industry. From new product launches to market
-        insights and safety standards
-                   </p>
-                 </div>
-               </div>
-             </section>
+      <section className="relative h-[400px] overflow-hidden">
+        <div className="absolute inset-0">
+          <Image
+            src="/images/zebaish2.jpg"
+            alt="Zebaish Blog - Sleep & Comfort"
+            fill
+            className="object-cover blur-sm"
+          />
+          <div className="absolute inset-0 bg-black/50"></div>
+        </div>
+        <div className="relative mx-auto flex h-full max-w-7xl items-center px-4 sm:px-6 lg:px-8">
+          <div>
+            <h1 className="text-5xl font-bold text-white sm:text-6xl lg:text-7xl font-serif">
+              Sleep & Style Journal
+            </h1>
+            <p className="mt-4 text-xl text-white sm:text-2xl">
+              Expert advice on bedding care, bedroom styling, <br /> and achieving the perfect night's sleep.
+            </p>
+          </div>
+        </div>
+      </section>
 
 
       {/* Blog Posts */}
@@ -101,12 +96,12 @@ export default function Blog() {
                       day: "numeric",
                     })}
                   </time>
-                  <span className="rounded-full bg-gray-200 px-3 py-1 text-xs font-semibold text-gray-600 dark:bg-gray-800 dark:text-gray-400">
+                  <span className="rounded-full bg-blue-100 px-3 py-1 text-xs font-semibold text-blue-800 dark:bg-blue-900 dark:text-blue-200">
                     {post.category}
                   </span>
                 </div>
                 <div className="mt-4 flex-grow">
-                  <h2 className="text-xl font-semibold text-gray-900 dark:text-white">
+                  <h2 className="text-xl font-semibold text-gray-900 dark:text-white group-hover:text-blue-600 transition-colors font-serif">
                     <Link href={post.link}>
                       <span className="absolute inset-0" />
                       {post.title}
@@ -134,12 +129,11 @@ export default function Blog() {
       <section className="bg-gray-50 py-16 dark:bg-gray-900">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="mx-auto max-w-2xl text-center">
-            <h2 className="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl dark:text-white">
-              Stay Updated
+            <h2 className="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl dark:text-white font-serif">
+              Join Our Community
             </h2>
             <p className="mt-4 text-lg leading-8 text-gray-600 dark:text-gray-400">
-              Subscribe to our newsletter to receive the latest updates and
-              insights.
+              Subscribe to get exclusive offers, care tips, and new collection alerts.
             </p>
             <form className="mt-8 flex gap-x-4">
               <label htmlFor="email-address" className="sr-only">
@@ -167,4 +161,3 @@ export default function Blog() {
     </div>
   );
 }
-

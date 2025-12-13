@@ -2,52 +2,46 @@
 
 import Link from "next/link";
 import Image from "next/image";
-import { getProductImage, getProductSlug } from "@/lib/products";
+import { allCollections } from "@/lib/products";
 
 interface SearchResultsProps {
   query: string;
   onClose: () => void;
 }
 
-// Product data for search
-const allProducts = [
-  { name: "H2D+C Baby Stroller", code: "H2D+C", category: "Baby Strollers", link: "/products/stroller-h2dc" },
-  { name: "A10 Baby Stroller", code: "A10", category: "Baby Strollers", link: "/products/stroller-a10" },
-  { name: "KBH311 Baby Car Seat", code: "KBH311", category: "Baby Car Seats", link: "/products/car-seat-kbh311" },
-  { name: "C002 Baby Car Seat", code: "C002", category: "Baby Car Seats", link: "/products/car-seat-c002" },
-  { name: "UP650X Baby Crib", code: "UP650X", category: "Baby Cribs", link: "/products/crib-up650x" },
-  { name: "AP9405 Baby Crib", code: "AP9405", category: "Baby Cribs", link: "/products/crib-ap9405" },
-  { name: "DC02 Baby High Chair", code: "DC02", category: "Baby High Chairs", link: "/products/high-chair-dc02" },
-  { name: "TY-02 Baby High Chair", code: "TY-02", category: "Baby High Chairs", link: "/products/high-chair-ty02" },
-  { name: "TY01 Swing Chair", code: "TY01", category: "Baby Gear", link: "/products/swing-ty01" },
-  { name: "X177 Learning Walker", code: "X177", category: "Baby Gear", link: "/products/walker-x177" },
-];
+// Use centralized product data for search
+const allProducts = allCollections.map((product) => ({
+  name: product.name,
+  code: product.code,
+  category: product.category,
+  link: product.link,
+}));
 
-// Blog posts data for search
+// Blog posts data for search  
 const blogPosts = [
   {
-    title: "Introduction: Best Newborn Stroller – The Ultimate Guide",
-    excerpt: "The best newborn stroller is an essential item for parents. Discover what makes a stroller perfect for your newborn baby.",
-    category: "Product Guide",
-    link: "/blog/best-newborn-stroller-guide",
+    title: "Choosing the Perfect Thread Count: A Guide",
+    excerpt: "Understanding thread count is key to finding the perfect sheets. Learn what matters most for your comfort.",
+    category: "Fabric Guide",
+    link: "/blog/thread-count-guide",
   },
   {
-    title: "Kidilo: Your Trusted Partner for Premium Baby Gear, Including Top-Quality Kidilo Stroller",
-    excerpt: "When it comes to reliable and safe baby products, Kidilo stands out as a leading manufacturer. Learn about our premium stroller collection.",
-    category: "Company News",
-    link: "/blog/kidilo-premium-baby-gear",
+    title: "Bridal Bedding Trends for 2024",
+    excerpt: "From royal velvets to subtle embroidery, discover the trends defining elegant bridal bedrooms this year.",
+    category: "Trends",
+    link: "/blog/bridal-trends-2024",
   },
   {
-    title: "Kidilo Launches New Baby Walkers to Support Safe First Steps",
-    excerpt: "Kidilo, a leading Baby Carriage Chinese manufacturer and trusted brand, announces the launch of new baby walkers designed to support safe first steps.",
-    category: "Product Launch",
-    link: "/blog/new-baby-walkers-launch",
+    title: "Why Bamboo Pillows Are a Game Changer",
+    excerpt: "Discover the cooling and hypoallergenic benefits of bamboo memory foam pillows for a better night's sleep.",
+    category: "Sleep Health",
+    link: "/blog/bamboo-pillow-benefits",
   },
   {
-    title: "Baby Crib Market Sees New Growth: Eco-Friendly and Multi-Functional Designs Take the Spotlight",
-    excerpt: "With the growing popularity of 'refined parenting,' the baby crib market is experiencing new growth trends focusing on eco-friendly and multi-functional designs.",
-    category: "Market Insights",
-    link: "/blog/baby-crib-market-growth",
+    title: "Caring for Your Luxury Duvets",
+    excerpt: "Extend the life of your premium bedding with these simple care and washing tips.",
+    category: "Care Tips",
+    link: "/blog/bedding-care-tips",
   },
 ];
 
@@ -97,7 +91,7 @@ export default function SearchResults({ query, onClose }: SearchResultsProps) {
             No results found
           </p>
           <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">
-            Try searching for products or blog posts
+            Try searching for bedding products or blog posts
           </p>
         </div>
       </div>
@@ -114,7 +108,8 @@ export default function SearchResults({ query, onClose }: SearchResultsProps) {
           </h3>
           <div className="space-y-2">
             {productResults.map((product) => {
-              const productImage = getProductImage(product.code);
+              const fullProduct = allCollections.find((p) => p.code === product.code);
+              const productImage = fullProduct?.image || "/images/bedding/new/hero_new_1.png";
               return (
                 <Link
                   key={product.code}
@@ -202,4 +197,3 @@ export default function SearchResults({ query, onClose }: SearchResultsProps) {
     </div>
   );
 }
-

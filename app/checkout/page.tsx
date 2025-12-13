@@ -137,23 +137,23 @@ export default function Checkout() {
         },
         billing: formData.sameAsShipping
           ? {
-              firstName: formData.firstName,
-              lastName: formData.lastName,
-              address: formData.address,
-              city: formData.city,
-              state: formData.state,
-              zipCode: formData.zipCode,
-              country: formData.country,
-            }
+            firstName: formData.firstName,
+            lastName: formData.lastName,
+            address: formData.address,
+            city: formData.city,
+            state: formData.state,
+            zipCode: formData.zipCode,
+            country: formData.country,
+          }
           : {
-              firstName: formData.billingFirstName,
-              lastName: formData.billingLastName,
-              address: formData.billingAddress,
-              city: formData.billingCity,
-              state: formData.billingState,
-              zipCode: formData.billingZipCode,
-              country: formData.billingCountry,
-            },
+            firstName: formData.billingFirstName,
+            lastName: formData.billingLastName,
+            address: formData.billingAddress,
+            city: formData.billingCity,
+            state: formData.billingState,
+            zipCode: formData.billingZipCode,
+            country: formData.billingCountry,
+          },
         paymentMethod: formData.paymentMethod,
         notes: formData.notes,
         total: getTotalPrice(),
@@ -239,11 +239,10 @@ export default function Checkout() {
                       name="firstName"
                       value={formData.firstName}
                       onChange={handleChange}
-                      className={`w-full rounded-lg border ${
-                        errors.firstName
+                      className={`w-full rounded-lg border ${errors.firstName
                           ? "border-red-500"
                           : "border-gray-300 dark:border-gray-700"
-                      } bg-white dark:bg-gray-800 px-4 py-2 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-purple-500`}
+                        } bg-white dark:bg-gray-800 px-4 py-2 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-purple-500`}
                       required
                     />
                     {errors.firstName && (
@@ -259,11 +258,10 @@ export default function Checkout() {
                       name="lastName"
                       value={formData.lastName}
                       onChange={handleChange}
-                      className={`w-full rounded-lg border ${
-                        errors.lastName
+                      className={`w-full rounded-lg border ${errors.lastName
                           ? "border-red-500"
                           : "border-gray-300 dark:border-gray-700"
-                      } bg-white dark:bg-gray-800 px-4 py-2 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-purple-500`}
+                        } bg-white dark:bg-gray-800 px-4 py-2 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-purple-500`}
                       required
                     />
                     {errors.lastName && (
@@ -279,11 +277,10 @@ export default function Checkout() {
                       name="email"
                       value={formData.email}
                       onChange={handleChange}
-                      className={`w-full rounded-lg border ${
-                        errors.email
+                      className={`w-full rounded-lg border ${errors.email
                           ? "border-red-500"
                           : "border-gray-300 dark:border-gray-700"
-                      } bg-white dark:bg-gray-800 px-4 py-2 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-purple-500`}
+                        } bg-white dark:bg-gray-800 px-4 py-2 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-purple-500`}
                       required
                     />
                     {errors.email && (
@@ -299,11 +296,10 @@ export default function Checkout() {
                       name="phone"
                       value={formData.phone}
                       onChange={handleChange}
-                      className={`w-full rounded-lg border ${
-                        errors.phone
+                      className={`w-full rounded-lg border ${errors.phone
                           ? "border-red-500"
                           : "border-gray-300 dark:border-gray-700"
-                      } bg-white dark:bg-gray-800 px-4 py-2 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-purple-500`}
+                        } bg-white dark:bg-gray-800 px-4 py-2 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-purple-500`}
                       required
                     />
                     {errors.phone && (
@@ -319,11 +315,10 @@ export default function Checkout() {
                       name="address"
                       value={formData.address}
                       onChange={handleChange}
-                      className={`w-full rounded-lg border ${
-                        errors.address
+                      className={`w-full rounded-lg border ${errors.address
                           ? "border-red-500"
                           : "border-gray-300 dark:border-gray-700"
-                      } bg-white dark:bg-gray-800 px-4 py-2 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-purple-500`}
+                        } bg-white dark:bg-gray-800 px-4 py-2 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-purple-500`}
                       required
                     />
                     {errors.address && (
@@ -339,11 +334,10 @@ export default function Checkout() {
                       name="city"
                       value={formData.city}
                       onChange={handleChange}
-                      className={`w-full rounded-lg border ${
-                        errors.city
+                      className={`w-full rounded-lg border ${errors.city
                           ? "border-red-500"
                           : "border-gray-300 dark:border-gray-700"
-                      } bg-white dark:bg-gray-800 px-4 py-2 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-purple-500`}
+                        } bg-white dark:bg-gray-800 px-4 py-2 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-purple-500`}
                       required
                     />
                     {errors.city && (
@@ -359,11 +353,10 @@ export default function Checkout() {
                       name="state"
                       value={formData.state}
                       onChange={handleChange}
-                      className={`w-full rounded-lg border ${
-                        errors.state
+                      className={`w-full rounded-lg border ${errors.state
                           ? "border-red-500"
                           : "border-gray-300 dark:border-gray-700"
-                      } bg-white dark:bg-gray-800 px-4 py-2 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-purple-500`}
+                        } bg-white dark:bg-gray-800 px-4 py-2 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-purple-500`}
                       required
                     />
                     {errors.state && (
@@ -379,11 +372,10 @@ export default function Checkout() {
                       name="zipCode"
                       value={formData.zipCode}
                       onChange={handleChange}
-                      className={`w-full rounded-lg border ${
-                        errors.zipCode
+                      className={`w-full rounded-lg border ${errors.zipCode
                           ? "border-red-500"
                           : "border-gray-300 dark:border-gray-700"
-                      } bg-white dark:bg-gray-800 px-4 py-2 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-purple-500`}
+                        } bg-white dark:bg-gray-800 px-4 py-2 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-purple-500`}
                       required
                     />
                     {errors.zipCode && (
@@ -399,11 +391,10 @@ export default function Checkout() {
                       name="country"
                       value={formData.country}
                       onChange={handleChange}
-                      className={`w-full rounded-lg border ${
-                        errors.country
+                      className={`w-full rounded-lg border ${errors.country
                           ? "border-red-500"
                           : "border-gray-300 dark:border-gray-700"
-                      } bg-white dark:bg-gray-800 px-4 py-2 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-purple-500`}
+                        } bg-white dark:bg-gray-800 px-4 py-2 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-purple-500`}
                       required
                     />
                     {errors.country && (
@@ -447,11 +438,10 @@ export default function Checkout() {
                           name="billingFirstName"
                           value={formData.billingFirstName}
                           onChange={handleChange}
-                          className={`w-full rounded-lg border ${
-                            errors.billingFirstName
+                          className={`w-full rounded-lg border ${errors.billingFirstName
                               ? "border-red-500"
                               : "border-gray-300 dark:border-gray-700"
-                          } bg-white dark:bg-gray-800 px-4 py-2 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-purple-500`}
+                            } bg-white dark:bg-gray-800 px-4 py-2 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-purple-500`}
                         />
                         {errors.billingFirstName && (
                           <p className="mt-1 text-sm text-red-600">
@@ -468,11 +458,10 @@ export default function Checkout() {
                           name="billingLastName"
                           value={formData.billingLastName}
                           onChange={handleChange}
-                          className={`w-full rounded-lg border ${
-                            errors.billingLastName
+                          className={`w-full rounded-lg border ${errors.billingLastName
                               ? "border-red-500"
                               : "border-gray-300 dark:border-gray-700"
-                          } bg-white dark:bg-gray-800 px-4 py-2 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-purple-500`}
+                            } bg-white dark:bg-gray-800 px-4 py-2 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-purple-500`}
                         />
                         {errors.billingLastName && (
                           <p className="mt-1 text-sm text-red-600">
@@ -489,11 +478,10 @@ export default function Checkout() {
                           name="billingAddress"
                           value={formData.billingAddress}
                           onChange={handleChange}
-                          className={`w-full rounded-lg border ${
-                            errors.billingAddress
+                          className={`w-full rounded-lg border ${errors.billingAddress
                               ? "border-red-500"
                               : "border-gray-300 dark:border-gray-700"
-                          } bg-white dark:bg-gray-800 px-4 py-2 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-purple-500`}
+                            } bg-white dark:bg-gray-800 px-4 py-2 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-purple-500`}
                         />
                         {errors.billingAddress && (
                           <p className="mt-1 text-sm text-red-600">
@@ -510,11 +498,10 @@ export default function Checkout() {
                           name="billingCity"
                           value={formData.billingCity}
                           onChange={handleChange}
-                          className={`w-full rounded-lg border ${
-                            errors.billingCity
+                          className={`w-full rounded-lg border ${errors.billingCity
                               ? "border-red-500"
                               : "border-gray-300 dark:border-gray-700"
-                          } bg-white dark:bg-gray-800 px-4 py-2 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-purple-500`}
+                            } bg-white dark:bg-gray-800 px-4 py-2 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-purple-500`}
                         />
                         {errors.billingCity && (
                           <p className="mt-1 text-sm text-red-600">
@@ -531,11 +518,10 @@ export default function Checkout() {
                           name="billingState"
                           value={formData.billingState}
                           onChange={handleChange}
-                          className={`w-full rounded-lg border ${
-                            errors.billingState
+                          className={`w-full rounded-lg border ${errors.billingState
                               ? "border-red-500"
                               : "border-gray-300 dark:border-gray-700"
-                          } bg-white dark:bg-gray-800 px-4 py-2 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-purple-500`}
+                            } bg-white dark:bg-gray-800 px-4 py-2 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-purple-500`}
                         />
                         {errors.billingState && (
                           <p className="mt-1 text-sm text-red-600">
@@ -552,11 +538,10 @@ export default function Checkout() {
                           name="billingZipCode"
                           value={formData.billingZipCode}
                           onChange={handleChange}
-                          className={`w-full rounded-lg border ${
-                            errors.billingZipCode
+                          className={`w-full rounded-lg border ${errors.billingZipCode
                               ? "border-red-500"
                               : "border-gray-300 dark:border-gray-700"
-                          } bg-white dark:bg-gray-800 px-4 py-2 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-purple-500`}
+                            } bg-white dark:bg-gray-800 px-4 py-2 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-purple-500`}
                         />
                         {errors.billingZipCode && (
                           <p className="mt-1 text-sm text-red-600">
@@ -573,11 +558,10 @@ export default function Checkout() {
                           name="billingCountry"
                           value={formData.billingCountry}
                           onChange={handleChange}
-                          className={`w-full rounded-lg border ${
-                            errors.billingCountry
+                          className={`w-full rounded-lg border ${errors.billingCountry
                               ? "border-red-500"
                               : "border-gray-300 dark:border-gray-700"
-                          } bg-white dark:bg-gray-800 px-4 py-2 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-purple-500`}
+                            } bg-white dark:bg-gray-800 px-4 py-2 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-purple-500`}
                         />
                         {errors.billingCountry && (
                           <p className="mt-1 text-sm text-red-600">
