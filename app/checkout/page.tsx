@@ -31,7 +31,7 @@ export default function Checkout() {
     billingZipCode: "",
     billingCountry: "",
     // Payment Method
-    paymentMethod: "contact",
+    paymentMethod: "cod",
     // Additional Notes
     notes: "",
   });
@@ -240,8 +240,8 @@ export default function Checkout() {
                       value={formData.firstName}
                       onChange={handleChange}
                       className={`w-full rounded-lg border ${errors.firstName
-                          ? "border-red-500"
-                          : "border-gray-300 dark:border-gray-700"
+                        ? "border-red-500"
+                        : "border-gray-300 dark:border-gray-700"
                         } bg-white dark:bg-gray-800 px-4 py-2 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-purple-500`}
                       required
                     />
@@ -259,8 +259,8 @@ export default function Checkout() {
                       value={formData.lastName}
                       onChange={handleChange}
                       className={`w-full rounded-lg border ${errors.lastName
-                          ? "border-red-500"
-                          : "border-gray-300 dark:border-gray-700"
+                        ? "border-red-500"
+                        : "border-gray-300 dark:border-gray-700"
                         } bg-white dark:bg-gray-800 px-4 py-2 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-purple-500`}
                       required
                     />
@@ -278,8 +278,8 @@ export default function Checkout() {
                       value={formData.email}
                       onChange={handleChange}
                       className={`w-full rounded-lg border ${errors.email
-                          ? "border-red-500"
-                          : "border-gray-300 dark:border-gray-700"
+                        ? "border-red-500"
+                        : "border-gray-300 dark:border-gray-700"
                         } bg-white dark:bg-gray-800 px-4 py-2 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-purple-500`}
                       required
                     />
@@ -297,8 +297,8 @@ export default function Checkout() {
                       value={formData.phone}
                       onChange={handleChange}
                       className={`w-full rounded-lg border ${errors.phone
-                          ? "border-red-500"
-                          : "border-gray-300 dark:border-gray-700"
+                        ? "border-red-500"
+                        : "border-gray-300 dark:border-gray-700"
                         } bg-white dark:bg-gray-800 px-4 py-2 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-purple-500`}
                       required
                     />
@@ -316,8 +316,8 @@ export default function Checkout() {
                       value={formData.address}
                       onChange={handleChange}
                       className={`w-full rounded-lg border ${errors.address
-                          ? "border-red-500"
-                          : "border-gray-300 dark:border-gray-700"
+                        ? "border-red-500"
+                        : "border-gray-300 dark:border-gray-700"
                         } bg-white dark:bg-gray-800 px-4 py-2 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-purple-500`}
                       required
                     />
@@ -335,8 +335,8 @@ export default function Checkout() {
                       value={formData.city}
                       onChange={handleChange}
                       className={`w-full rounded-lg border ${errors.city
-                          ? "border-red-500"
-                          : "border-gray-300 dark:border-gray-700"
+                        ? "border-red-500"
+                        : "border-gray-300 dark:border-gray-700"
                         } bg-white dark:bg-gray-800 px-4 py-2 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-purple-500`}
                       required
                     />
@@ -354,8 +354,8 @@ export default function Checkout() {
                       value={formData.state}
                       onChange={handleChange}
                       className={`w-full rounded-lg border ${errors.state
-                          ? "border-red-500"
-                          : "border-gray-300 dark:border-gray-700"
+                        ? "border-red-500"
+                        : "border-gray-300 dark:border-gray-700"
                         } bg-white dark:bg-gray-800 px-4 py-2 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-purple-500`}
                       required
                     />
@@ -373,8 +373,8 @@ export default function Checkout() {
                       value={formData.zipCode}
                       onChange={handleChange}
                       className={`w-full rounded-lg border ${errors.zipCode
-                          ? "border-red-500"
-                          : "border-gray-300 dark:border-gray-700"
+                        ? "border-red-500"
+                        : "border-gray-300 dark:border-gray-700"
                         } bg-white dark:bg-gray-800 px-4 py-2 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-purple-500`}
                       required
                     />
@@ -392,8 +392,8 @@ export default function Checkout() {
                       value={formData.country}
                       onChange={handleChange}
                       className={`w-full rounded-lg border ${errors.country
-                          ? "border-red-500"
-                          : "border-gray-300 dark:border-gray-700"
+                        ? "border-red-500"
+                        : "border-gray-300 dark:border-gray-700"
                         } bg-white dark:bg-gray-800 px-4 py-2 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-purple-500`}
                       required
                     />
@@ -439,8 +439,8 @@ export default function Checkout() {
                           value={formData.billingFirstName}
                           onChange={handleChange}
                           className={`w-full rounded-lg border ${errors.billingFirstName
-                              ? "border-red-500"
-                              : "border-gray-300 dark:border-gray-700"
+                            ? "border-red-500"
+                            : "border-gray-300 dark:border-gray-700"
                             } bg-white dark:bg-gray-800 px-4 py-2 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-purple-500`}
                         />
                         {errors.billingFirstName && (
@@ -459,8 +459,8 @@ export default function Checkout() {
                           value={formData.billingLastName}
                           onChange={handleChange}
                           className={`w-full rounded-lg border ${errors.billingLastName
-                              ? "border-red-500"
-                              : "border-gray-300 dark:border-gray-700"
+                            ? "border-red-500"
+                            : "border-gray-300 dark:border-gray-700"
                             } bg-white dark:bg-gray-800 px-4 py-2 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-purple-500`}
                         />
                         {errors.billingLastName && (
@@ -479,8 +479,8 @@ export default function Checkout() {
                           value={formData.billingAddress}
                           onChange={handleChange}
                           className={`w-full rounded-lg border ${errors.billingAddress
-                              ? "border-red-500"
-                              : "border-gray-300 dark:border-gray-700"
+                            ? "border-red-500"
+                            : "border-gray-300 dark:border-gray-700"
                             } bg-white dark:bg-gray-800 px-4 py-2 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-purple-500`}
                         />
                         {errors.billingAddress && (
@@ -499,8 +499,8 @@ export default function Checkout() {
                           value={formData.billingCity}
                           onChange={handleChange}
                           className={`w-full rounded-lg border ${errors.billingCity
-                              ? "border-red-500"
-                              : "border-gray-300 dark:border-gray-700"
+                            ? "border-red-500"
+                            : "border-gray-300 dark:border-gray-700"
                             } bg-white dark:bg-gray-800 px-4 py-2 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-purple-500`}
                         />
                         {errors.billingCity && (
@@ -519,8 +519,8 @@ export default function Checkout() {
                           value={formData.billingState}
                           onChange={handleChange}
                           className={`w-full rounded-lg border ${errors.billingState
-                              ? "border-red-500"
-                              : "border-gray-300 dark:border-gray-700"
+                            ? "border-red-500"
+                            : "border-gray-300 dark:border-gray-700"
                             } bg-white dark:bg-gray-800 px-4 py-2 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-purple-500`}
                         />
                         {errors.billingState && (
@@ -539,8 +539,8 @@ export default function Checkout() {
                           value={formData.billingZipCode}
                           onChange={handleChange}
                           className={`w-full rounded-lg border ${errors.billingZipCode
-                              ? "border-red-500"
-                              : "border-gray-300 dark:border-gray-700"
+                            ? "border-red-500"
+                            : "border-gray-300 dark:border-gray-700"
                             } bg-white dark:bg-gray-800 px-4 py-2 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-purple-500`}
                         />
                         {errors.billingZipCode && (
@@ -559,8 +559,8 @@ export default function Checkout() {
                           value={formData.billingCountry}
                           onChange={handleChange}
                           className={`w-full rounded-lg border ${errors.billingCountry
-                              ? "border-red-500"
-                              : "border-gray-300 dark:border-gray-700"
+                            ? "border-red-500"
+                            : "border-gray-300 dark:border-gray-700"
                             } bg-white dark:bg-gray-800 px-4 py-2 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-purple-500`}
                         />
                         {errors.billingCountry && (
@@ -580,21 +580,21 @@ export default function Checkout() {
                   Payment Method
                 </h2>
                 <div className="space-y-4">
-                  <label className="flex items-center p-4 border border-gray-300 dark:border-gray-700 rounded-lg cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-800">
+                  <label className="flex items-center p-4 border-2 border-[var(--primary)] bg-purple-50 dark:bg-purple-900/10 dark:border-purple-500 rounded-lg cursor-pointer">
                     <input
                       type="radio"
                       name="paymentMethod"
-                      value="contact"
-                      checked={formData.paymentMethod === "contact"}
-                      onChange={handleChange}
+                      value="cod"
+                      checked={true}
+                      readOnly
                       className="h-4 w-4 text-purple-600 focus:ring-purple-500"
                     />
                     <div className="ml-3">
-                      <span className="text-sm font-medium text-gray-900 dark:text-white">
-                        Contact for Payment
+                      <span className="text-sm font-bold text-gray-900 dark:text-white">
+                        Cash on Delivery (COD)
                       </span>
                       <p className="text-xs text-gray-500 dark:text-gray-400">
-                        We will contact you for payment details
+                        Pay with cash upon delivery.
                       </p>
                     </div>
                   </label>
@@ -622,7 +622,7 @@ export default function Checkout() {
                   href="/products"
                   className="flex-1 rounded-lg border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 px-6 py-3 text-center text-base font-semibold text-gray-900 dark:text-white hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
                 >
-                  Continue Shopping
+                  Continue Homeping
                 </Link>
                 <button
                   type="submit"

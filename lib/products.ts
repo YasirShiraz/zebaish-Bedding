@@ -1251,7 +1251,7 @@ export const heroSlides = [
   {
     title: "Luxury Bedding Collection",
     description: "Experience the comfort of royalty with our premium cotton and velvet bedding sets.",
-    cta: "Shop Collection",
+    cta: "Home Collection",
     link: "/products",
     image: "/images/bedding/new/hero_new_1.png",
   },

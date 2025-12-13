@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 
-export default function ShopByDiscount() {
+export default function HomeByDiscount() {
     const discounts = [
         { label: "FLAT 50% OFF", link: "/products?discount=50" },
         { label: "FLAT 60% OFF", link: "/products?discount=60" },
@@ -14,7 +14,7 @@ export default function ShopByDiscount() {
         <section className="py-12 bg-gray-50 dark:bg-gray-900">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <h2 className="text-2xl md:text-3xl font-bold text-center text-gray-800 dark:text-white mb-8 uppercase tracking-wide">
-                    Shop By Discount
+                    Home By Discount
                 </h2>
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">

@@ -23,16 +23,16 @@ export default function CartIcon({ onClick }: { onClick: () => void }) {
     };
 
     updateCartCount();
-    
+
     // Listen for storage changes
     const handleStorageChange = () => {
       updateCartCount();
     };
-    
+
     window.addEventListener("storage", handleStorageChange);
     // Also check periodically for changes (in case of same-tab updates)
     const interval = setInterval(updateCartCount, 500);
-    
+
     return () => {
       window.removeEventListener("storage", handleStorageChange);
       clearInterval(interval);
@@ -42,7 +42,7 @@ export default function CartIcon({ onClick }: { onClick: () => void }) {
   return (
     <button
       onClick={onClick}
-      className="relative hidden rounded-full p-2 text-gray-600 transition-colors hover:bg-gray-100 hover:text-gray-900 dark:text-gray-400 dark:hover:bg-gray-800 dark:hover:text-white md:block"
+      className="relative rounded-full p-2 text-gray-600 transition-colors hover:bg-gray-100 hover:text-gray-900 dark:text-gray-400 dark:hover:bg-gray-800 dark:hover:text-white"
       aria-label="Cart"
     >
       <svg

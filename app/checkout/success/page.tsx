@@ -91,7 +91,7 @@ function CheckoutSuccessContent() {
                 href="/products"
                 className="inline-flex items-center rounded-lg bg-[var(--primary)] px-6 py-3 text-base font-semibold text-white shadow-sm hover:bg-[var(--primary-hover)] transition-colors"
               >
-                Continue Shopping
+                Continue Homeping
               </Link>
               <Link
                 href="/"

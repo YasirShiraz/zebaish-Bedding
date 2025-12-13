@@ -21,7 +21,7 @@ export default function Contact() {
       {/* Map Section */}
       <div className="w-full h-64 sm:h-80 lg:h-96 bg-gray-200 dark:bg-gray-800 relative">
         <iframe
-          src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3619.2976449891895!2d67.03558207537848!3d24.917826877903567!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3eb33f90157042d3%3A0x93b9b88a68db2b03!2sMohammadi%20Shopping%20Center!5e0!3m2!1sen!2s!4v1734036628157!5m2!1sen!2s"
+          src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3619.2976449891895!2d67.03558207537848!3d24.917826877903567!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3eb33f90157042d3%3A0x93b9b88a68db2b03!2sMohammadi%20Homeping%20Center!5e0!3m2!1sen!2s!4v1734036628157!5m2!1sen!2s"
           width="100%"
           height="100%"
           style={{ border: 0 }}
@@ -65,7 +65,7 @@ export default function Contact() {
               <div>
                 <h3 className="font-semibold text-gray-900 dark:text-white mb-2">Karachi - Pakistan</h3>
                 <p className="text-sm text-gray-600 dark:text-gray-400">
-                  Shop# 35, Mohammadi Shopping Center, Hydri Market, Block G North Nazimabad Town, Karachi
+                  Home# 35, Mohammadi Homeping Center, Hydri Market, Block G North Nazimabad Town, Karachi
                 </p>
               </div>
             </div>

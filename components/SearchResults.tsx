@@ -126,7 +126,7 @@ export default function SearchResults({ query, onClose }: SearchResultsProps) {
                     />
                   </div>
                   <div className="flex-1 min-w-0">
-                    <p className="text-sm font-medium text-gray-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 truncate">
+                    <p className="text-sm font-medium text-gray-900 !dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 truncate">
                       {product.name}
                     </p>
                     <p className="text-xs text-gray-500 dark:text-gray-400">
@@ -167,7 +167,7 @@ export default function SearchResults({ query, onClose }: SearchResultsProps) {
                 onClick={onClose}
                 className="block rounded-lg p-3 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors group"
               >
-                <p className="text-sm font-medium text-gray-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 line-clamp-1">
+                <p className="text-sm font-medium text-gray-900 !dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 line-clamp-1">
                   {post.title}
                 </p>
                 <p className="text-xs text-gray-500 dark:text-gray-400 mt-1 line-clamp-1">

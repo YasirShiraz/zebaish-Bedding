@@ -388,9 +388,11 @@ export default function Products() {
                           </div>
 
                           <div className="flex flex-col items-center gap-2 pt-1">
-                            <p className="text-sm font-bold text-gray-900 dark:text-white whitespace-nowrap">
-                              Rs. {product.price.toLocaleString()}
-                            </p>
+                            <div className="mt-1 flex items-center gap-2">
+                              <p className="text-sm font-bold text-gray-900 dark:text-white">
+                                ${product.price}
+                              </p>
+                            </div>
 
                             {/* Quick Add Button - Always Visible */}
                             <button

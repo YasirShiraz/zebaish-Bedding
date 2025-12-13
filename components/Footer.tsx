@@ -136,7 +136,7 @@ export default function Footer() {
               <li className="flex items-start">
                 <span className="mr-3 text-black dark:text-white">📍</span>
                 <span>
-                  Shop# 35, Mohammadi Shopping Center,<br />
+                  Home# 35, Mohammadi Homeping Center,<br />
                   Hydri Market, Block G,<br />
                   North Nazimabad Town, Karachi
                 </span>

@@ -114,7 +114,7 @@ export default function Orders() {
               href="/products"
               className="rounded-lg bg-white/20 px-4 py-2 text-sm font-semibold text-white hover:bg-white/30 transition-colors"
             >
-              Continue Shopping
+              Continue Homeping
             </Link>
           </div>
         </div>
@@ -140,7 +140,7 @@ export default function Orders() {
               No orders yet
             </h3>
             <p className="mt-2 text-gray-600 dark:text-gray-400">
-              Start shopping to see your orders here.
+              Start Homeping to see your orders here.
             </p>
             <div className="mt-6">
               <Link
@@ -194,7 +194,7 @@ export default function Orders() {
                         0
                       )}{" "}
                       {order.items.reduce((sum, item) => sum + item.quantity, 0) ===
-                      1
+                        1
                         ? "item"
                         : "items"}
                     </p>

@@ -5,6 +5,9 @@ import Image from "next/image";
 import Link from "next/link";
 import AddToCartButton from "@/components/AddToCartButton";
 
+import { useRouter } from "next/navigation";
+import { useCart } from "@/contexts/CartContext";
+
 export default function ProductDetails({
     product,
     relatedProducts,
@@ -12,6 +15,8 @@ export default function ProductDetails({
     product: any;
     relatedProducts: any[];
 }) {
+    const router = useRouter();
+    const { addToCart } = useCart();
     const [activeTab, setActiveTab] = useState("description");
 
     return (
@@ -192,6 +197,23 @@ export default function ProductDetails({
                                         variant="large"
                                         className="w-full text-lg py-4"
                                     />
+                                    <button
+                                        onClick={() => {
+                                            addToCart({
+                                                id: product.code,
+                                                name: product.name,
+                                                code: product.code,
+                                                category: product.category,
+                                                image: product.image,
+                                                price: product.price,
+                                                slug: product.slug,
+                                            });
+                                            router.push("/checkout");
+                                        }}
+                                        className="w-full rounded-lg bg-black dark:bg-white text-white dark:text-black py-4 text-lg font-bold hover:bg-gray-800 dark:hover:bg-gray-200 transition-colors shadow-lg"
+                                    >
+                                        Buy Now
+                                    </button>
                                     <p className="text-xs text-center text-gray-500">
                                         Free 30-Day Returns • 100% Satisfaction Guarantee
                                     </p>

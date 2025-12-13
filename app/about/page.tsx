@@ -240,7 +240,7 @@ export default function About() {
               Transform Your Bedroom Today
             </h2>
             <p className="mx-auto mt-6 max-w-xl text-lg leading-8 text-gray-300">
-              Discover the luxury you deserve. Shop our latest collection now.
+              Discover the luxury you deserve. Home our latest collection now.
             </p>
             <div className="mt-10">
               <Link
