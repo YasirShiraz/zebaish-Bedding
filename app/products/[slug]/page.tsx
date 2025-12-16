@@ -4,10 +4,15 @@ import { prisma } from "@/lib/prisma";
 import { Metadata } from "next";
 
 export async function generateStaticParams() {
-  const products = await prisma.product.findMany({ select: { slug: true } });
-  return products.map((product: { slug: string }) => ({
-    slug: product.slug,
-  }));
+  try {
+    const products = await prisma.product.findMany({ select: { slug: true } });
+    return products.map((product: { slug: string }) => ({
+      slug: product.slug,
+    }));
+  } catch (error) {
+    console.error("Error generating static params:", error);
+    return [];
+  }
 }
 
 export async function generateMetadata({
