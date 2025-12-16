@@ -56,11 +56,7 @@ export const metadata: Metadata = {
         description: "Premium bedding and home textiles.",
         images: ["/images/og-image.jpg"],
     },
-    icons: {
-        icon: "/favicon.ico",
-        shortcut: "/favicon.ico",
-        apple: "/apple-touch-icon.png",
-    },
+
 };
 
 import BottomNav from "@/components/BottomNav";
