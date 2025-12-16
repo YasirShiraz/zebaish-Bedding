@@ -29,7 +29,7 @@ export async function PUT(request: Request) {
 
         // Update user in database
         const updatedUser = await prisma.user.update({
-            where: { id: session.id },
+            where: { id: session.id as string },
             data: {
                 name,
                 phone

@@ -54,6 +54,39 @@ export default function Profile() {
     }
   }, [isAuthenticated]);
 
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+    // Clear error when user starts typing
+    if (errors[name]) {
+      setErrors((prev) => {
+        const newErrors = { ...prev };
+        delete newErrors[name];
+        return newErrors;
+      });
+    }
+  };
+
+  const validateForm = () => {
+    const newErrors: { [key: string]: string } = {};
+
+    if (!formData.name.trim()) {
+      newErrors.name = "Name is required";
+    }
+
+    if (!formData.email.trim()) {
+      newErrors.email = "Email is required";
+    } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
+      newErrors.email = "Email is invalid";
+    }
+
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
+
   const handleSave = async () => {
     if (!validateForm()) {
       return;
@@ -147,17 +180,17 @@ export default function Profile() {
             <div className="rounded-2xl border border-gray-200 bg-white dark:border-gray-800 dark:bg-gray-900 p-6 shadow-sm">
               <div className="text-center">
                 <div className="mx-auto h-24 w-24 rounded-full bg-[var(--primary)] flex items-center justify-center text-white text-3xl font-bold mb-4">
-                  {(user.name || "U").charAt(0).toUpperCase()}
+                  {(user?.name || "U").charAt(0).toUpperCase()}
                 </div>
                 <h2 className="text-xl font-semibold text-gray-900 dark:text-white">
-                  {user.name}
+                  {user?.name}
                 </h2>
                 <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
-                  {user.email}
+                  {user?.email}
                 </p>
-                {user.phone && (
+                {user?.phone && (
                   <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
-                    {user.phone}
+                    {user?.phone}
                   </p>
                 )}
               </div>
@@ -232,7 +265,7 @@ export default function Profile() {
                     </>
                   ) : (
                     <p className="text-gray-900 dark:text-white py-3">
-                      {user.name}
+                      {user?.name}
                     </p>
                   )}
                 </div>
@@ -260,7 +293,7 @@ export default function Profile() {
                     </>
                   ) : (
                     <p className="text-gray-900 dark:text-white py-3">
-                      {user.email}
+                      {user?.email}
                     </p>
                   )}
                 </div>
@@ -289,7 +322,7 @@ export default function Profile() {
                     </>
                   ) : (
                     <p className="text-gray-900 dark:text-white py-3">
-                      {user.phone || "Not provided"}
+                      {user?.phone || "Not provided"}
                     </p>
                   )}
                 </div>
@@ -333,9 +366,9 @@ export default function Profile() {
                       onClick={() => {
                         setIsEditing(false);
                         setFormData({
-                          name: user.name || "",
-                          email: user.email || "",
-                          phone: user.phone || "",
+                          name: user?.name || "",
+                          email: user?.email || "",
+                          phone: user?.phone || "",
                         });
                         setErrors({});
                       }}
