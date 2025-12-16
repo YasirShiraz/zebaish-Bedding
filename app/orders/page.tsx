@@ -186,7 +186,7 @@ export default function Orders() {
                   </div>
                   <div className="mt-4 sm:mt-0 text-right">
                     <p className="text-lg font-semibold text-gray-900 dark:text-white">
-                      ${order.total.toFixed(2)}
+                      Rs {order.total.toFixed(2)}
                     </p>
                     <p className="text-sm text-gray-500 dark:text-gray-400">
                       {order.items.reduce(
@@ -224,7 +224,7 @@ export default function Orders() {
                           {item.code} • Qty: {item.quantity}
                         </p>
                         <p className="text-sm font-medium text-gray-900 dark:text-white mt-2">
-                          ${(item.price * item.quantity).toFixed(2)}
+                          Rs {(item.price * item.quantity).toFixed(2)}
                         </p>
                       </div>
                     </div>
@@ -285,7 +285,7 @@ export default function Orders() {
                         <div className="space-y-2 text-sm">
                           <div className="flex justify-between text-gray-600 dark:text-gray-400">
                             <span>Subtotal</span>
-                            <span>${order.total.toFixed(2)}</span>
+                            <span>Rs {order.total.toFixed(2)}</span>
                           </div>
                           <div className="flex justify-between text-gray-600 dark:text-gray-400">
                             <span>Shipping</span>
@@ -293,12 +293,12 @@ export default function Orders() {
                           </div>
                           <div className="flex justify-between text-gray-600 dark:text-gray-400">
                             <span>Tax</span>
-                            <span>${(order.total * 0.1).toFixed(2)}</span>
+                            <span>Rs {(order.total * 0.1).toFixed(2)}</span>
                           </div>
                           <div className="flex justify-between pt-2 border-t border-gray-200 dark:border-gray-800 font-semibold text-gray-900 dark:text-white">
                             <span>Total</span>
                             <span>
-                              ${(order.total + order.total * 0.1).toFixed(2)}
+                              Rs {(order.total + order.total * 0.1).toFixed(2)}
                             </span>
                           </div>
                         </div>

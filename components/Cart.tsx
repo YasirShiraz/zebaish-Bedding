@@ -137,7 +137,7 @@ export default function Cart({ isOpen, onClose }: CartProps) {
                       {item.code} • {item.category}
                     </p>
                     <p className="text-sm font-semibold text-gray-900 dark:text-white mt-2">
-                      ${item.price.toFixed(2)}
+                      Rs {item.price.toFixed(2)}
                     </p>
 
                     {/* Quantity Controls */}
@@ -196,7 +196,7 @@ export default function Cart({ isOpen, onClose }: CartProps) {
             {/* Total */}
             <div className="flex items-center justify-between text-lg font-semibold text-gray-900 dark:text-white">
               <span>Total:</span>
-              <span>${getTotalPrice().toFixed(2)}</span>
+              <span>Rs {getTotalPrice().toFixed(2)}</span>
             </div>
 
             {/* Actions */}

@@ -3,34 +3,73 @@
 import { useState, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { heroSlides } from "@/lib/products";
+
+interface HeroSlide {
+    id: string;
+    title: string;
+    description: string;
+    image: string;
+    link: string;
+    cta: string;
+}
 
 export default function HeroCarousel() {
+    const [slides, setSlides] = useState<HeroSlide[]>([]);
     const [currentSlide, setCurrentSlide] = useState(0);
+    const [loading, setLoading] = useState(true);
+
+    useEffect(() => {
+        // Fetch slides from CMS API
+        const fetchSlides = async () => {
+            try {
+                const res = await fetch("/api/cms/hero");
+                if (res.ok) {
+                    const data = await res.json();
+                    if (data.length > 0) {
+                        setSlides(data);
+                    }
+                }
+            } catch (error) {
+                console.error("Failed to load hero slides", error);
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchSlides();
+    }, []);
 
     // Auto-advance slides
     useEffect(() => {
+        if (slides.length <= 1) return;
+
         const timer = setInterval(() => {
-            setCurrentSlide((prev) => (prev + 1) % heroSlides.length);
-        }, 5000); // Change slide every 5 seconds
+            setCurrentSlide((prev) => (prev + 1) % slides.length);
+        }, 5000);
 
         return () => clearInterval(timer);
-    }, []);
+    }, [slides.length]);
 
     const nextSlide = () => {
-        setCurrentSlide((prev) => (prev + 1) % heroSlides.length);
+        setCurrentSlide((prev) => (prev + 1) % slides.length);
     };
 
     const prevSlide = () => {
-        setCurrentSlide((prev) => (prev - 1 + heroSlides.length) % heroSlides.length);
+        setCurrentSlide((prev) => (prev - 1 + slides.length) % slides.length);
     };
+
+    if (loading) {
+        return <div className="h-[600px] w-full bg-gray-900 animate-pulse" />;
+    }
+
+    if (slides.length === 0) return null;
 
     return (
         <div className="relative h-[600px] w-full overflow-hidden bg-gray-900">
             {/* Slides */}
-            {heroSlides.map((slide, index) => (
+            {slides.map((slide, index) => (
                 <div
-                    key={index}
+                    key={slide.id}
                     className={`absolute inset-0 transition-opacity duration-1000 ease-in-out ${index === currentSlide ? "opacity-100" : "opacity-0"
                         }`}
                 >
@@ -69,59 +108,63 @@ export default function HeroCarousel() {
             ))}
 
             {/* Navigation Arrows */}
-            <button
-                onClick={prevSlide}
-                className="absolute left-4 top-1/2 -translate-y-1/2 rounded-full bg-white/10 p-2 text-white/75 backdrop-blur-sm hover:bg-white/20 hover:text-white transition-all sm:left-8"
-                aria-label="Previous slide"
-            >
-                <svg
-                    className="h-6 w-6"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    strokeWidth="2.5"
-                    stroke="currentColor"
-                >
-                    <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        d="M15.75 19.5L8.25 12l7.5-7.5"
-                    />
-                </svg>
-            </button>
-            <button
-                onClick={nextSlide}
-                className="absolute right-4 top-1/2 -translate-y-1/2 rounded-full bg-white/10 p-2 text-white/75 backdrop-blur-sm hover:bg-white/20 hover:text-white transition-all sm:right-8"
-                aria-label="Next slide"
-            >
-                <svg
-                    className="h-6 w-6"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    strokeWidth="2.5"
-                    stroke="currentColor"
-                >
-                    <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        d="M8.25 4.5l7.5 7.5-7.5 7.5"
-                    />
-                </svg>
-            </button>
-
-            {/* Dots Navigation */}
-            <div className="absolute bottom-8 left-1/2 flex -translate-x-1/2 justify-center space-x-3">
-                {heroSlides.map((_, index) => (
+            {slides.length > 1 && (
+                <>
                     <button
-                        key={index}
-                        onClick={() => setCurrentSlide(index)}
-                        className={`h-2.5 w-2.5 rounded-full transition-all ${index === currentSlide
-                            ? "bg-white w-8"
-                            : "bg-white/50 hover:bg-white/75"
-                            }`}
-                        aria-label={`Go to slide ${index + 1}`}
-                    />
-                ))}
-            </div>
+                        onClick={prevSlide}
+                        className="absolute left-4 top-1/2 -translate-y-1/2 rounded-full bg-white/10 p-2 text-white/75 backdrop-blur-sm hover:bg-white/20 hover:text-white transition-all sm:left-8"
+                        aria-label="Previous slide"
+                    >
+                        <svg
+                            className="h-6 w-6"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            strokeWidth="2.5"
+                            stroke="currentColor"
+                        >
+                            <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                d="M15.75 19.5L8.25 12l7.5-7.5"
+                            />
+                        </svg>
+                    </button>
+                    <button
+                        onClick={nextSlide}
+                        className="absolute right-4 top-1/2 -translate-y-1/2 rounded-full bg-white/10 p-2 text-white/75 backdrop-blur-sm hover:bg-white/20 hover:text-white transition-all sm:right-8"
+                        aria-label="Next slide"
+                    >
+                        <svg
+                            className="h-6 w-6"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            strokeWidth="2.5"
+                            stroke="currentColor"
+                        >
+                            <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                d="M8.25 4.5l7.5 7.5-7.5 7.5"
+                            />
+                        </svg>
+                    </button>
+
+                    {/* Dots Navigation */}
+                    <div className="absolute bottom-8 left-1/2 flex -translate-x-1/2 justify-center space-x-3">
+                        {slides.map((_, index) => (
+                            <button
+                                key={index}
+                                onClick={() => setCurrentSlide(index)}
+                                className={`h-2.5 w-2.5 rounded-full transition-all ${index === currentSlide
+                                    ? "bg-white w-8"
+                                    : "bg-white/50 hover:bg-white/75"
+                                    }`}
+                                aria-label={`Go to slide ${index + 1}`}
+                            />
+                        ))}
+                    </div>
+                </>
+            )}
         </div>
     );
 }

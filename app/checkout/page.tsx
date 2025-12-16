@@ -119,61 +119,38 @@ export default function Checkout() {
 
     setIsSubmitting(true);
 
-    // Simulate API call
+    // Submit to API
     try {
-      // In a real application, you would send this data to your backend
-      const orderData = {
+      const payload = {
         items,
-        shipping: {
-          firstName: formData.firstName,
-          lastName: formData.lastName,
+        customerDetails: {
+          fullName: `${formData.firstName} ${formData.lastName}`,
           email: formData.email,
           phone: formData.phone,
-          address: formData.address,
+          address: `${formData.address}, ${formData.state} ${formData.zipCode}, ${formData.country}`,
           city: formData.city,
-          state: formData.state,
-          zipCode: formData.zipCode,
-          country: formData.country,
-        },
-        billing: formData.sameAsShipping
-          ? {
-            firstName: formData.firstName,
-            lastName: formData.lastName,
-            address: formData.address,
-            city: formData.city,
-            state: formData.state,
-            zipCode: formData.zipCode,
-            country: formData.country,
-          }
-          : {
-            firstName: formData.billingFirstName,
-            lastName: formData.billingLastName,
-            address: formData.billingAddress,
-            city: formData.billingCity,
-            state: formData.billingState,
-            zipCode: formData.billingZipCode,
-            country: formData.billingCountry,
-          },
-        paymentMethod: formData.paymentMethod,
-        notes: formData.notes,
-        total: getTotalPrice(),
-        orderDate: new Date().toISOString(),
+        }
       };
 
-      // Simulate API delay
-      await new Promise((resolve) => setTimeout(resolve, 1500));
+      const res = await fetch('/api/checkout', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(payload),
+      });
 
-      // Store order in localStorage (in real app, this would be handled by backend)
-      const orders = JSON.parse(localStorage.getItem("orders") || "[]");
-      const orderId = `ORD-${Date.now()}`;
-      orders.push({ orderId, ...orderData });
-      localStorage.setItem("orders", JSON.stringify(orders));
+      if (!res.ok) {
+        throw new Error('Checkout failed');
+      }
+
+      const data = await res.json();
 
       // Clear cart
       clearCart();
 
       // Redirect to success page
-      router.push(`/checkout/success?orderId=${orderId}`);
+      router.push(`/checkout/success?orderId=${data.orderId}`);
     } catch (error) {
       console.error("Checkout error:", error);
       alert("An error occurred. Please try again.");
@@ -687,7 +664,7 @@ export default function Checkout() {
                         Qty: {item.quantity}
                       </p>
                       <p className="text-sm font-medium text-gray-900 dark:text-white mt-1">
-                        ${(item.price * item.quantity).toFixed(2)}
+                        Rs {(item.price * item.quantity).toFixed(2)}
                       </p>
                     </div>
                   </div>
@@ -698,7 +675,7 @@ export default function Checkout() {
               <div className="border-t border-gray-200 dark:border-gray-800 pt-4 space-y-2">
                 <div className="flex justify-between text-sm text-gray-600 dark:text-gray-400">
                   <span>Subtotal</span>
-                  <span>${subtotal.toFixed(2)}</span>
+                  <span>Rs {subtotal.toFixed(2)}</span>
                 </div>
                 <div className="flex justify-between text-sm text-gray-600 dark:text-gray-400">
                   <span>Shipping</span>
@@ -706,11 +683,11 @@ export default function Checkout() {
                 </div>
                 <div className="flex justify-between text-sm text-gray-600 dark:text-gray-400">
                   <span>Tax</span>
-                  <span>${tax.toFixed(2)}</span>
+                  <span>Rs {tax.toFixed(2)}</span>
                 </div>
                 <div className="flex justify-between text-lg font-semibold text-gray-900 dark:text-white pt-2 border-t border-gray-200 dark:border-gray-800">
                   <span>Total</span>
-                  <span>${total.toFixed(2)}</span>
+                  <span>Rs {total.toFixed(2)}</span>
                 </div>
               </div>
             </div>

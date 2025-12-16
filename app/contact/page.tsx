@@ -9,11 +9,36 @@ export default function Contact() {
     email: "",
     message: "",
   });
+  const [isSubmitted, setIsSubmitted] = useState(false);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const [isLoading, setIsLoading] = useState(false);
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // Handle form submission
-    console.log("Form submitted:", formData);
+    setIsLoading(true);
+
+    try {
+      const response = await fetch('/api/contact', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData),
+      });
+
+      if (response.ok) {
+        setIsSubmitted(true);
+        setFormData({ name: "", email: "", message: "" });
+        setTimeout(() => setIsSubmitted(false), 5000);
+      } else {
+        alert('Something went wrong. Please try again.');
+      }
+    } catch (error) {
+      console.error('Error:', error);
+      alert('Failed to send message.');
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -116,6 +141,17 @@ export default function Contact() {
           </p>
 
           <form onSubmit={handleSubmit} className="space-y-6">
+            {isSubmitted && (
+              <div className="flex items-center p-4 mb-6 text-sm text-green-800 border border-green-200 rounded-lg bg-green-50 dark:bg-gray-800 dark:text-green-400 dark:border-green-800" role="alert">
+                <svg className="flex-shrink-0 inline w-4 h-4 me-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
+                  <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5Zm3.707 8.207-4 4a1 1 0 0 1-1.414 0l-2-2a1 1 0 0 1 1.414-1.414L9 10.586l3.293-3.293a1 1 0 0 1 1.414 1.414Z" />
+                </svg>
+                <span className="sr-only">Success</span>
+                <div>
+                  <span className="font-medium">Success!</span> We have received your message and will get back to you shortly.
+                </div>
+              </div>
+            )}
             {/* Name */}
             <div>
               <input
@@ -159,10 +195,10 @@ export default function Contact() {
 
             {/* Submit Button */}
             <button
-              type="submit"
-              className="w-full sm:w-auto px-8 py-3 bg-black dark:bg-white text-white dark:text-black font-semibold rounded-lg hover:bg-gray-800 dark:hover:bg-gray-200 transition-colors"
+              disabled={isLoading}
+              className="w-full sm:w-auto px-8 py-3 bg-black dark:bg-white text-white dark:text-black font-semibold rounded-lg hover:bg-gray-800 dark:hover:bg-gray-200 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              SEND MESSAGE
+              {isLoading ? "SENDING..." : "SEND MESSAGE"}
             </button>
           </form>
         </div>

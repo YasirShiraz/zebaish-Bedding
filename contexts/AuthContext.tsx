@@ -7,11 +7,12 @@ export interface User {
   email: string;
   name: string;
   phone?: string;
+  role?: string;
 }
 
 interface AuthContextType {
   user: User | null;
-  login: (email: string, password: string) => Promise<boolean>;
+  login: (email: string, password: string) => Promise<User | null>;
   signup: (name: string, email: string, password: string, phone?: string) => Promise<boolean>;
   logout: () => void;
   isAuthenticated: boolean;
@@ -27,52 +28,53 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   useEffect(() => {
     setMounted(true);
-    // Load user from localStorage
-    const savedUser = localStorage.getItem("user");
-    const savedAuth = localStorage.getItem("auth");
-    if (savedUser && savedAuth) {
-      try {
-        setUser(JSON.parse(savedUser));
-      } catch (error) {
-        console.error("Error loading user from localStorage:", error);
-      }
-    }
-    setIsLoading(false);
+    checkSession();
   }, []);
 
-  const login = async (email: string, password: string): Promise<boolean> => {
+  const checkSession = async () => {
+    try {
+      const res = await fetch("/api/auth/me");
+      if (res.ok) {
+        const data = await res.json();
+        if (data.user) {
+          setUser(data.user);
+        } else {
+          setUser(null);
+        }
+      }
+    } catch (error) {
+      console.error("Session check failed", error);
+      setUser(null);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const login = async (email: string, password: string): Promise<User | null> => {
     setIsLoading(true);
     try {
-      // Simulate API call
-      await new Promise((resolve) => setTimeout(resolve, 1000));
+      const res = await fetch("/api/auth/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, password }),
+      });
 
-      // In a real app, this would be an API call
-      // For demo purposes, we'll check against localStorage
-      const users = JSON.parse(localStorage.getItem("users") || "[]");
-      const foundUser = users.find(
-        (u: any) => u.email === email && u.password === password
-      );
-
-      if (foundUser) {
-        const userData = {
-          id: foundUser.id,
-          email: foundUser.email,
-          name: foundUser.name,
-          phone: foundUser.phone,
-        };
-        setUser(userData);
-        localStorage.setItem("user", JSON.stringify(userData));
-        localStorage.setItem("auth", "true");
+      if (res.ok) {
+        const data = await res.json();
+        setUser(data.user);
         setIsLoading(false);
-        return true;
+        return data.user;
       }
 
       setIsLoading(false);
-      return false;
+      return null;
+
+      setIsLoading(false);
+      return null;
     } catch (error) {
       console.error("Login error:", error);
       setIsLoading(false);
-      return false;
+      return null;
     }
   };
 
@@ -84,44 +86,30 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   ): Promise<boolean> => {
     setIsLoading(true);
     try {
-      // Simulate API call
-      await new Promise((resolve) => setTimeout(resolve, 1000));
+      const res = await fetch("/api/auth/signup", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ name, email, password }), // Phone can be added to DB if schema updated
+      });
 
-      // In a real app, this would be an API call
-      const users = JSON.parse(localStorage.getItem("users") || "[]");
-      
-      // Check if user already exists
-      if (users.some((u: any) => u.email === email)) {
-        setIsLoading(false);
-        return false;
+      if (res.ok) {
+        // Auto login after signup
+        const loginRes = await fetch("/api/auth/login", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ email, password }),
+        });
+
+        if (loginRes.ok) {
+          const data = await loginRes.json();
+          setUser(data.user);
+          setIsLoading(false);
+          return true;
+        }
       }
 
-      // Create new user
-      const newUser = {
-        id: `user-${Date.now()}`,
-        name,
-        email,
-        password, // In real app, this would be hashed
-        phone,
-        createdAt: new Date().toISOString(),
-      };
-
-      users.push(newUser);
-      localStorage.setItem("users", JSON.stringify(users));
-
-      // Auto login after signup
-      const userData = {
-        id: newUser.id,
-        email: newUser.email,
-        name: newUser.name,
-        phone: newUser.phone,
-      };
-      setUser(userData);
-      localStorage.setItem("user", JSON.stringify(userData));
-      localStorage.setItem("auth", "true");
-
       setIsLoading(false);
-      return true;
+      return false;
     } catch (error) {
       console.error("Signup error:", error);
       setIsLoading(false);
@@ -129,10 +117,13 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     }
   };
 
-  const logout = () => {
-    setUser(null);
-    localStorage.removeItem("user");
-    localStorage.removeItem("auth");
+  const logout = async () => {
+    try {
+      await fetch("/api/auth/logout", { method: "POST" });
+      setUser(null);
+    } catch (error) {
+      console.error("Logout error", error);
+    }
   };
 
   // Always provide the context, even during SSR

@@ -16,11 +16,11 @@
      <path d="M80,10 Q95,10 95,25 Q95,40 80,40" fill="none" stroke="url(#goldGradient)" stroke-width="4" opacity="0.8"/>
   </g>
 
-  <!-- Text with currentColor to adapt to text color of parent -->
-  <text x="100" y="55" font-family="'Playfair Display', serif" font-weight="700" font-size="45" fill="currentColor">
+  <!-- Text with fixed color because Image tag doesn't support currentColor -->
+  <text x="100" y="55" font-family="'Playfair Display', serif" font-weight="700" font-size="45" fill="#111827">
     ZEBAISH
   </text>
-  <text x="105" y="85" font-family="'Lato', sans-serif" font-weight="300" font-size="20" letter-spacing="8" fill="currentColor" opacity="0.8">
+  <text x="105" y="85" font-family="'Lato', sans-serif" font-weight="300" font-size="20" letter-spacing="8" fill="#111827" opacity="0.8">
     CORNER
   </text>
 </svg>

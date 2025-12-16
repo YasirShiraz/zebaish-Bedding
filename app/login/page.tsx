@@ -5,10 +5,12 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
 import { useAuth } from "@/contexts/AuthContext";
+import { signInWithPopup } from "firebase/auth";
+import { auth, googleProvider, facebookProvider } from "@/lib/firebase";
 
 export default function Login() {
   const router = useRouter();
-  const { login, isAuthenticated, isLoading } = useAuth();
+  const { login, isAuthenticated, isLoading, user } = useAuth();
   const [formData, setFormData] = useState({
     email: "",
     password: "",
@@ -24,9 +26,17 @@ export default function Login() {
 
   useEffect(() => {
     if (mounted && isAuthenticated && !isLoading) {
-      router.push("/");
+      // If user is already logged in, redirect based on role
+      // But we need to wait for user object to be populated
+      if (user) {
+        if ((user as any).role === 'ADMIN') {
+          router.push("/admin");
+        } else {
+          router.push("/");
+        }
+      }
     }
-  }, [mounted, isAuthenticated, isLoading, router]);
+  }, [mounted, isAuthenticated, isLoading, router, user]);
 
   if (!mounted || (isAuthenticated && !isLoading)) {
     return (
@@ -75,10 +85,13 @@ export default function Login() {
 
     setIsSubmitting(true);
     try {
-      const success = await login(formData.email, formData.password);
-      if (success) {
-        router.push("/");
-        router.refresh();
+      const user = await login(formData.email, formData.password);
+      if (user) {
+        if ((user as any).role === 'ADMIN') {
+          window.location.href = "/admin";
+        } else {
+          window.location.href = "/";
+        }
       } else {
         setErrors({ submit: "Invalid email or password. Please try again." });
       }
@@ -125,9 +138,6 @@ export default function Login() {
 
       {/* Right Side - Form */}
       <div className="flex items-center justify-center p-8 sm:p-12 lg:p-16 relative">
-        <Link href="/" className="lg:hidden absolute top-8 left-8 text-2xl font-serif font-bold tracking-wider text-gray-900 dark:text-white">
-          ZEBAISH
-        </Link>
 
         <div className="w-full max-w-md space-y-10">
           <div className="text-center lg:text-left">
@@ -150,6 +160,32 @@ export default function Login() {
             <div className="grid grid-cols-2 gap-4">
               <button
                 type="button"
+                onClick={async () => {
+                  try {
+                    const result = await signInWithPopup(auth, googleProvider);
+                    const firebaseUser = result.user;
+
+                    // Sync with app backend
+                    const res = await fetch("/api/auth/social-login", {
+                      method: "POST",
+                      headers: { "Content-Type": "application/json" },
+                      body: JSON.stringify({
+                        email: firebaseUser.email,
+                        name: firebaseUser.displayName,
+                        image: firebaseUser.photoURL
+                      }),
+                    });
+
+                    if (res.ok) {
+                      window.location.href = "/";
+                    } else {
+                      setErrors({ submit: "Failed to sync with server" });
+                    }
+                  } catch (error) {
+                    console.error("Google sign in error", error);
+                    setErrors({ submit: "Failed to sign in with Google" });
+                  }
+                }}
                 className="flex items-center justify-center gap-3 rounded-xl border border-gray-200 bg-white px-4 py-3 text-sm font-semibold text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-gray-200 transition-all dark:border-gray-800 dark:bg-gray-900 dark:text-gray-300 dark:hover:bg-gray-800"
               >
                 <svg className="h-5 w-5" viewBox="0 0 24 24">
@@ -174,6 +210,32 @@ export default function Login() {
               </button>
               <button
                 type="button"
+                onClick={async () => {
+                  try {
+                    const result = await signInWithPopup(auth, facebookProvider);
+                    const firebaseUser = result.user;
+
+                    // Sync with app backend
+                    const res = await fetch("/api/auth/social-login", {
+                      method: "POST",
+                      headers: { "Content-Type": "application/json" },
+                      body: JSON.stringify({
+                        email: firebaseUser.email,
+                        name: firebaseUser.displayName,
+                        image: firebaseUser.photoURL
+                      }),
+                    });
+
+                    if (res.ok) {
+                      window.location.href = "/";
+                    } else {
+                      setErrors({ submit: "Failed to sync with server" });
+                    }
+                  } catch (error) {
+                    console.error("Facebook sign in error", error);
+                    setErrors({ submit: "Failed to sign in with Facebook" });
+                  }
+                }}
                 className="flex items-center justify-center gap-3 rounded-xl border border-gray-200 bg-white px-4 py-3 text-sm font-semibold text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-gray-200 transition-all dark:border-gray-800 dark:bg-gray-900 dark:text-gray-300 dark:hover:bg-gray-800"
               >
                 <svg className="h-5 w-5 text-[#1877F2]" fill="currentColor" viewBox="0 0 24 24">

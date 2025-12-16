@@ -30,61 +30,29 @@ export default function Profile() {
   }, [mounted, isAuthenticated, isLoading, router]);
 
   useEffect(() => {
-    if (user) {
-      setFormData({
-        name: user.name || "",
-        email: user.email || "",
-        phone: user.phone || "",
-      });
+    // Fetch latest user data from API
+    const fetchUserData = async () => {
+      try {
+        const res = await fetch('/api/auth/me');
+        if (res.ok) {
+          const data = await res.json();
+          if (data.user) {
+            setFormData({
+              name: data.user.name || "",
+              email: data.user.email || "",
+              phone: data.user.phone || "",
+            });
+          }
+        }
+      } catch (error) {
+        console.error("Failed to fetch user data", error);
+      }
+    };
+
+    if (isAuthenticated) {
+      fetchUserData();
     }
-  }, [user]);
-
-  if (!mounted || isLoading) {
-    return (
-      <div className="bg-white dark:bg-black min-h-screen flex items-center justify-center">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-purple-600"></div>
-      </div>
-    );
-  }
-
-  if (!isAuthenticated || !user) {
-    return null;
-  }
-
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
-    setFormData((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
-    if (errors[name]) {
-      setErrors((prev) => ({
-        ...prev,
-        [name]: "",
-      }));
-    }
-  };
-
-  const validateForm = () => {
-    const newErrors: { [key: string]: string } = {};
-
-    if (!formData.name.trim()) {
-      newErrors.name = "Name is required";
-    }
-
-    if (!formData.email.trim()) {
-      newErrors.email = "Email is required";
-    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
-      newErrors.email = "Invalid email format";
-    }
-
-    if (formData.phone && !/^\+?[\d\s-()]+$/.test(formData.phone)) {
-      newErrors.phone = "Invalid phone number format";
-    }
-
-    setErrors(newErrors);
-    return Object.keys(newErrors).length === 0;
-  };
+  }, [isAuthenticated]);
 
   const handleSave = async () => {
     if (!validateForm()) {
@@ -93,34 +61,29 @@ export default function Profile() {
 
     setIsSaving(true);
     try {
-      // Update user in localStorage
-      const users = JSON.parse(localStorage.getItem("users") || "[]");
-      const userIndex = users.findIndex((u: any) => u.id === user.id);
-      
-      if (userIndex !== -1) {
-        users[userIndex] = {
-          ...users[userIndex],
+      const res = await fetch('/api/auth/me', {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
           name: formData.name,
-          email: formData.email,
           phone: formData.phone,
-        };
-        localStorage.setItem("users", JSON.stringify(users));
-      }
+        }),
+      });
 
-      // Update current user in localStorage
-      const updatedUser = {
-        ...user,
-        name: formData.name,
-        email: formData.email,
-        phone: formData.phone,
-      };
-      localStorage.setItem("user", JSON.stringify(updatedUser));
+      if (!res.ok) {
+        throw new Error('Failed to update profile');
+      }
 
       setSaveSuccess(true);
       setIsEditing(false);
+
+      // Refresh to update context
+      router.refresh();
+
       setTimeout(() => {
         setSaveSuccess(false);
-        router.refresh();
       }, 2000);
     } catch (error) {
       setErrors({
@@ -184,7 +147,7 @@ export default function Profile() {
             <div className="rounded-2xl border border-gray-200 bg-white dark:border-gray-800 dark:bg-gray-900 p-6 shadow-sm">
               <div className="text-center">
                 <div className="mx-auto h-24 w-24 rounded-full bg-[var(--primary)] flex items-center justify-center text-white text-3xl font-bold mb-4">
-                  {user.name.charAt(0).toUpperCase()}
+                  {(user.name || "U").charAt(0).toUpperCase()}
                 </div>
                 <h2 className="text-xl font-semibold text-gray-900 dark:text-white">
                   {user.name}
@@ -258,11 +221,10 @@ export default function Profile() {
                         name="name"
                         value={formData.name}
                         onChange={handleChange}
-                        className={`w-full rounded-lg border ${
-                          errors.name
-                            ? "border-red-500"
-                            : "border-gray-300 dark:border-gray-700"
-                        } bg-white dark:bg-gray-800 px-4 py-3 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-purple-500`}
+                        className={`w-full rounded-lg border ${errors.name
+                          ? "border-red-500"
+                          : "border-gray-300 dark:border-gray-700"
+                          } bg-white dark:bg-gray-800 px-4 py-3 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-purple-500`}
                       />
                       {errors.name && (
                         <p className="mt-1 text-sm text-red-600">{errors.name}</p>
@@ -287,11 +249,10 @@ export default function Profile() {
                         name="email"
                         value={formData.email}
                         onChange={handleChange}
-                        className={`w-full rounded-lg border ${
-                          errors.email
-                            ? "border-red-500"
-                            : "border-gray-300 dark:border-gray-700"
-                        } bg-white dark:bg-gray-800 px-4 py-3 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-purple-500`}
+                        className={`w-full rounded-lg border ${errors.email
+                          ? "border-red-500"
+                          : "border-gray-300 dark:border-gray-700"
+                          } bg-white dark:bg-gray-800 px-4 py-3 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-purple-500`}
                       />
                       {errors.email && (
                         <p className="mt-1 text-sm text-red-600">{errors.email}</p>
@@ -316,11 +277,10 @@ export default function Profile() {
                         name="phone"
                         value={formData.phone}
                         onChange={handleChange}
-                        className={`w-full rounded-lg border ${
-                          errors.phone
-                            ? "border-red-500"
-                            : "border-gray-300 dark:border-gray-700"
-                        } bg-white dark:bg-gray-800 px-4 py-3 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-purple-500`}
+                        className={`w-full rounded-lg border ${errors.phone
+                          ? "border-red-500"
+                          : "border-gray-300 dark:border-gray-700"
+                          } bg-white dark:bg-gray-800 px-4 py-3 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-purple-500`}
                         placeholder="+1 (555) 123-4567"
                       />
                       {errors.phone && (

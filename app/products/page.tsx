@@ -4,7 +4,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { useState, useMemo, useEffect } from "react";
 import AddToCartButton from "@/components/AddToCartButton";
-import { allCollections } from "@/lib/products";
+import { useCart } from "@/contexts/CartContext";
 import WhatsAppButton from "@/components/WhatsAppButton";
 
 const categories = [
@@ -21,15 +21,60 @@ const categories = [
 type SortOption = "default" | "name-asc" | "name-desc" | "price-asc" | "price-desc";
 
 export default function Products() {
+  const { addToCart } = useCart();
   const [selectedCategory, setSelectedCategory] = useState("All Categories");
   const [sortBy, setSortBy] = useState<SortOption>("default");
   const [showFilters, setShowFilters] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
-  const [priceRange, setPriceRange] = useState({ min: 0, max: 1000 });
+  const [priceRange, setPriceRange] = useState({ min: 0, max: 100000 });
 
-  // Filter and sort products
+  // Fetch products from API
+  const [products, setProducts] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    fetch('/api/products', { cache: 'no-store' })
+      .then(res => res.json())
+      .then(data => {
+        // Map API data to frontend format
+        const mapped = Array.isArray(data) ? data.map(p => {
+          // Images stored as JSON string in DB
+          let validImage = '/images/placeholder.jpg';
+          try {
+            if (p.images) {
+              const parsed = JSON.parse(p.images)[0];
+              // Check if it's a valid relative or absolute URL (simple check)
+              if (parsed && (parsed.startsWith('/') || parsed.startsWith('http'))) {
+                validImage = parsed;
+              }
+            }
+          } catch (e) {
+            // Keep placeholder
+          }
+
+          return {
+            ...p,
+            code: p.id,
+            image: validImage,
+            category: p.category?.name || 'Uncategorized',
+            link: `/products/${p.slug}`,
+            salePrice: p.salePrice,
+            price: p.price,
+            rating: p.reviews?.length
+              ? p.reviews.reduce((acc: any, review: any) => acc + review.rating, 0) / p.reviews.length
+              : 0,
+            reviewCount: p.reviews?.length || 0
+          };
+        }) : [];
+        setProducts(mapped);
+      })
+      .catch(err => console.error("Failed to load products", err))
+      .finally(() => setLoading(false));
+  }, []);
+
   const filteredAndSortedProducts = useMemo(() => {
-    let filtered = [...allCollections];
+    // Use API products only
+    let filtered = [...products];
 
     // Filter by category
     if (selectedCategory !== "All Categories") {
@@ -69,13 +114,13 @@ export default function Products() {
     });
 
     return sorted;
-  }, [selectedCategory, sortBy, searchQuery, priceRange]);
+  }, [selectedCategory, sortBy, searchQuery, priceRange, products]);
 
   const clearFilters = () => {
     setSelectedCategory("All Categories");
     setSortBy("default");
     setSearchQuery("");
-    setPriceRange({ min: 0, max: 1000 });
+    setPriceRange({ min: 0, max: 100000 });
   };
 
   return (
@@ -96,8 +141,66 @@ export default function Products() {
         </div>
       </nav>
 
-      {/* Enhanced Hero Section */}
-      <section className="relative h-[40vh] min-h-[400px] overflow-hidden">
+      {/* Mobile Header - Reference Replica */}
+      <section className="relative h-[250px] lg:hidden">
+        <Image
+          src="/images/zebaish4.jpg"
+          alt="Bedding Category"
+          fill
+          className="object-cover"
+          priority
+        />
+        <div className="absolute inset-0 bg-black/20" />
+        <div className="absolute inset-0 flex flex-col items-center justify-center text-white">
+          <h1 className="text-3xl font-bold tracking-widest uppercase mb-1">BEDDING</h1>
+          <div className="flex items-center gap-2 text-xs font-medium uppercase tracking-wide opacity-90">
+            <span>Home</span>
+            <span>/</span>
+            <span>BEDDING</span>
+          </div>
+        </div>
+      </section>
+
+      {/* Mobile Filter Bar - Reference Replica */}
+      <div className="lg:hidden sticky top-[60px] z-30 bg-white dark:bg-gray-900 border-b border-gray-100 dark:border-gray-800 px-4 py-3">
+        <div className="flex items-center justify-between gap-3">
+          {/* Filter Button - Black */}
+          <button
+            onClick={() => setShowFilters(!showFilters)}
+            className="flex-1 bg-black text-white dark:bg-white dark:text-black text-[10px] font-bold uppercase tracking-widest py-2.5 px-4 flex items-center justify-center gap-2"
+          >
+            <svg className="w-3 h-3" fill="currentColor" viewBox="0 0 24 24">
+              <path d="M10 18h4v-2h-4v2zM3 6v2h18V6H3zm3 7h12v-2H6v2z" />
+            </svg>
+            Filter
+          </button>
+
+          {/* Sort Button - Gray/White */}
+          <div className="flex-1 relative">
+            <select
+              value={sortBy}
+              onChange={(e) => setSortBy(e.target.value as SortOption)}
+              className="w-full appearance-none bg-gray-100 text-gray-900 dark:bg-gray-800 dark:text-gray-100 text-[10px] font-bold uppercase tracking-widest py-2.5 px-4 text-center rounded-none border-none"
+            >
+              <option value="default">Sort By</option>
+              <option value="price-asc">Price: Low to High</option>
+              <option value="price-desc">Price: High to Low</option>
+            </select>
+            <svg className="w-3 h-3 absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+            </svg>
+          </div>
+
+          {/* Grid Icons */}
+          <div className="flex items-center gap-2 text-gray-400 pl-2 border-l border-gray-200">
+            <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M4 4h4v4H4zm6 0h4v4h-4zm6 0h4v4h-4zM4 10h4v4H4zm6 0h4v4h-4zm6 0h4v4h-4zM4 16h4v4H4zm6 0h4v4h-4zm6 0h4v4h-4z" /></svg>
+            <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M4 5h16v2H4zm0 6h16v2H4zm0 6h16v2H4z" /></svg>
+          </div>
+        </div>
+      </div>
+
+      {/* Desktop Hero (Hidden on Mobile) */}
+      <section className="hidden lg:block relative h-[40vh] min-h-[400px] overflow-hidden">
         <div className="absolute inset-0">
           <Image
             src="/images/zebaish4.jpg"
@@ -124,38 +227,9 @@ export default function Products() {
         </div>
       </section>
 
-      {/* New Arrivals Section (Mobile/Tablet Highlight) */}
-      <section className="py-8 pl-4 lg:hidden">
-        <h2 className="mb-4 text-xl font-bold text-gray-900 dark:text-white font-serif">
-          New Arrivals
-        </h2>
-        <div className="flex gap-4 overflow-x-auto pb-4 snap-x pr-4 scrollbar-hide">
-          {allCollections.slice(0, 5).map((product) => (
-            <Link
-              key={`new-${product.code}`}
-              href={product.link}
-              className="relative min-w-[160px] snap-start rounded-lg overflow-hidden flex-shrink-0 group"
-            >
-              <div className="relative aspect-[3/4] w-full">
-                <Image
-                  src={product.image}
-                  alt={product.name}
-                  fill
-                  className="object-cover rounded-lg"
-                />
-                <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 to-transparent p-3 pt-8">
-                  <p className="text-white text-sm font-bold truncate">{product.name}</p>
-                  <p className="text-gray-200 text-xs">${product.price}</p>
-                </div>
-              </div>
-            </Link>
-          ))}
-        </div>
-      </section>
-
       {/* Main Content */}
-      <section className="py-8 lg:py-20">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+      <section className="py-4 lg:py-20">
+        <div className="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8">
           <div className="flex flex-col lg:flex-row gap-8 lg:gap-12">
 
             {/* Sidebar Filters */}
@@ -248,8 +322,8 @@ export default function Products() {
                   <div className="space-y-4 pt-6 border-t border-gray-100 dark:border-gray-800">
                     <div className="flex items-center justify-between">
                       <h3 className="text-xs font-bold text-gray-400 dark:text-gray-500 uppercase tracking-wider">Price Range</h3>
-                      {(priceRange.min > 0 || priceRange.max < 1000) && (
-                        <button onClick={() => setPriceRange({ min: 0, max: 1000 })} className="text-xs text-blue-600 font-medium hover:underline">
+                      {(priceRange.min > 0 || priceRange.max < 100000) && (
+                        <button onClick={() => setPriceRange({ min: 0, max: 100000 })} className="text-xs text-blue-600 font-medium hover:underline">
                           Reset
                         </button>
                       )}
@@ -258,7 +332,7 @@ export default function Products() {
                       <div>
                         <label className="text-xs text-gray-500 mb-1.5 block font-medium">Min</label>
                         <div className="relative group">
-                          <span className="absolute left-3 top-2.5 text-gray-400">$</span>
+                          <span className="absolute left-3 top-2.5 text-gray-400">Rs</span>
                           <input
                             type="number"
                             min="0"
@@ -271,7 +345,7 @@ export default function Products() {
                       <div>
                         <label className="text-xs text-gray-500 mb-1.5 block font-medium">Max</label>
                         <div className="relative group">
-                          <span className="absolute left-3 top-2.5 text-gray-400">$</span>
+                          <span className="absolute left-3 top-2.5 text-gray-400">Rs</span>
                           <input
                             type="number"
                             min="0"
@@ -290,12 +364,12 @@ export default function Products() {
             {/* Results Section */}
             <div className="flex-1">
               {/* Toolbar */}
-              <div className="mb-6 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 animate-fade-in-up">
-                <p className="text-sm text-gray-600 dark:text-gray-400 font-medium">
+              <div className="mb-4 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 animate-fade-in-up">
+                <p className="text-sm text-gray-600 dark:text-gray-400 font-medium hidden sm:block">
                   Showing <span className="text-gray-900 dark:text-white font-bold">{filteredAndSortedProducts.length}</span> results
                 </p>
 
-                <div className="flex items-center gap-3">
+                <div className="flex items-center gap-3 hidden sm:flex">
                   <label htmlFor="sort" className="text-sm font-medium text-gray-700 dark:text-gray-300 whitespace-nowrap">
                     Sort by:
                   </label>
@@ -324,30 +398,21 @@ export default function Products() {
               {/* Products Grid - Optimized for Mobile (2 cols with tighter gap) */}
               {filteredAndSortedProducts.length > 0 ? (
                 <>
-                  <div className="grid grid-cols-2 gap-3 sm:gap-6 md:grid-cols-3 lg:grid-cols-4 xl:gap-8">
+                  <div className="grid grid-cols-2 gap-x-2 gap-y-6 sm:gap-6 md:grid-cols-3 lg:grid-cols-4 xl:gap-8">
                     {filteredAndSortedProducts.map((product, index) => (
                       <div
-                        key={product.code}
-                        className="group relative animate-fade-in-up"
+                        key={product.code || index}
+                        className="group relative animate-fade-in-up flex flex-col h-full bg-transparent"
                         style={{ animationDelay: `${index * 50}ms` }}
                       >
-                        {/* Image - Minimalist: No border, just the image */}
-                        <div className="aspect-[3/4] w-full overflow-hidden rounded-lg bg-gray-100 dark:bg-gray-800 relative">
-                          {/* Badges - Simplified */}
-                          {product.price > 200 && (
-                            <div className="absolute top-2 left-2 z-10">
-                              <span className="inline-block px-2 py-1 text-[10px] font-bold tracking-widest text-white bg-black uppercase shadow-sm">
-                                Premium
-                              </span>
-                            </div>
-                          )}
-                          {product.price < 80 && (
-                            <div className="absolute top-2 left-2 z-10">
-                              <span className="inline-block px-2 py-1 text-[10px] font-bold tracking-widest text-white bg-red-600 uppercase shadow-sm">
-                                Sale
-                              </span>
-                            </div>
-                          )}
+                        {/* Image */}
+                        <div className="aspect-[3/4] w-full overflow-hidden bg-gray-100 dark:bg-gray-800 relative mb-3 rounded-xl">
+                          {/* NEW IN Badge - Exact Replica */}
+                          <div className="absolute top-3 left-3 z-10">
+                            <span className="bg-white text-black text-[10px] font-bold px-3 py-1 rounded-full uppercase tracking-widest shadow-sm">
+                              New In
+                            </span>
+                          </div>
 
                           <Link href={product.link} className="block h-full w-full">
                             <Image
@@ -357,15 +422,24 @@ export default function Products() {
                               sizes="(max-width: 768px) 50vw, (max-width: 1200px) 33vw, 25vw"
                               className="object-cover transition-transform duration-700 ease-out group-hover:scale-105"
                             />
-                            {/* Subtle dark overlay on hover */}
-                            <div className="absolute inset-0 bg-black/0 transition-colors duration-300 group-hover:bg-black/10" />
                           </Link>
 
-                          {/* Quick Add - Minimalist: Floating button */}
-                          <div className="absolute bottom-3 right-3 translate-y-4 opacity-0 transition-all duration-300 group-hover:translate-y-0 group-hover:opacity-100 hidden sm:block">
+                          {/* Cart Button Overlay (Desktop Only) */}
+                          <div className="absolute bottom-3 right-3 translate-y-4 opacity-0 transition-all duration-300 group-hover:translate-y-0 group-hover:opacity-100 hidden lg:block">
                             <button
-                              className="flex h-10 w-10 items-center justify-center rounded-full bg-white text-black shadow-lg transition-transform hover:scale-110 active:scale-95"
-                              title="Add to Cart"
+                              onClick={(e) => {
+                                e.preventDefault();
+                                addToCart({
+                                  id: product.code,
+                                  code: product.code,
+                                  name: product.name,
+                                  price: product.salePrice && product.salePrice < product.price ? product.salePrice : product.price,
+                                  image: product.image,
+                                  category: product.category,
+                                  slug: product.slug,
+                                });
+                              }}
+                              className="flex h-10 w-10 items-center justify-center rounded-full bg-white text-black shadow-lg hover:scale-110 active:scale-95"
                             >
                               <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
@@ -374,45 +448,75 @@ export default function Products() {
                           </div>
                         </div>
 
-                        {/* Product Details - Red Home Store Style */}
-                        <div className="mt-2 space-y-1 text-center">
-                          <div className="min-w-0">
-                            <p className="text-[10px] font-bold uppercase tracking-widest text-gray-500 dark:text-gray-400 mb-1">
-                              {product.category}
-                            </p>
-                            <Link href={product.link} className="block group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
-                              <h3 className="text-sm font-semibold text-gray-900 dark:text-white line-clamp-2 leading-tight">
+                        {/* Product Details - Reference Replica */}
+                        <div className="flex flex-col flex-1 px-1 pt-2 pb-1 justify-between">
+                          <div>
+                            <Link href={product.link} className="block">
+                              <h3 className="text-xs sm:text-sm font-bold text-gray-900 dark:text-white uppercase tracking-wider mb-1 line-clamp-2 min-h-[2.5em]">
                                 {product.name}
                               </h3>
                             </Link>
+
+                            {/* Star Rating */}
+                            <div className="flex items-center gap-1 mt-1 mb-1">
+                              <div className="flex">
+                                {[...Array(5)].map((_, i) => (
+                                  <svg
+                                    key={i}
+                                    className={`w-3 h-3 ${i < Math.round(product.rating || 0) ? "text-yellow-400 fill-current" : "text-gray-300"}`}
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    viewBox="0 0 24 24"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    strokeWidth="2"
+                                    strokeLinecap="round"
+                                    strokeLinejoin="round"
+                                  >
+                                    <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
+                                  </svg>
+                                ))}
+                              </div>
+                              <span className="text-[10px] text-gray-500 font-medium">({product.reviewCount || 0})</span>
+                            </div>
+                            <div className="flex items-center flex-wrap gap-2 mt-2">
+                              {product.salePrice && product.salePrice < product.price ? (
+                                <>
+                                  <p className="text-base font-bold text-gray-900 dark:text-white">
+                                    Rs {product.salePrice.toLocaleString()}
+                                  </p>
+                                  <p className="text-xs text-gray-500 line-through">
+                                    Rs {product.price.toLocaleString()}
+                                  </p>
+                                  <span className="text-[10px] font-bold text-red-600 bg-red-100 px-1.5 py-0.5 rounded-sm dark:bg-red-900/30 dark:text-red-400">
+                                    SAVE {Math.round(((product.price - product.salePrice) / product.price) * 100)}%
+                                  </span>
+                                </>
+                              ) : (
+                                <p className="text-base font-bold text-gray-900 dark:text-white">
+                                  Rs {product.price.toLocaleString()}
+                                </p>
+                              )}
+                            </div>
                           </div>
 
-                          <div className="flex flex-col items-center gap-2 pt-1">
-                            <div className="mt-1 flex items-center gap-2">
-                              <p className="text-sm font-bold text-gray-900 dark:text-white">
-                                ${product.price}
-                              </p>
-                            </div>
-
-                            {/* Quick Add Button - Always Visible */}
-                            <button
-                              onClick={(e) => {
-                                e.preventDefault();
-                                // Add to cart logic here
-                              }}
-                              className="w-full py-1.5 px-3 border border-gray-300 dark:border-gray-700 bg-white dark:bg-black text-xs font-bold uppercase tracking-wider text-gray-900 dark:text-white hover:bg-gray-50 dark:hover:bg-gray-900 transition-colors"
-                            >
-                              Quick Add
-                            </button>
-
-                            {/* Rating stars - Small and subtle */}
-                            <div className="flex items-center gap-0.5 sm:gap-1 text-yellow-500">
-                              <svg className="w-3 h-3 fill-current" viewBox="0 0 20 20">
-                                <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                              </svg>
-                              <span className="text-xs text-gray-400">(24)</span>
-                            </div>
-                          </div>
+                          {/* Add to Cart Button (Mobile/All Screens) - Outlined Style */}
+                          <button
+                            onClick={(e) => {
+                              e.preventDefault();
+                              addToCart({
+                                id: product.code,
+                                code: product.code,
+                                name: product.name,
+                                price: product.salePrice && product.salePrice < product.price ? product.salePrice : product.price,
+                                image: product.image,
+                                category: product.category,
+                                slug: product.slug,
+                              });
+                            }}
+                            className="mt-3 w-full py-2.5 border border-gray-900 dark:border-white text-gray-900 dark:text-white text-[10px] font-bold uppercase tracking-widest rounded-lg hover:bg-gray-900 hover:text-white dark:hover:bg-white dark:hover:text-black transition-all duration-200"
+                          >
+                            Add to Cart
+                          </button>
                         </div>
                       </div>
                     ))}

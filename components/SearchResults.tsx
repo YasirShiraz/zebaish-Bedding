@@ -1,51 +1,72 @@
-"use client";
+import { useState, useEffect } from "react";
+import Link from 'next/link';
+import Image from 'next/image';
+import { useRouter } from 'next/navigation';
+import { allCollections } from '@/lib/products';
 
-import Link from "next/link";
-import Image from "next/image";
-import { allCollections } from "@/lib/products";
+const allProducts = allCollections;
+const blogPosts: any[] = []; // Blog removed or data not available appropriately
 
 interface SearchResultsProps {
   query: string;
   onClose: () => void;
 }
 
-// Use centralized product data for search
-const allProducts = allCollections.map((product) => ({
-  name: product.name,
-  code: product.code,
-  category: product.category,
-  link: product.link,
-}));
-
-// Blog posts data for search  
-const blogPosts = [
-  {
-    title: "Choosing the Perfect Thread Count: A Guide",
-    excerpt: "Understanding thread count is key to finding the perfect sheets. Learn what matters most for your comfort.",
-    category: "Fabric Guide",
-    link: "/blog/thread-count-guide",
-  },
-  {
-    title: "Bridal Bedding Trends for 2024",
-    excerpt: "From royal velvets to subtle embroidery, discover the trends defining elegant bridal bedrooms this year.",
-    category: "Trends",
-    link: "/blog/bridal-trends-2024",
-  },
-  {
-    title: "Why Bamboo Pillows Are a Game Changer",
-    excerpt: "Discover the cooling and hypoallergenic benefits of bamboo memory foam pillows for a better night's sleep.",
-    category: "Sleep Health",
-    link: "/blog/bamboo-pillow-benefits",
-  },
-  {
-    title: "Caring for Your Luxury Duvets",
-    excerpt: "Extend the life of your premium bedding with these simple care and washing tips.",
-    category: "Care Tips",
-    link: "/blog/bedding-care-tips",
-  },
-];
-
 export default function SearchResults({ query, onClose }: SearchResultsProps) {
+  const [history, setHistory] = useState<string[]>([]);
+  const [showHistory, setShowHistory] = useState(false);
+
+  useEffect(() => {
+    const stored = localStorage.getItem('searchHistory');
+    if (stored) {
+      setHistory(JSON.parse(stored));
+    }
+  }, []);
+
+  useEffect(() => {
+    setShowHistory(!query || query.trim().length === 0);
+  }, [query]);
+
+  const clearHistory = () => {
+    localStorage.removeItem('searchHistory');
+    setHistory([]);
+  };
+
+  if (showHistory) {
+    if (history.length === 0) return null;
+
+    return (
+      <div className="absolute left-0 right-0 top-full mt-2 z-50 max-h-96 overflow-y-auto rounded-lg border border-gray-200 bg-white shadow-lg dark:border-gray-800 dark:bg-gray-900 p-4">
+        <div className="flex items-center justify-between mb-3">
+          <h3 className="text-xs font-semibold uppercase tracking-wide text-gray-500 dark:text-gray-400">
+            Recent Searches
+          </h3>
+          <button
+            onClick={clearHistory}
+            className="text-xs text-red-500 hover:text-red-600 font-medium"
+          >
+            Clear History
+          </button>
+        </div>
+        <div className="space-y-2">
+          {history.map((term, index) => (
+            <Link
+              key={index}
+              href={`/search?q=${encodeURIComponent(term)}`}
+              onClick={onClose}
+              className="flex items-center gap-3 rounded-lg p-2 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors cursor-pointer text-sm text-gray-700 dark:text-gray-300"
+            >
+              <svg className="h-4 w-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+              {term}
+            </Link>
+          ))}
+        </div>
+      </div>
+    );
+  }
+
   if (!query || query.trim().length < 2) {
     return null;
   }

@@ -15,18 +15,20 @@ interface AddToCartButtonProps {
   };
   variant?: "default" | "large" | "small";
   className?: string;
+  price?: number;
 }
 
 export default function AddToCartButton({
   product,
   variant = "default",
   className = "",
+  price: propPrice,
 }: AddToCartButtonProps) {
   const { addToCart, isInCart } = useCart();
   const [isAdding, setIsAdding] = useState(false);
   const [showSuccess, setShowSuccess] = useState(false);
 
-  const price = getProductPrice(product.code);
+  const price = propPrice ?? getProductPrice(product.code);
   const inCart = isInCart(product.id);
 
   const handleAddToCart = () => {
@@ -53,11 +55,11 @@ export default function AddToCartButton({
 
   const variantClasses = {
     default:
-      "px-6 py-3 text-base bg-[var(--primary)] text-white shadow-sm hover:bg-[var(--primary-hover)] hover:shadow-md focus:ring-2 focus:ring-offset-2 focus:ring-[var(--primary)]",
+      "px-6 py-3 text-base bg-gradient-to-r from-[#667eea] to-[#764ba2] text-white shadow-md hover:shadow-lg hover:from-[#764ba2] hover:to-[#667eea] rounded-xl transform hover:-translate-y-0.5 transition-all duration-200 active:scale-95 focus:ring-2 focus:ring-offset-2 focus:ring-[#667eea]",
     large:
-      "px-8 py-4 text-lg bg-[var(--primary)] text-white shadow-sm hover:bg-[var(--primary-hover)] hover:shadow-md focus:ring-2 focus:ring-offset-2 focus:ring-[var(--primary)]",
+      "px-8 py-4 text-lg bg-gradient-to-r from-[#667eea] to-[#764ba2] text-white shadow-md hover:shadow-lg hover:from-[#764ba2] hover:to-[#667eea] rounded-xl transform hover:-translate-y-0.5 transition-all duration-200 active:scale-95 focus:ring-2 focus:ring-offset-2 focus:ring-[#667eea]",
     small:
-      "px-4 py-2 text-sm bg-[var(--primary)] text-white shadow-sm hover:bg-[var(--primary-hover)] hover:shadow-md focus:ring-2 focus:ring-offset-2 focus:ring-[var(--primary)]",
+      "px-4 py-2 text-sm bg-gradient-to-r from-[#667eea] to-[#764ba2] text-white shadow-md hover:shadow-lg hover:from-[#764ba2] hover:to-[#667eea] rounded-xl transform hover:-translate-y-0.5 transition-all duration-200 active:scale-95 focus:ring-2 focus:ring-offset-2 focus:ring-[#667eea]",
   };
 
   const secondaryClasses = {
@@ -93,6 +95,8 @@ export default function AddToCartButton({
     );
   }
 
+  /* 
+  // Commented out to allow re-adding (which updates price/quantity)
   if (inCart) {
     return (
       <button
@@ -116,6 +120,7 @@ export default function AddToCartButton({
       </button>
     );
   }
+  */
 
   return (
     <button
@@ -161,7 +166,7 @@ export default function AddToCartButton({
               d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"
             />
           </svg>
-          Add to Cart • ${price.toFixed(2)}
+          Add to Cart • Rs {price.toFixed(2)}
         </>
       )}
     </button>

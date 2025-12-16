@@ -100,8 +100,7 @@ export default function Signup() {
         formData.phone || undefined
       );
       if (success) {
-        router.push("/");
-        router.refresh();
+        window.location.href = "/";
       } else {
         setErrors({ submit: "An account with this email already exists." });
       }
