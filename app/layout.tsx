@@ -28,6 +28,10 @@ export const metadata: Metadata = {
     },
     description: "Discover luxury bedding collections from Zebaish Bedding. Premium cotton sheets, velvet duvets, bridal sets, and home textiles crafted for ultimate comfort.",
     keywords: ["bedding", "luxury bedding", "bridal sets", "duvet covers", "cotton sheets", "home textiles", "zebaish", "pakistan bedding"],
+    icons: {
+        icon: '/images/logo-brand.png',
+        apple: '/images/logo-brand.png',
+    },
     authors: [{ name: "Zebaish Bedding" }],
     creator: "Zebaish Bedding",
     openGraph: {
