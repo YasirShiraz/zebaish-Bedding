@@ -20,6 +20,9 @@ export default function Footer() {
   const description = settings.footer_description || "Transform your living space with our premium bedding and home accessories. Quality, comfort, and style in every thread.";
   const instagram = settings.social_instagram || "https://instagram.com";
   const facebook = settings.social_facebook || "https://facebook.com";
+  const whatsapp = settings.social_whatsapp || "https://wa.me/923453177990";
+  const tiktok = settings.social_tiktok || "https://www.tiktok.com/@zebaish";
+  const youtube = settings.social_youtube || "https://www.youtube.com";
 
   return (
     <footer className="bg-gray-50 dark:bg-black border-t border-gray-200 dark:border-gray-800">
@@ -71,14 +74,92 @@ export default function Footer() {
               {description}
             </p>
             {/* Social Links */}
-            <div className="flex space-x-5">
-              <a href={instagram} target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-black dark:hover:text-white transition-colors">
+            <div className="flex flex-wrap gap-3">
+              {/* Instagram */}
+              <a
+                href={instagram}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="group flex h-9 w-9 items-center justify-center rounded-full bg-gradient-to-tr from-yellow-200 via-pink-300 to-purple-300 text-white shadow-sm ring-1 ring-transparent hover:shadow-md hover:brightness-105 transition-all dark:from-yellow-300 dark:via-pink-400 dark:to-purple-400"
+              >
                 <span className="sr-only">Instagram</span>
-                <svg className="h-6 w-6" fill="currentColor" viewBox="0 0 24 24"><path fillRule="evenodd" d="M12.315 2c2.43 0 2.784.013 3.808.06 1.064.049 1.791.218 2.427.465a4.902 4.902 0 011.772 1.153 4.902 4.902 0 011.153 1.772c.247.636.416 1.363.465 2.427.048 1.067.06 1.407.06 4.123v.08c0 2.643-.012 2.987-.06 4.043-.049 1.064-.218 1.791-.465 2.427a4.902 4.902 0 01-1.153 1.772 4.902 4.902 0 01-1.772 1.153c-.636.247-1.363.416-2.427.465-1.067.048-1.407.06-4.123.06h-.08c-2.643 0-2.987-.012-4.043-.06-1.064-.049-1.791-.218-2.427-.465a4.902 4.902 0 01-1.772-1.153 4.902 4.902 0 01-1.153-1.772c-.247-.636-.416-1.363-.465-2.427-.047-1.024-.06-1.379-.06-3.808v-.63c0-2.43.013-2.784.06-3.808.049-1.064.218-1.791.465-2.427a4.902 4.902 0 011.153-1.772 4.902 4.902 0 011.772-1.153c.636-.247 1.363-.416 2.427-.465C9.673 2.013 10.03 2 12.315 2zm-1.2 1.95c-2.048.078-3.468.25-4.228.84a3.1 3.1 0 00-.97 1.083c-.352.57-.487 1.407-.542 3.018l-.004 1.258c0 2.213.067 2.859.395 3.513.111.22.25.422.412.603.498.558 1.144.75 3.06.775 2.502.032 3.19.043 4.298-.01 1.758-.084 2.66-.464 3.061-.884.22-.232.392-.495.508-.779.317-.798.353-2.031.353-4.706V8.293c0-2.31.006-2.909-.323-3.64a2.95 2.95 0 00-.507-.779c-.401-.42-1.303-.8-3.061-.884-1.358-.065-1.766-.07-4.298-.02l.067.013zm6 6.84c0 3.32-2.69 6.01-6.01 6.01-3.32 0-6.01-2.69-6.01-6.01 0-3.32 2.69-6.01 6.01-6.01 3.32 0 6.01 2.69 6.01 6.01z" clipRule="evenodd" /></svg>
+                <span className="flex h-7 w-7 items-center justify-center rounded-[0.9rem] bg-black/80 group-hover:bg-black transition-colors">
+                  {/* Classic Instagram glyph: rounded square, circle, small dot */}
+                  <svg className="h-4 w-4" viewBox="0 0 24 24" aria-hidden="true">
+                    <rect
+                      x="3"
+                      y="3"
+                      width="18"
+                      height="18"
+                      rx="5"
+                      ry="5"
+                      fill="none"
+                      stroke="white"
+                      strokeWidth="1.6"
+                    />
+                    <circle
+                      cx="12"
+                      cy="12"
+                      r="4"
+                      fill="none"
+                      stroke="white"
+                      strokeWidth="1.6"
+                    />
+                    <circle cx="17" cy="7" r="1.1" fill="white" />
+                  </svg>
+                </span>
               </a>
-              <a href={facebook} target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-black dark:hover:text-white transition-colors">
+              {/* Facebook */}
+              <a
+                href={facebook}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex h-9 w-9 items-center justify-center rounded-full bg-gray-100 text-[#1877F2] shadow-sm ring-1 ring-gray-200 hover:bg-[#1877F2] hover:text-white hover:ring-[#1877F2] transition-colors dark:bg-gray-900 dark:text-[#70a4ff] dark:ring-gray-800 dark:hover:bg-[#1877F2] dark:hover:text-white"
+              >
                 <span className="sr-only">Facebook</span>
-                <svg className="h-6 w-6" fill="currentColor" viewBox="0 0 24 24"><path fillRule="evenodd" d="M22 12c0-5.523-4.477-10-10-10S2 6.477 2 12c0 4.991 3.657 9.128 8.438 9.878v-6.987h-2.54V12h2.54V9.797c0-2.506 1.492-3.89 3.777-3.89 1.094 0 2.238.195 2.238.195v2.46h-1.26c-1.243 0-1.63.771-1.63 1.562V12h2.773l-.443 2.89h-2.33v6.988C18.343 21.128 22 16.991 22 12z" clipRule="evenodd" /></svg>
+                <svg className="h-5 w-5" fill="currentColor" viewBox="0 0 24 24">
+                  <path
+                    fillRule="evenodd"
+                    d="M22 12c0-5.523-4.477-10-10-10S2 6.477 2 12c0 4.991 3.657 9.128 8.438 9.878v-6.987h-2.54V12h2.54V9.797c0-2.506 1.492-3.89 3.777-3.89 1.094 0 2.238.195 2.238.195v2.46h-1.26c-1.243 0-1.63.771-1.63 1.562V12h2.773l-.443 2.89h-2.33v6.988C18.343 21.128 22 16.991 22 12Z"
+                    clipRule="evenodd"
+                  />
+                </svg>
+              </a>
+              {/* WhatsApp */}
+              <a
+                href={whatsapp}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex h-9 w-9 items-center justify-center rounded-full bg-gray-100 text-emerald-500 shadow-sm ring-1 ring-gray-200 hover:bg-emerald-500 hover:text-white hover:ring-emerald-500 transition-colors dark:bg-gray-900 dark:text-emerald-400 dark:ring-gray-800 dark:hover:bg-emerald-500 dark:hover:text-white"
+              >
+                <span className="sr-only">WhatsApp</span>
+                <svg className="h-5 w-5" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                  <path d="M20.52 3.48A11.78 11.78 0 0 0 12.04 0C5.73 0 .6 5.11.6 11.4c0 2.01.53 3.98 1.54 5.72L0 24l7.07-2.09a11.47 11.47 0 0 0 4.97 1.12h.01c6.31 0 11.44-5.11 11.44-11.4 0-3.05-1.21-5.92-3.47-8.15ZM12.05 21.3h-.01a9.7 9.7 0 0 1-4.95-1.36l-.36-.21-4.2 1.24 1.23-4.09-.24-.42A9.37 9.37 0 0 1 2.41 11.4C2.4 6.2 6.8 1.87 12.04 1.87c2.6 0 5.04 1.01 6.88 2.84a9.52 9.52 0 0 1 2.83 6.7c0 5.2-4.4 9.53-9.7 9.53Zm5.34-7.1c-.29-.15-1.7-.84-1.96-.93-.26-.1-.45-.15-.64.15-.19.29-.74.92-.91 1.11-.17.19-.34.21-.63.06-.29-.15-1.22-.49-2.32-1.55-.86-.83-1.44-1.85-1.61-2.15-.17-.29-.02-.45.13-.6.14-.14.29-.34.43-.51.15-.17.19-.29.29-.49.1-.19.05-.36-.02-.51-.07-.15-.64-1.55-.88-2.12-.23-.55-.47-.48-.64-.49h-.55c-.19 0-.5.07-.76.36-.26.29-1 1-1 2.44 0 1.44 1.03 2.84 1.17 3.04.15.19 2.03 3.1 4.92 4.35.69.3 1.23.48 1.65.62.69.22 1.32.19 1.82.12.56-.08 1.7-.69 1.94-1.36.24-.68.24-1.26.17-1.36-.07-.1-.26-.17-.54-.32Z" />
+                </svg>
+              </a>
+              {/* TikTok */}
+              <a
+                href={tiktok}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex h-9 w-9 items-center justify-center rounded-full bg-gray-100 text-gray-900 shadow-sm ring-1 ring-gray-200 hover:bg-black hover:text-white hover:ring-black transition-colors dark:bg-gray-900 dark:text-gray-100 dark:ring-gray-800 dark:hover:bg-white dark:hover:text-black"
+              >
+                <span className="sr-only">TikTok</span>
+                <svg className="h-5 w-5" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                  <path d="M19.69 7.35a5.54 5.54 0 0 1-3.32-1.1A5.67 5.67 0 0 1 14.8 3h-.01A3.1 3.1 0 0 0 11.7 0H9.46v14.02a1.77 1.77 0 0 1-1.8 1.74 1.77 1.77 0 0 1-1.8-1.74 1.77 1.77 0 0 1 1.8-1.74c.18 0 .35.03.52.08V9.3a5.57 5.57 0 0 0-.52-.02A5.72 5.72 0 0 0 2 14.02 5.72 5.72 0 0 0 8.14 20a5.72 5.72 0 0 0 5.76-5.65V9c.59.43 1.26.77 1.97.99.6.2 1.23.31 1.87.33V7.35Z" />
+                </svg>
+              </a>
+              {/* YouTube */}
+              <a
+                href={youtube}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex h-9 w-9 items-center justify-center rounded-full bg-gray-100 text-red-600 shadow-sm ring-1 ring-gray-200 hover:bg-red-600 hover:text-white hover:ring-red-600 transition-colors dark:bg-gray-900 dark:text-red-400 dark:ring-gray-800 dark:hover:bg-red-600 dark:hover:text-white"
+              >
+                <span className="sr-only">YouTube</span>
+                <svg className="h-5 w-5" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                  <path d="M23.5 6.2s-.23-1.64-.95-2.36c-.9-.95-1.9-.96-2.36-1.01C16.4 2.5 12 2.5 12 2.5h-.01s-4.4 0-8.19.33c-.46.05-1.46.06-2.36 1.01C.73 4.56.5 6.2.5 6.2S.27 8.12.27 10.03v1.88c0 1.92.23 3.84.23 3.84s.23 1.64.95 2.36c.9.95 2.08.92 2.61 1.03 1.9.19 7.94.33 7.94.33s4.41-.01 8.2-.34c.46-.05 1.46-.06 2.36-1.01.72-.72.95-2.36.95-2.36s.23-1.92.23-3.84v-1.88c0-1.91-.23-3.83-.23-3.83ZM9.75 14.73V7.77l6.13 3.48-6.13 3.48Z" />
+                </svg>
               </a>
             </div>
           </div>

@@ -119,6 +119,7 @@ export default function SettingsManager() {
                                 </label>
                                 <input
                                     type="url"
+                                    placeholder="https://instagram.com/your-page"
                                     value={settings["social_instagram"] || ""}
                                     onChange={(e) => handleChange("social_instagram", e.target.value)}
                                     className="block w-full rounded-lg border-gray-300 shadow-sm focus:border-black focus:ring-black dark:border-gray-600 dark:bg-gray-700"
@@ -130,8 +131,45 @@ export default function SettingsManager() {
                                 </label>
                                 <input
                                     type="url"
+                                    placeholder="https://facebook.com/your-page"
                                     value={settings["social_facebook"] || ""}
                                     onChange={(e) => handleChange("social_facebook", e.target.value)}
+                                    className="block w-full rounded-lg border-gray-300 shadow-sm focus:border-black focus:ring-black dark:border-gray-600 dark:bg-gray-700"
+                                />
+                            </div>
+                            <div>
+                                <label className="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-300">
+                                    WhatsApp URL
+                                </label>
+                                <input
+                                    type="url"
+                                    placeholder="https://wa.me/92345xxxxxxx"
+                                    value={settings["social_whatsapp"] || ""}
+                                    onChange={(e) => handleChange("social_whatsapp", e.target.value)}
+                                    className="block w-full rounded-lg border-gray-300 shadow-sm focus:border-black focus:ring-black dark:border-gray-600 dark:bg-gray-700"
+                                />
+                            </div>
+                            <div>
+                                <label className="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-300">
+                                    TikTok URL
+                                </label>
+                                <input
+                                    type="url"
+                                    placeholder="https://www.tiktok.com/@your-page"
+                                    value={settings["social_tiktok"] || ""}
+                                    onChange={(e) => handleChange("social_tiktok", e.target.value)}
+                                    className="block w-full rounded-lg border-gray-300 shadow-sm focus:border-black focus:ring-black dark:border-gray-600 dark:bg-gray-700"
+                                />
+                            </div>
+                            <div>
+                                <label className="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-300">
+                                    YouTube URL
+                                </label>
+                                <input
+                                    type="url"
+                                    placeholder="https://youtube.com/@your-channel"
+                                    value={settings["social_youtube"] || ""}
+                                    onChange={(e) => handleChange("social_youtube", e.target.value)}
                                     className="block w-full rounded-lg border-gray-300 shadow-sm focus:border-black focus:ring-black dark:border-gray-600 dark:bg-gray-700"
                                 />
                             </div>

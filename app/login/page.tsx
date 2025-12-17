@@ -5,6 +5,8 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
 import { useAuth } from "@/contexts/AuthContext";
+import { signInWithPopup } from "firebase/auth";
+import { auth, googleProvider } from "@/lib/firebase";
 
 export default function Login() {
   const router = useRouter();
@@ -101,7 +103,7 @@ export default function Login() {
   };
 
   return (
-    <div className="min-h-screen grid grid-cols-1 lg:grid-cols-2 bg-white dark:bg-black">
+    <div className="min-h-screen grid grid-cols-1 lg:grid-cols-2 bg-gradient-to-br from-slate-50 via-white to-slate-100 dark:from-black dark:via-zinc-950 dark:to-zinc-900">
       {/* Left Side - Image/Brand */}
       <div className="hidden lg:block relative h-full">
         <div className="absolute inset-0 bg-gray-900">
@@ -135,34 +137,94 @@ export default function Login() {
       </div>
 
       {/* Right Side - Form */}
-      <div className="flex items-center justify-center p-8 sm:p-12 lg:p-16 relative">
+      <div className="flex items-center justify-center p-4 sm:p-8 lg:p-16 relative">
 
-        <div className="w-full max-w-md space-y-10">
-          <div className="text-center lg:text-left">
+        <div className="w-full max-w-md space-y-10 rounded-2xl bg-white/90 dark:bg-zinc-950/90 shadow-xl shadow-black/5 border border-slate-100 dark:border-zinc-800 backdrop-blur">
+          <div className="px-6 pt-6 sm:px-8 sm:pt-8 text-center lg:text-left space-y-3">
+            <div className="inline-flex items-center gap-2 rounded-full bg-slate-100 px-3 py-1 text-[11px] font-medium uppercase tracking-wide text-slate-600 dark:bg-zinc-900 dark:text-zinc-300">
+              <span className="h-1.5 w-1.5 rounded-full bg-emerald-500" />
+              Secure login • Zebaish Members
+            </div>
             <h2 className="text-3xl font-bold tracking-tight text-gray-900 dark:text-white">
-              Sign in
+              Welcome back
             </h2>
-            <p className="mt-2 text-sm text-gray-600 dark:text-gray-400">
-              New to Zebaish?{" "}
-              <Link
-                href="/signup"
-                className="font-medium text-blue-600 hover:text-blue-500 hover:underline transition-all"
-              >
-                Create an account
-              </Link>
+            <p className="text-sm text-gray-600 dark:text-gray-400">
+              Sign in to view orders, wishlist, and exclusive bedding offers.
+              {" "}
+              <span className="block mt-1">
+                New here?{" "}
+                <Link
+                  href="/signup"
+                  className="font-medium text-blue-600 hover:text-blue-500 hover:underline transition-all"
+                >
+                  Create an account
+                </Link>
+              </span>
             </p>
           </div>
 
-          <div className="space-y-6">
-            {/* Social login temporarily disabled to avoid Firebase config issues */}
+          <div className="space-y-6 px-6 pb-6 sm:px-8 sm:pb-8">
+          {/* Google Login */}
+            {/* Social auth */}
+            <div className="grid grid-cols-1 gap-3">
+              <button
+                type="button"
+                onClick={async () => {
+                  try {
+                    const result = await signInWithPopup(auth, googleProvider);
+                    const firebaseUser = result.user;
 
+                    // Sync with app backend
+                    const res = await fetch("/api/auth/social-login", {
+                      method: "POST",
+                      headers: { "Content-Type": "application/json" },
+                      body: JSON.stringify({
+                        email: firebaseUser.email,
+                        name: firebaseUser.displayName,
+                        image: firebaseUser.photoURL,
+                      }),
+                    });
+
+                    if (res.ok) {
+                      window.location.href = "/";
+                    } else {
+                      setErrors({ submit: "Failed to sync with server" });
+                    }
+                  } catch (error) {
+                    console.error("Google sign in error", error);
+                    setErrors({ submit: "Failed to sign in with Google" });
+                  }
+                }}
+                className="group relative flex items-center justify-center gap-3 rounded-full border border-gray-300 bg-white px-4 py-3 text-sm font-medium text-gray-800 shadow-sm hover:bg-gray-50 hover:border-gray-400 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-900 transition-all dark:bg-black dark:text-gray-100 dark:border-gray-700 dark:hover:bg-gray-900"
+              >
+                <svg className="h-5 w-5" viewBox="0 0 24 24" aria-hidden="true">
+                  <path
+                    fill="#EA4335"
+                    d="M11.99 10.2v3.6h5.02c-.2 1.14-.81 2.1-1.73 2.75l2.8 2.17C19.96 17.4 21 15.2 21 12.6c0-.44-.04-.86-.11-1.26H11.99z"
+                  />
+                  <path
+                    fill="#34A853"
+                    d="M6.62 13.62 5.96 14.1l-2.24 1.73C5.13 19 8.31 21 11.99 21c2.43 0 4.47-.8 5.96-2.18l-2.8-2.17c-.78.54-1.78.87-3.16.87-2.43 0-4.49-1.63-5.21-3.9z"
+                  />
+                  <path
+                    fill="#FBBC05"
+                    d="M4.72 8.83 2.48 7.1C1.54 8.86 1.54 11.02 2.48 12.78c.8 1.56 2.16 2.77 3.74 3.34v-2.5C5.5 12.35 5.3 11.7 5.3 11c0-.7.2-1.35.42-1.98z"
+                  />
+                  <path
+                    fill="#4285F4"
+                    d="M11.99 4.5c1.33 0 2.52.46 3.46 1.37l2.58-2.57C16.45 1.8 14.42 1 11.99 1 8.31 1 5.13 3 3.72 6.27l2.9 2.56c.72-2.27 2.78-4.33 5.37-4.33z"
+                  />
+                </svg>
+                <span>Login with Google</span>
+              </button>
+            </div>
             <div className="relative">
               <div className="absolute inset-0 flex items-center">
                 <div className="w-full border-t border-gray-200 dark:border-gray-800" />
               </div>
               <div className="relative flex justify-center text-sm">
                 <span className="bg-white dark:bg-black px-4 text-gray-500 dark:text-gray-400 lowercase italic">
-                  or continue with email
+                  or login with email
                 </span>
               </div>
             </div>
@@ -241,8 +303,9 @@ export default function Login() {
               <button
                 type="submit"
                 disabled={isSubmitting}
-                className="flex w-full justify-center rounded-xl bg-gray-900 px-3 py-3.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-gray-800 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gray-900 disabled:opacity-50 disabled:cursor-not-allowed transition-all dark:bg-white dark:text-black dark:hover:bg-gray-100"
+                className="relative inline-flex w-full items-center justify-center overflow-hidden rounded-full bg-gradient-to-r from-amber-500 via-rose-500 to-fuchsia-600 px-4 py-3.5 text-sm font-semibold leading-6 text-white shadow-lg shadow-rose-500/40 ring-1 ring-rose-500/40 transition-all hover:shadow-rose-500/60 hover:brightness-105 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-rose-500 disabled:opacity-60 disabled:cursor-not-allowed dark:from-amber-400 dark:via-rose-400 dark:to-fuchsia-500"
               >
+                <span className="absolute inset-0 -z-10 bg-[radial-gradient(circle_at_top,_rgba(254,249,195,0.28),_transparent_55%),radial-gradient(circle_at_bottom,_rgba(244,114,182,0.35),_transparent_55%)] opacity-60" />
                 {isSubmitting ? (
                   <span className="flex items-center gap-2">
                     <svg className="animate-spin h-4 w-4" fill="none" viewBox="0 0 24 24">
@@ -252,7 +315,7 @@ export default function Login() {
                     Signing in...
                   </span>
                 ) : (
-                  "Sign in"
+                  "Sign in to your account"
                 )}
               </button>
             </form>
