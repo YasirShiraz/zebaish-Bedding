@@ -4,7 +4,6 @@ import Link from "next/link";
 import Image from "next/image";
 import HeroCarousel from "../components/HeroCarousel";
 import { useEffect, useState } from "react";
-import { getProductImage } from "@/lib/products";
 
 interface Stat {
   value: string;
@@ -25,30 +24,66 @@ interface CTA {
   buttonLink: string;
 }
 
+interface HomeSectionConfig {
+  id: string;
+  title: string;
+  category: string;
+  limit: number;
+  enabled: boolean;
+  image?: string;
+}
+
+// Helper to safely get a product image from DB model (images stored as JSON string)
+const getDbProductImage = (product: any): string => {
+  if (!product) return "/images/zebaish1 (1).jpg";
+
+  if (product.image && typeof product.image === "string") {
+    return product.image;
+  }
+
+  if (product.images && typeof product.images === "string") {
+    try {
+      const parsed = JSON.parse(product.images);
+      if (Array.isArray(parsed) && parsed[0]) {
+        return parsed[0];
+      }
+    } catch (e) {
+      console.error("Failed to parse product images JSON", e);
+    }
+  }
+
+  return "/images/zebaish1 (1).jpg";
+};
+
 export default function Home() {
   const [stats, setStats] = useState<Stat[]>([]);
   const [services, setServices] = useState<Service[]>([]);
   const [cta, setCta] = useState<CTA | null>(null);
   const [signatureCollections, setSignatureCollections] = useState<any[]>([]);
+  const [homeSections, setHomeSections] = useState<HomeSectionConfig[] | null>(
+    null
+  );
 
   useEffect(() => {
     // Fetch CMS content
     const fetchContent = async () => {
       try {
-        const [statsRes, servicesRes, ctaRes, collectionsRes] = await Promise.all([
+        const [statsRes, servicesRes, sectionsRes] = await Promise.all([
           fetch("/api/cms/content/stats"),
           fetch("/api/cms/content/services"),
-          fetch("/api/cms/content/cta"),
-          fetch("/api/cms/content/signature_collections"),
+          fetch("/api/cms/home-sections"),
         ]);
 
-        if (statsRes.ok) setStats(await statsRes.json());
-        if (servicesRes.ok) setServices(await servicesRes.json());
-        if (ctaRes.ok) setCta(await ctaRes.json());
-        if (collectionsRes.ok) {
-          const data = await collectionsRes.json();
+        if (statsRes.ok && statsRes.headers.get("content-type")?.includes("application/json")) {
+          setStats(await statsRes.json());
+        }
+        if (servicesRes.ok && servicesRes.headers.get("content-type")?.includes("application/json")) {
+          setServices(await servicesRes.json());
+        }
+        if (sectionsRes.ok && sectionsRes.headers.get("content-type")?.includes("application/json")) {
+          const data = await sectionsRes.json();
           if (Array.isArray(data) && data.length > 0) {
-            setSignatureCollections(data);
+            setHomeSections(data);
           }
         }
       } catch (error) {
@@ -59,38 +94,32 @@ export default function Home() {
     fetchContent();
   }, []);
 
-  const defaultProducts = [
-    {
-      name: "Bridal Bedding Sets",
-      category: "Bridal Collection",
-      description: "Exquisite bridal sets designed for luxury and elegance on your special day.",
-      image: "/images/zebaish1 (1).jpg",
-      link: "/products/elegant-bridal-bedding",
-    },
-    {
-      name: "Royal Comfort Duvet",
-      category: "Duvet Sets",
-      description: "Experience the embrace of royalty with our premium velvet-touch duvets.",
-      image: "/images/bedding/new/duvet_01.png",
-      link: "/products/royal-comfort-duvet",
-    },
-    {
-      name: "Luxury Cotton Sheets",
-      category: "Bed Sheets",
-      description: "Breathable, 100% cotton sheets for a cool, crisp, and comfortable sleep.",
-      image: "/images/bedding/new/sheet_01.png",
-      link: "/products/luxury-cotton-sheet",
-    },
-    {
-      name: "Premium Sofa Covers",
-      category: "Sofa Covers",
-      description: "Transform your living room with our elegant, durable sofa covers in various designs.",
-      image: "/images/bedding/new/sofa_cover.png",
-      link: "/products/sofa-cover-premium",
-    },
-  ];
-
-  const mainProducts = signatureCollections.length > 0 ? signatureCollections : defaultProducts;
+  const effectiveHomeSections: HomeSectionConfig[] =
+    homeSections && homeSections.length === 3
+      ? homeSections
+      : [
+          {
+            id: "bridal",
+            title: "Bridal Bedding",
+            category: "bridal-bedding",
+            limit: 8,
+            enabled: true,
+          },
+          {
+            id: "kitchen",
+            title: "Home & Kitchen",
+            category: "mats",
+            limit: 8,
+            enabled: true,
+          },
+          {
+            id: "beauty",
+            title: "Towels & Bath Shawls",
+            category: "towels",
+            limit: 8,
+            enabled: true,
+          },
+        ];
 
   const getIcon = (key: string) => {
     switch (key) {
@@ -123,174 +152,270 @@ export default function Home() {
     }
   };
 
+  const featureRow: Service[] =
+    services && services.length > 0
+      ? services.slice(0, 4)
+      : [
+          {
+            title: "Premium Quality",
+            description: "Soft, durable fabrics selected for everyday comfort.",
+            icon: "shield",
+          },
+          {
+            title: "Fast Delivery",
+            description: "Quick dispatch across Pakistan with safe packaging.",
+            icon: "truck",
+          },
+          {
+            title: "Easy Exchange",
+            description: "Simple return & exchange policy on eligible orders.",
+            icon: "refresh",
+          },
+          {
+            title: "Gift Ready",
+            description: "Perfect for bridal trousseau & special occasions.",
+            icon: "gift",
+          },
+        ];
+
   return (
-    <div className="bg-gray-50 dark:bg-black transition-colors duration-300 font-sans">
-      {/* Hero Carousel */}
-      <HeroCarousel />
+    <div className="bg-white dark:bg-slate-950 text-slate-900 dark:text-slate-100 transition-colors duration-300 font-sans">
+      {/* Hero Banner */}
+      <section className="bg-white dark:bg-slate-950 border-b border-slate-100 dark:border-slate-800">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 pt-6 pb-10">
+          <HeroCarousel />
+        </div>
+      </section>
 
-      {/* Stats Section - Premium White Cards */}
-      {stats.length > 0 && (
-        <section className="py-12 -mt-10 relative z-20 px-4">
-          <div className="mx-auto max-w-7xl">
-            <div className="grid grid-cols-2 gap-4 sm:gap-6 lg:grid-cols-4">
-              {stats.map((stat, index) => (
-                <div 
-                  key={index}
-                  className="flex flex-col items-center justify-center text-center p-6 sm:p-8 rounded-xl bg-white dark:bg-gray-900 shadow-[0_8px_30px_rgb(0,0,0,0.04)] hover:shadow-[0_8px_30px_rgb(0,0,0,0.08)] transition-shadow duration-300"
-                >
-                  <div className="text-3xl sm:text-4xl font-extrabold text-gray-900 dark:text-white mb-2 font-serif">
-                    {stat.value}
-                  </div>
-                  <div className="text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-widest">
-                    {stat.label}
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-        </section>
-      )}
-
-      {/* Main Products Section - Signature Collections */}
-      <section className="py-16 sm:py-24">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="mx-auto max-w-2xl text-center mb-12 sm:mb-16">
-            <p className="text-xs font-bold uppercase tracking-[0.2em] text-orange-600 dark:text-orange-500 mb-4">
-              Featured Collections
-            </p>
-            <h2 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-gray-900 dark:text-white font-serif mb-6 leading-tight">
-              Our Signature Collections
-            </h2>
-            <p className="text-lg text-gray-600 dark:text-gray-400 max-w-xl mx-auto font-light">
-              Transform your bedroom into a sanctuary of comfort and style with Zebaish Corner's premium bedding collections.
-            </p>
-          </div>
-
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            {mainProducts.map((product, index) => (
-              <Link
-                key={product.name}
-                href={product.link}
-                className="group relative h-[400px] overflow-hidden rounded-2xl cursor-pointer"
+      {/* Feature Row (icons) */}
+      <section className="bg-white dark:bg-slate-950 border-b border-slate-100 dark:border-slate-800">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 sm:gap-6">
+            {featureRow.map((item, index) => (
+              <div
+                key={index}
+                className="flex items-center gap-3 rounded-xl bg-slate-50 dark:bg-slate-900 px-4 py-3 shadow-sm"
               >
-                <Image
-                  src={product.image}
-                  alt={product.name}
-                  fill
-                  className="object-cover transition-transform duration-700 group-hover:scale-110"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent opacity-80 group-hover:opacity-90 transition-opacity" />
-
-                <div className="absolute bottom-6 left-6 right-6">
-                  <p className="text-[10px] font-bold uppercase tracking-widest text-orange-400 mb-2">
-                    {product.category}
-                  </p>
-                  <h3 className="text-2xl font-bold text-white font-serif mb-2 leading-tight">
-                    {product.name}
-                  </h3>
-                  <div className="h-0.5 w-12 bg-white group-hover:w-full transition-all duration-500" />
+                <div className="text-rose-500 dark:text-rose-300">
+                  {getIcon(item.icon)}
                 </div>
-              </Link>
+                <div>
+                  <p className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-700 dark:text-slate-200">
+                    {item.title}
+                  </p>
+                  <p className="mt-1 text-[11px] text-slate-500 dark:text-slate-400">
+                    {item.description}
+                  </p>
+                </div>
+              </div>
             ))}
-          </div>
-
-          {/* View All Button */}
-          <div className="mt-16 text-center">
-            <Link
-              href="/products"
-              className="group inline-flex items-center gap-3 px-10 py-5 bg-gray-900 dark:bg-white text-white dark:text-black font-medium rounded-full hover:bg-black dark:hover:bg-gray-200 transform hover:-translate-y-1 transition-all duration-300 shadow-xl shadow-gray-200/50 dark:shadow-none"
-            >
-              View All Collection
-              <svg className="w-5 h-5 transition-transform duration-300 group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M17.25 8.25L21 12m0 0l-3.75 3.75M21 12H3" />
-              </svg>
-            </Link>
           </div>
         </div>
       </section>
 
-      {/* Services Section - Why Choose Us */}
-      {services.length > 0 && (
-        <section className="py-20 bg-gray-50 dark:bg-black">
-          <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-            <div className="text-center mb-16">
-              <p className="text-xs font-bold uppercase tracking-[0.2em] text-orange-600 dark:text-orange-500 mb-4">
-                Why Choose Us
-              </p>
-              <h2 className="text-4xl sm:text-5xl font-bold text-gray-900 dark:text-white font-serif">
-                Premium Service Guaranteed
-              </h2>
-            </div>
+      {/* New Arrivals */}
+      <NewArrivalsSection />
 
-            <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-4">
-              {services.map((service, index) => (
-                <div
-                  key={index}
-                  className="bg-white dark:bg-gray-900 rounded-2xl p-8 shadow-[0_4px_20px_rgb(0,0,0,0.03)] hover:shadow-[0_8px_30px_rgb(0,0,0,0.06)] transition-shadow duration-300 text-left border border-gray-100 dark:border-gray-800"
-                >
-                  <div className="w-14 h-14 bg-orange-50 dark:bg-orange-900/20 rounded-xl flex items-center justify-center text-orange-600 dark:text-orange-500 mb-6">
-                    {getIcon(service.icon)}
+      {/* Repeating sections: banner + grid (like reference layout) */}
+      <section className="bg-slate-50 dark:bg-slate-950">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-10 sm:py-12 space-y-10 sm:space-y-12">
+          {effectiveHomeSections
+            .filter((section) => section.enabled)
+            .map((section) => (
+              <CategorySection key={section.id} config={section} />
+            ))}
+        </div>
+      </section>
+    </div>
+  );
+}
+
+type CategorySectionProps = {
+  config: HomeSectionConfig;
+};
+
+function NewArrivalsSection() {
+  const [products, setProducts] = useState<any[]>([]);
+
+  useEffect(() => {
+    const fetchProducts = async () => {
+      try {
+        const params = new URLSearchParams();
+        params.set("limit", String(8));
+
+        const res = await fetch(`/api/products?${params.toString()}`);
+        if (!res.ok) {
+          console.error("Failed to fetch new arrivals", res.status, res.statusText);
+          return;
+        }
+
+        const contentType = res.headers.get("content-type") || "";
+        if (!contentType.includes("application/json")) {
+          // API ne HTML ya koi aur response bheja, JSON parse nahi karenge
+          console.error("Expected JSON for /api/products but got", contentType);
+          return;
+        }
+
+        const data = await res.json();
+        setProducts(Array.isArray(data) ? data : []);
+      } catch (error) {
+        console.error("Failed to fetch new arrivals", error);
+      }
+    };
+
+    fetchProducts();
+  }, []);
+
+  if (!products || products.length === 0) return null;
+
+  return (
+    <section className="bg-slate-50 dark:bg-slate-950 border-b border-slate-100 dark:border-slate-900">
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-10 sm:py-12">
+        <div className="flex items-center justify-between mb-6 sm:mb-8">
+          <div>
+            <p className="text-[11px] font-semibold uppercase tracking-[0.26em] text-rose-500 dark:text-rose-300">
+              Just In
+            </p>
+            <h2 className="mt-2 text-2xl sm:text-3xl font-semibold font-serif text-slate-900 dark:text-slate-50">
+              New Arrivals
+            </h2>
+          </div>
+          <Link
+            href="/products"
+            className="text-xs sm:text-sm font-medium text-rose-600 dark:text-rose-300 hover:underline"
+          >
+            View all products
+          </Link>
+        </div>
+
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 sm:gap-6">
+          {products.slice(0, 8).map((product) => {
+            const imageSrc = getDbProductImage(product);
+
+            return (
+              <Link
+                key={product.id}
+                href={`/products/${product.slug}`}
+                className="group bg-white dark:bg-slate-900 rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-shadow border border-slate-100 dark:border-slate-800"
+              >
+                <div className="relative h-40 sm:h-48">
+                  <Image
+                    src={imageSrc}
+                    alt={product.name}
+                    fill
+                    className="object-cover group-hover:scale-105 transition-transform duration-300"
+                  />
+                  <div className="absolute top-2 left-2 rounded-full bg-rose-600 text-white text-[10px] font-semibold px-2 py-0.5">
+                    NEW
                   </div>
-                  <h3 className="text-lg font-bold text-gray-900 dark:text-white mb-3">
-                    {service.title}
+                </div>
+                <div className="p-3 sm:p-4 space-y-1">
+                  <p className="text-[10px] uppercase tracking-[0.18em] text-slate-400">
+                    {product.category?.name || ""}
+                  </p>
+                  <h3 className="text-xs sm:text-sm font-semibold text-slate-900 dark:text-slate-50 line-clamp-2">
+                    {product.name}
                   </h3>
-                  <p className="text-sm text-gray-500 dark:text-gray-400 leading-relaxed">
-                    {service.description}
+                  <p className="text-xs font-medium text-slate-900 dark:text-slate-50">
+                    Rs. {product.salePrice ?? product.price}
                   </p>
                 </div>
-              ))}
+              </Link>
+            );
+          })}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function CategorySection({ config }: CategorySectionProps) {
+  const [products, setProducts] = useState<any[]>([]);
+
+  useEffect(() => {
+    const fetchProducts = async () => {
+      try {
+        const params = new URLSearchParams();
+        if (config.category) params.set("category", config.category);
+        if (config.limit) params.set("limit", String(config.limit));
+
+        const res = await fetch(`/api/products?${params.toString()}`);
+        if (res.ok) {
+          const data = await res.json();
+          setProducts(Array.isArray(data) ? data : []);
+        }
+      } catch (error) {
+        console.error("Failed to fetch section products", error);
+      }
+    };
+
+    fetchProducts();
+  }, [config.category, config.limit]);
+
+  if (!products || products.length === 0) return null;
+
+  return (
+    <section className="py-12 sm:py-16">
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 space-y-8">
+        {/* Optional large banner image */}
+        {config.image && (
+          <div className="relative h-40 sm:h-60 w-full overflow-hidden rounded-3xl bg-gray-200 dark:bg-gray-800">
+            <Image
+              src={config.image}
+              alt={config.title}
+              fill
+              className="object-cover"
+            />
+            <div className="absolute inset-0 bg-gradient-to-r from-black/60 via-black/10 to-transparent" />
+            <div className="relative z-10 h-full flex items-center px-6 sm:px-10">
+              <h2 className="text-2xl sm:text-3xl lg:text-4xl font-semibold tracking-[0.25em] uppercase text-white">
+                {config.title}
+              </h2>
             </div>
           </div>
-        </section>
-      )}
+        )}
 
-      {/* CTA Section - Ready to Transform */}
-      {cta && (
-        <section className="py-16 sm:py-24 px-4">
-          <div className="mx-auto max-w-7xl relative overflow-hidden rounded-[2.5rem]">
-            <div className="absolute inset-0">
-              <Image
-                src={cta.image}
-                alt="Luxury Bedding"
-                fill
-                className="object-cover"
-              />
-              <div className="absolute inset-0 bg-gradient-to-r from-red-900/90 to-red-950/40 mix-blend-multiply"></div>
-              <div className="absolute inset-0 bg-black/20"></div>
-            </div>
-
-            <div className="relative z-10 px-6 py-24 sm:px-12 lg:px-20 text-center sm:text-left flex flex-col sm:flex-row items-center justify-between gap-12">
-              <div className="max-w-2xl">
-                <h2
-                  className="text-4xl sm:text-5xl lg:text-6xl font-bold text-white font-serif mb-6 leading-tight"
-                  dangerouslySetInnerHTML={{ __html: cta.title }}
-                />
-                <p className="text-lg text-white/90 font-light max-w-lg">
-                  {cta.description}
-                </p>
-              </div>
-
-              <div className="flex flex-col sm:flex-row gap-4 shrink-0">
-                <Link
-                  href={cta.buttonLink || "/products"}
-                  className="group inline-flex items-center justify-center gap-2 px-8 py-4 bg-white text-gray-900 font-bold rounded-full hover:bg-gray-50 hover:scale-105 hover:shadow-lg transition-all duration-300 transform"
-                >
-                  {cta.buttonText}
-                  <svg className="w-5 h-5 transition-transform duration-300 group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
-                  </svg>
-                </Link>
-                <Link
-                  href="/contact"
-                  className="inline-flex items-center justify-center gap-2 px-8 py-4 bg-transparent border-2 border-white/30 text-white font-bold rounded-full hover:bg-white/10 hover:border-white transition-all"
-                >
-                  Contact Us
-                </Link>
-              </div>
-            </div>
+        {!config.image && (
+          <div className="flex items-center justify-between">
+            <h2 className="text-xl sm:text-2xl font-semibold tracking-[0.2em] uppercase text-gray-900 dark:text-white">
+              {config.title}
+            </h2>
           </div>
-        </section>
-      )}
-    </div>
+        )}
+
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 sm:gap-6">
+          {products.slice(0, config.limit).map((product) => {
+            const imageSrc = getDbProductImage(product);
+            return (
+              <Link
+                key={product.id}
+                href={`/products/${product.slug}`}
+                className="group bg-white dark:bg-gray-900 rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-shadow border border-gray-100 dark:border-gray-800"
+              >
+                <div className="relative h-40 sm:h-48">
+                  <Image
+                    src={imageSrc}
+                    alt={product.name}
+                    fill
+                    className="object-cover group-hover:scale-105 transition-transform duration-300"
+                  />
+                </div>
+                <div className="p-3 sm:p-4 space-y-1">
+                  <p className="text-[10px] uppercase tracking-[0.18em] text-gray-400">
+                    {product.category?.name || ""}
+                  </p>
+                  <h3 className="text-xs sm:text-sm font-semibold text-gray-900 dark:text-white line-clamp-2">
+                    {product.name}
+                  </h3>
+                  <p className="text-xs font-medium text-gray-900 dark:text-white">
+                    Rs. {product.salePrice ?? product.price}
+                  </p>
+                </div>
+              </Link>
+            );
+          })}
+        </div>
+      </div>
+    </section>
   );
 }

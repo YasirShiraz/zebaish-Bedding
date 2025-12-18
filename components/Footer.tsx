@@ -25,30 +25,33 @@ export default function Footer() {
   const youtube = settings.social_youtube || "https://www.youtube.com";
 
   return (
-    <footer className="bg-gray-50 dark:bg-black border-t border-gray-200 dark:border-gray-800">
-      {/* Newsletter Section - Premium Band */}
-      <div className="border-b border-gray-200 dark:border-gray-800">
-        <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
+    <footer className="bg-gray-50 border-t border-gray-200 text-slate-800 dark:bg-black dark:border-white/10 dark:text-gray-200">
+      {/* Newsletter Section - Luxury Band */}
+      <div className="border-b border-gray-200 bg-white dark:border-white/10 dark:bg-gradient-to-r dark:from-black dark:via-[#120414] dark:to-black">
+        <div className="mx-auto max-w-7xl px-4 py-10 sm:px-6 lg:px-8">
           <div className="flex flex-col items-center justify-between gap-8 md:flex-row">
-            <div className="text-center md:text-left">
-              <h3 className="text-2xl font-serif font-medium text-gray-900 dark:text-white">
-                Join Our Newsletter
+            <div className="text-center md:text-left max-w-xl">
+              <p className="text-[11px] font-semibold uppercase tracking-[0.3em] text-rose-600 dark:text-rose-200">
+                Stay In The Zebaish Circle
+              </p>
+              <h3 className="mt-3 text-2xl sm:text-3xl font-serif font-medium text-slate-900 dark:text-white">
+                Be the first to know about new bridal drops &amp; private sales.
               </h3>
-              <p className="mt-2 text-sm text-gray-600 dark:text-gray-400">
-                Subscribe to receive updates, access to exclusive deals, and more.
+              <p className="mt-2 text-sm text-slate-600 dark:text-gray-300">
+                No spam — only thoughtfully curated inspiration for your bedroom and home.
               </p>
             </div>
             <form className="flex w-full max-w-md flex-col gap-3 sm:flex-row sm:gap-2">
               <input
                 type="email"
                 placeholder="Enter your email address"
-                className="w-full min-w-0 appearance-none rounded-md border border-gray-300 bg-white px-4 py-2.5 text-sm text-gray-900 focus:border-black focus:ring-1 focus:ring-black dark:border-gray-700 dark:bg-gray-800 dark:text-white dark:focus:border-white dark:focus:ring-white"
+                className="w-full min-w-0 appearance-none rounded-full border border-gray-300 bg-white px-4 py-2.5 text-sm text-slate-900 placeholder:text-gray-400 focus:border-rose-300 focus:ring-1 focus:ring-rose-300/70 outline-none dark:border-white/15 dark:bg-white/5 dark:text-gray-100"
               />
               <button
                 type="submit"
-                className="flex w-full items-center justify-center rounded-md border border-transparent bg-black px-6 py-2.5 text-sm font-medium text-white hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-black focus:ring-offset-2 dark:bg-white dark:text-black dark:hover:bg-gray-200 sm:w-auto"
+                className="flex w-full items-center justify-center rounded-full bg-black px-6 py-2.5 text-sm font-semibold text-white shadow-[0_14px_40px_rgba(0,0,0,0.2)] hover:bg-rose-600 hover:-translate-y-0.5 transition-all duration-300 sm:w-auto dark:bg-white dark:text-gray-900 dark:shadow-[0_14px_40px_rgba(0,0,0,0.6)] dark:hover:bg-rose-50"
               >
-                Subscribe
+                Join Newsletter
               </button>
             </form>
           </div>
@@ -63,14 +66,14 @@ export default function Footer() {
             <Link href="/" className="-m-1.5 p-1.5">
               <span className="sr-only">Zebaish Bedding</span>
               <Image
-                className="h-8 w-auto dark:invert dark:brightness-0 dark:sepia dark:hue-rotate-15 dark:saturate-50"
+                className="h-8 w-auto dark:invert dark:brightness-0"
                 width={150}
                 height={40}
                 src="/images/logo-text.svg"
                 alt="Zebaish Bedding"
               />
             </Link>
-            <p className="text-sm leading-relaxed text-gray-600 dark:text-gray-400">
+            <p className="text-sm leading-relaxed text-slate-600 dark:text-gray-300">
               {description}
             </p>
             {/* Social Links */}
@@ -80,7 +83,7 @@ export default function Footer() {
                 href={instagram}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="group flex h-9 w-9 items-center justify-center rounded-full bg-gradient-to-tr from-yellow-200 via-pink-300 to-purple-300 text-white shadow-sm ring-1 ring-transparent hover:shadow-md hover:brightness-105 transition-all dark:from-yellow-300 dark:via-pink-400 dark:to-purple-400"
+                className="group flex h-9 w-9 items-center justify-center rounded-full bg-gradient-to-tr from-yellow-200 via-pink-300 to-purple-300 text-white shadow-md ring-1 ring-white/20 hover:shadow-lg hover:brightness-110 transition-all"
               >
                 <span className="sr-only">Instagram</span>
                 <span className="flex h-7 w-7 items-center justify-center rounded-[0.9rem] bg-black/80 group-hover:bg-black transition-colors">
@@ -114,7 +117,7 @@ export default function Footer() {
                 href={facebook}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex h-9 w-9 items-center justify-center rounded-full bg-gray-100 text-[#1877F2] shadow-sm ring-1 ring-gray-200 hover:bg-[#1877F2] hover:text-white hover:ring-[#1877F2] transition-colors dark:bg-gray-900 dark:text-[#70a4ff] dark:ring-gray-800 dark:hover:bg-[#1877F2] dark:hover:text-white"
+                className="flex h-9 w-9 items-center justify-center rounded-full bg-white/5 text-[#70a4ff] shadow-sm ring-1 ring-white/10 hover:bg-[#1877F2] hover:text-white hover:ring-[#1877F2] transition-colors"
               >
                 <span className="sr-only">Facebook</span>
                 <svg className="h-5 w-5" fill="currentColor" viewBox="0 0 24 24">
@@ -130,7 +133,7 @@ export default function Footer() {
                 href={whatsapp}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex h-9 w-9 items-center justify-center rounded-full bg-gray-100 text-emerald-500 shadow-sm ring-1 ring-gray-200 hover:bg-emerald-500 hover:text-white hover:ring-emerald-500 transition-colors dark:bg-gray-900 dark:text-emerald-400 dark:ring-gray-800 dark:hover:bg-emerald-500 dark:hover:text-white"
+                className="flex h-9 w-9 items-center justify-center rounded-full bg-white/5 text-emerald-400 shadow-sm ring-1 ring-white/10 hover:bg-emerald-500 hover:text-white hover:ring-emerald-500 transition-colors"
               >
                 <span className="sr-only">WhatsApp</span>
                 <svg className="h-5 w-5" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
@@ -142,7 +145,7 @@ export default function Footer() {
                 href={tiktok}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex h-9 w-9 items-center justify-center rounded-full bg-gray-100 text-gray-900 shadow-sm ring-1 ring-gray-200 hover:bg-black hover:text-white hover:ring-black transition-colors dark:bg-gray-900 dark:text-gray-100 dark:ring-gray-800 dark:hover:bg-white dark:hover:text-black"
+                className="flex h-9 w-9 items-center justify-center rounded-full bg-white/5 text-gray-100 shadow-sm ring-1 ring-white/10 hover:bg-white hover:text-black hover:ring-white transition-colors"
               >
                 <span className="sr-only">TikTok</span>
                 <svg className="h-5 w-5" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
@@ -154,7 +157,7 @@ export default function Footer() {
                 href={youtube}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex h-9 w-9 items-center justify-center rounded-full bg-gray-100 text-red-600 shadow-sm ring-1 ring-gray-200 hover:bg-red-600 hover:text-white hover:ring-red-600 transition-colors dark:bg-gray-900 dark:text-red-400 dark:ring-gray-800 dark:hover:bg-red-600 dark:hover:text-white"
+                className="flex h-9 w-9 items-center justify-center rounded-full bg-white/5 text-red-400 shadow-sm ring-1 ring-white/10 hover:bg-red-600 hover:text-white hover:ring-red-600 transition-colors"
               >
                 <span className="sr-only">YouTube</span>
                 <svg className="h-5 w-5" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
@@ -166,27 +169,27 @@ export default function Footer() {
 
           {/* Explore Links */}
           <div>
-            <h3 className="text-sm font-semibold uppercase tracking-wider text-gray-900 dark:text-white">
+            <h3 className="text-sm font-semibold uppercase tracking-wider text-slate-900 dark:text-white">
               Explore
             </h3>
             <ul className="mt-6 space-y-4 text-sm">
               <li>
-                <Link href="/" className="text-gray-600 hover:text-black dark:text-gray-400 dark:hover:text-white transition-colors">
+                <Link href="/" className="text-slate-600 hover:text-slate-900 dark:text-gray-300 dark:hover:text-white transition-colors">
                   Home
                 </Link>
               </li>
               <li>
-                <Link href="/products" className="text-gray-600 hover:text-black dark:text-gray-400 dark:hover:text-white transition-colors">
+                <Link href="/products" className="text-slate-600 hover:text-slate-900 dark:text-gray-300 dark:hover:text-white transition-colors">
                   All Products
                 </Link>
               </li>
               <li>
-                <Link href="/products?sort=newest" className="text-gray-600 hover:text-black dark:text-gray-400 dark:hover:text-white transition-colors">
+                <Link href="/products?sort=newest" className="text-slate-600 hover:text-slate-900 dark:text-gray-300 dark:hover:text-white transition-colors">
                   New Arrivals
                 </Link>
               </li>
               <li>
-                <Link href="/orders" className="text-gray-600 hover:text-black dark:text-gray-400 dark:hover:text-white transition-colors">
+                <Link href="/orders" className="text-slate-600 hover:text-slate-900 dark:text-gray-300 dark:hover:text-white transition-colors">
                   Track Your Order
                 </Link>
               </li>
@@ -195,32 +198,32 @@ export default function Footer() {
 
           {/* Customer Care */}
           <div>
-            <h3 className="text-sm font-semibold uppercase tracking-wider text-gray-900 dark:text-white">
+            <h3 className="text-sm font-semibold uppercase tracking-wider text-slate-900 dark:text-white">
               Customer Care
             </h3>
             <ul className="mt-6 space-y-4 text-sm">
               <li>
-                <Link href="/shipping-policy" className="text-gray-600 hover:text-black dark:text-gray-400 dark:hover:text-white transition-colors">
+                <Link href="/shipping-policy" className="text-slate-600 hover:text-slate-900 dark:text-gray-300 dark:hover:text-white transition-colors">
                   Shipping Policy
                 </Link>
               </li>
               <li>
-                <Link href="/returns" className="text-gray-600 hover:text-black dark:text-gray-400 dark:hover:text-white transition-colors">
+                <Link href="/returns" className="text-slate-600 hover:text-slate-900 dark:text-gray-300 dark:hover:text-white transition-colors">
                   Returns & Exchange
                 </Link>
               </li>
               <li>
-                <Link href="/faq" className="text-gray-600 hover:text-black dark:text-gray-400 dark:hover:text-white transition-colors">
+                <Link href="/faq" className="text-slate-600 hover:text-slate-900 dark:text-gray-300 dark:hover:text-white transition-colors">
                   FAQs
                 </Link>
               </li>
               <li>
-                <Link href="/privacy" className="text-gray-600 hover:text-black dark:text-gray-400 dark:hover:text-white transition-colors">
+                <Link href="/privacy" className="text-slate-600 hover:text-slate-900 dark:text-gray-300 dark:hover:text-white transition-colors">
                   Privacy Policy
                 </Link>
               </li>
               <li>
-                <Link href="/terms" className="text-gray-600 hover:text-black dark:text-gray-400 dark:hover:text-white transition-colors">
+                <Link href="/terms" className="text-slate-600 hover:text-slate-900 dark:text-gray-300 dark:hover:text-white transition-colors">
                   Terms & Conditions
                 </Link>
               </li>
@@ -229,25 +232,25 @@ export default function Footer() {
 
           {/* Contact Info */}
           <div>
-            <h3 className="text-sm font-semibold uppercase tracking-wider text-gray-900 dark:text-white">
+            <h3 className="text-sm font-semibold uppercase tracking-wider text-slate-900 dark:text-white">
               Contact Us
             </h3>
-            <ul className="mt-6 space-y-4 text-sm text-gray-600 dark:text-gray-400">
+            <ul className="mt-6 space-y-4 text-sm text-slate-600 dark:text-gray-300">
               <li className="flex items-start">
-                <span className="mr-3 text-black dark:text-white">📍</span>
+                <span className="mr-3 text-slate-900 dark:text-white">📍</span>
                 <span>
                   {address}
                 </span>
               </li>
               <li className="flex items-center">
-                <span className="mr-3 text-black dark:text-white">📞</span>
-                <a href={`tel:${phone.replace(/\s/g, "")}`} className="hover:text-black dark:hover:text-white transition-colors">
+                <span className="mr-3 text-slate-900 dark:text-white">📞</span>
+                <a href={`tel:${phone.replace(/\s/g, "")}`} className="hover:text-slate-900 dark:hover:text-white transition-colors">
                   {phone}
                 </a>
               </li>
               <li className="flex items-center">
-                <span className="mr-3 text-black dark:text-white">✉️</span>
-                <a href={`mailto:${email}`} className="hover:text-black dark:hover:text-white transition-colors">
+                <span className="mr-3 text-slate-900 dark:text-white">✉️</span>
+                <a href={`mailto:${email}`} className="hover:text-slate-900 dark:hover:text-white transition-colors">
                   {email}
                 </a>
               </li>
@@ -257,15 +260,15 @@ export default function Footer() {
       </div>
 
       {/* Bottom Bar */}
-      <div className="border-t border-gray-200 dark:border-gray-800 bg-gray-100 dark:bg-gray-900/50">
+      <div className="border-t border-gray-200 bg-gray-100 dark:border-white/10 dark:bg-black">
         <div className="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
-          <div className="flex flex-col items-center justify-between gap-4 text-xs text-gray-500 dark:text-gray-500 sm:flex-row">
-            <p>© 2025 Zebaish Corner. All Rights Reserved.</p>
-            <div className="flex items-center gap-4">
-              <p></p>
-              <span className="h-4 w-px bg-gray-300 dark:bg-gray-700"></span>
-              <p></p>
-            </div>
+          <div className="flex flex-col items-center justify-between gap-3 text-xs text-gray-500 sm:flex-row">
+            <p className="text-gray-500 dark:text-gray-400">
+              © 2025 Zebaish Corner. All Rights Reserved.
+            </p>
+            <p className="text-gray-400 text-[11px] dark:text-gray-500">
+              Crafted for those who believe their bedroom should feel like a private luxury suite.
+            </p>
           </div>
         </div>
       </div>

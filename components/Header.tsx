@@ -61,54 +61,26 @@ export default function Header() {
 
   const email = settings.contact_email || "zebaishbedding@gmail.com";
   const phone = settings.contact_phone || "+92 345 3177990";
+  const showTopBanner = (settings.show_top_banner ?? "true") === "true";
+  const topBannerText =
+    settings.top_banner_text ||
+    "Over 30% Discount - Zebaish Store - Free delivery on orders of Rs. 5,000 and above";
 
   return (
-    <header className="sticky top-0 z-40 w-full border-b border-gray-200 bg-white/95 backdrop-blur supports-[backdrop-filter]:bg-white/60 dark:border-gray-800 dark:bg-gray-900/95">
-      {/* Top Bar */}
-      <div className="border-b border-gray-200 bg-gray-50 dark:border-gray-800 dark:bg-gray-900">
-        <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-2 text-xs sm:px-6 lg:px-8">
-          <div className="flex items-center space-x-2 sm:space-x-4">
-            <a
-              href={`mailto:${email}`}
-              className="hidden text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white sm:block"
-            >
-              Email: {email}
-            </a>
-            <span className="hidden text-gray-400 sm:inline">|</span>
-            <a
-              href={`tel:${phone.replace(/\s/g, "")}`}
-              className="text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white"
-            >
-              <span className="hidden sm:inline">Order Hotline: </span>{phone}
-            </a>
-          </div>
-          <div className="flex items-center space-x-4">
-            <button
-              onClick={() => setIsSearchOpen(!isSearchOpen)}
-              className="text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white"
-              aria-label="Search"
-            >
-              <svg
-                className="h-4 w-4"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
-                />
-              </svg>
-            </button>
-            <span className="text-gray-400">Search</span>
+    <header className="fixed top-0 left-0 right-0 z-40 w-full border-b border-gray-200 bg-white shadow-sm dark:border-gray-800 dark:bg-gray-900">
+      {/* Promotional Banner (configurable from CMS) */}
+      {showTopBanner && (
+        <div className="bg-black text-white py-2.5 px-4 text-xs sm:text-sm font-medium tracking-wide overflow-hidden overflow-x-hidden relative scrollbar-hide">
+          <div className="flex animate-marquee whitespace-nowrap">
+            <span className="text-white/95 inline-block mr-8 sm:mr-12 md:mr-16">{topBannerText}</span>
+            <span className="text-white/95 inline-block mr-8 sm:mr-12 md:mr-16">{topBannerText}</span>
+            <span className="text-white/95 inline-block mr-8 sm:mr-12 md:mr-16">{topBannerText}</span>
           </div>
         </div>
-      </div>
+      )}
 
       {/* Main Navigation */}
-      <nav className="mx-auto flex max-w-7xl items-center justify-between px-4 py-6 sm:px-6 lg:px-8">
+      <nav className="flex w-full items-center justify-between px-4 py-3 sm:px-6 lg:px-8 lg:py-3">
         {/* Logo - Centered on Mobile, Left on Desktop */}
         <Link
           href="/"
@@ -117,9 +89,9 @@ export default function Header() {
           <Image
             src="/images/logo-brand.png"
             alt="Zebaish Corner"
-            width={180}
-            height={60}
-            className="h-12 w-auto md:h-16 object-contain"
+            width={160}
+            height={50}
+            className="h-10 w-auto md:h-12 object-contain"
             priority
           />
         </Link>
@@ -250,7 +222,7 @@ export default function Header() {
       {/* Search Bar */}
       {isSearchOpen && (
         <div className="border-t border-gray-200 bg-white dark:border-gray-800 dark:bg-gray-900">
-          <div className="mx-auto max-w-7xl px-4 py-4 sm:px-6 lg:px-8">
+          <div className="w-full px-4 py-4 sm:px-6 lg:px-8">
             <div className="relative" ref={searchRef}>
               <input
                 type="text"

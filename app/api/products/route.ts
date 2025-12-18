@@ -6,21 +6,36 @@ export const dynamic = 'force-dynamic';
 
 export async function GET(request: Request) {
     try {
+        const { searchParams } = new URL(request.url);
+        const categorySlug = searchParams.get("category");
+        const limitParam = searchParams.get("limit");
+        const take = limitParam ? parseInt(limitParam, 10) : undefined;
+
+        const where = categorySlug
+            ? {
+                category: {
+                    slug: categorySlug,
+                },
+            }
+            : undefined;
+
         const products = await prisma.product.findMany({
-            orderBy: { createdAt: 'desc' },
+            where,
+            orderBy: { createdAt: "desc" },
+            take,
             include: {
                 category: true,
                 variants: true,
                 reviews: {
                     select: {
-                        rating: true
-                    }
-                }
+                        rating: true,
+                    },
+                },
             },
         });
         return NextResponse.json(products);
     } catch (error) {
-        return NextResponse.json({ error: 'Failed to fetch products' }, { status: 500 });
+        return NextResponse.json({ error: "Failed to fetch products" }, { status: 500 });
     }
 }
 

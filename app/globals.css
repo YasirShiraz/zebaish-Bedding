@@ -114,6 +114,14 @@ html {
   background: var(--primary-hover);
 }
 
+/* Desktop: Scrollbar starts from hero section, not header */
+@media (min-width: 1024px) {
+  /* Header is fixed, scrollbar naturally starts below it */
+  html {
+    scrollbar-gutter: stable;
+  }
+}
+
 /* Focus styles */
 :root[data-theme="light"] *:focus-visible {
   outline: 2px solid var(--primary);
@@ -321,4 +329,48 @@ button {
 
 .text-brand-accent {
   color: var(--accent);
+}
+
+/* Marquee animation */
+@keyframes marquee {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-33.333%);
+  }
+}
+
+.animate-marquee {
+  animation: marquee 15s linear infinite;
+  will-change: transform;
+}
+
+/* Hide scrollbar for marquee */
+.scrollbar-hide {
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;  /* Firefox */
+}
+
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;  /* Chrome, Safari, Opera */
+}
+
+/* Hide scrollbar on mobile devices */
+@media (max-width: 768px) {
+  ::-webkit-scrollbar {
+    display: none;
+    width: 0;
+    height: 0;
+  }
+  
+  * {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+  
+  html, body {
+    overflow-x: hidden;
+    -webkit-overflow-scrolling: touch;
+  }
 }
