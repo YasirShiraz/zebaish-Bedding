@@ -8,6 +8,7 @@ interface WishlistContextType {
     removeFromWishlist: (productId: string) => Promise<void>;
     isInWishlist: (productId: string) => boolean;
     loading: boolean;
+    isInitialized: boolean;
 }
 
 const WishlistContext = createContext<WishlistContextType | undefined>(undefined);
@@ -16,12 +17,14 @@ export function WishlistProvider({ children }: { children: ReactNode }) {
     const { isAuthenticated, logout } = useAuth();
     const [wishlist, setWishlist] = useState<string[]>([]);
     const [loading, setLoading] = useState(false);
+    const [isInitialized, setIsInitialized] = useState(false);
 
     useEffect(() => {
         if (isAuthenticated) {
             fetchWishlist();
         } else {
             setWishlist([]); // Clear on logout
+            setIsInitialized(true);
         }
     }, [isAuthenticated]);
 
@@ -44,6 +47,7 @@ export function WishlistProvider({ children }: { children: ReactNode }) {
             console.error("Failed to fetch wishlist", err);
         } finally {
             setLoading(false);
+            setIsInitialized(true);
         }
     };
 
@@ -105,7 +109,7 @@ export function WishlistProvider({ children }: { children: ReactNode }) {
     const isInWishlist = (productId: string) => wishlist.includes(productId);
 
     return (
-        <WishlistContext.Provider value={{ wishlist, addToWishlist, removeFromWishlist, isInWishlist, loading }}>
+        <WishlistContext.Provider value={{ wishlist, addToWishlist, removeFromWishlist, isInWishlist, loading, isInitialized }}>
             {children}
         </WishlistContext.Provider>
     );

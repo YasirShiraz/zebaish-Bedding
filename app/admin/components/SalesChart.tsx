@@ -2,30 +2,32 @@
 
 import { useMemo } from "react";
 
-export default function SalesChart() {
-    // Mock data for visual demonstration - in a real app this would come from the API
-    const data = [
-        { day: 'Mon', value: 4000 },
-        { day: 'Tue', value: 3000 },
-        { day: 'Wed', value: 5500 },
-        { day: 'Thu', value: 4500 },
-        { day: 'Fri', value: 7000 },
-        { day: 'Sat', value: 8500 },
-        { day: 'Sun', value: 6000 },
+export default function SalesChart({ data: propData }: { data?: { day: string, value: number }[] }) {
+    // Fallback data for visual demonstration
+    const defaultData = [
+        { day: 'Mon', value: 0 },
+        { day: 'Tue', value: 0 },
+        { day: 'Wed', value: 0 },
+        { day: 'Thu', value: 0 },
+        { day: 'Fri', value: 0 },
+        { day: 'Sat', value: 0 },
+        { day: 'Sun', value: 0 },
     ];
 
-    const maxValue = Math.max(...data.map(d => d.value));
+    const data = propData || defaultData;
+    const maxValue = Math.max(...data.map(d => d.value), 100);
+    const totalWeekly = data.reduce((sum, d) => sum + d.value, 0);
 
     return (
-        <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6 h-full">
+        <div className="bg-white dark:bg-gray-900 rounded-xl shadow-sm border border-gray-200 dark:border-gray-800 p-6 h-full">
             <div className="flex items-center justify-between mb-6">
                 <div>
-                    <h2 className="text-lg font-bold text-gray-800">Weekly Revenue</h2>
-                    <p className="text-xs text-gray-500">Last 7 days performance</p>
+                    <h2 className="text-lg font-bold text-gray-800 dark:text-white">Weekly Revenue</h2>
+                    <p className="text-xs text-gray-500 dark:text-gray-400">Last 7 days performance</p>
                 </div>
                 <div className="text-right">
-                    <p className="text-2xl font-bold text-emerald-600">Rs 38.5k</p>
-                    <p className="text-xs text-emerald-500 font-medium">+12.5% vs last week</p>
+                    <p className="text-2xl font-bold text-emerald-600">Rs {(totalWeekly / 1000).toFixed(1)}k</p>
+                    <p className="text-xs text-emerald-500 font-medium">Real-time data</p>
                 </div>
             </div>
 

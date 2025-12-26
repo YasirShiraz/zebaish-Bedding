@@ -197,15 +197,39 @@ export default function NewProduct() {
                 </div>
 
                 {/* Variants Section */}
-                <div className="border rounded-lg p-6 space-y-4">
+                <div className="border rounded-lg p-4 md:p-6 space-y-4 overflow-hidden">
                     <h3 className="text-lg font-bold text-gray-900 dark:text-white">Variants (Sizes / Options)</h3>
-                    <div className="flex flex-col md:flex-row gap-4">
-                        <input type="text" placeholder="Name (e.g. King, Queen)" value={newVariant.name} onChange={(e) => setNewVariant({ ...newVariant, name: e.target.value })} className="flex-1 rounded-lg border border-gray-300 px-4 py-2 text-sm" />
-                        <div className="flex gap-4">
-                            <input type="number" placeholder="Price (Optional)" value={newVariant.price} onChange={(e) => setNewVariant({ ...newVariant, price: e.target.value })} className="flex-1 md:w-32 rounded-lg border border-gray-300 px-4 py-2 text-sm" />
-                            <input type="number" placeholder="Stock" value={newVariant.stock} onChange={(e) => setNewVariant({ ...newVariant, stock: e.target.value })} className="flex-1 md:w-24 rounded-lg border border-gray-300 px-4 py-2 text-sm" />
+                    <div className="flex flex-col md:flex-row gap-4 flex-wrap">
+                        <input
+                            type="text"
+                            placeholder="Name (e.g. King, Queen)"
+                            value={newVariant.name}
+                            onChange={(e) => setNewVariant({ ...newVariant, name: e.target.value })}
+                            className="w-full md:flex-1 rounded-lg border border-gray-300 px-4 py-2 text-sm dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                        />
+                        <div className="flex gap-4 w-full md:w-auto">
+                            <input
+                                type="number"
+                                placeholder="Price"
+                                value={newVariant.price}
+                                onChange={(e) => setNewVariant({ ...newVariant, price: e.target.value })}
+                                className="flex-1 md:w-32 rounded-lg border border-gray-300 px-4 py-2 text-sm dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                            />
+                            <input
+                                type="number"
+                                placeholder="Stock"
+                                value={newVariant.stock}
+                                onChange={(e) => setNewVariant({ ...newVariant, stock: e.target.value })}
+                                className="flex-1 md:w-24 rounded-lg border border-gray-300 px-4 py-2 text-sm dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                            />
                         </div>
-                        <button type="button" onClick={addVariant} className="bg-black text-white px-4 py-2 rounded-lg text-sm font-bold hover:bg-gray-800 transition-colors">Add</button>
+                        <button
+                            type="button"
+                            onClick={addVariant}
+                            className="w-full md:w-auto bg-black text-white px-6 py-2 rounded-lg text-sm font-bold hover:bg-gray-800 transition-colors"
+                        >
+                            Add
+                        </button>
                     </div>
 
                     <div className="space-y-2">

@@ -1,23 +1,19 @@
 "use client";
 
-import Link from "next/link";
+import NextLink from "next/link";
 import Image from "next/image";
 import { useState, useRef, useEffect } from "react";
 import ThemeSwitcher from "@/components/ThemeSwitcher";
 import Cart from "@/components/Cart";
 import CartIcon from "@/components/CartIcon";
-import SearchResults from "@/components/SearchResults";
 import UserMenu from "@/components/UserMenu";
 import { useAuth } from "@/contexts/AuthContext";
 
 export default function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
   const [isCartOpen, setIsCartOpen] = useState(false);
-  const [searchQuery, setSearchQuery] = useState("");
   const [settings, setSettings] = useState<Record<string, string>>({});
-  const searchRef = useRef<HTMLDivElement>(null);
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
@@ -31,27 +27,6 @@ export default function Header() {
 
   // Use auth hook - it's safe because AuthProvider wraps Header in layout
   const { user, isAuthenticated, logout } = useAuth();
-
-  // Close search when clicking outside
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (searchRef.current && !searchRef.current.contains(event.target as Node)) {
-        // Don't close if clicking on search button
-        const target = event.target as HTMLElement;
-        if (!target.closest('button[aria-label="Search"]')) {
-          setIsSearchOpen(false);
-        }
-      }
-    };
-
-    if (isSearchOpen) {
-      document.addEventListener("mousedown", handleClickOutside);
-    }
-
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
-  }, [isSearchOpen]);
 
   const navLinks = [
     { href: "/", label: "Home" },
@@ -82,7 +57,7 @@ export default function Header() {
       {/* Main Navigation */}
       <nav className="flex w-full items-center justify-between px-4 py-3 sm:px-6 lg:px-8 lg:py-3">
         {/* Logo - Centered on Mobile, Left on Desktop */}
-        <Link
+        <NextLink
           href="/"
           className="flex items-center transition-transform hover:scale-105"
         >
@@ -94,19 +69,19 @@ export default function Header() {
             className="h-10 w-auto md:h-12 object-contain"
             priority
           />
-        </Link>
+        </NextLink>
 
         {/* Desktop Navigation - Centered */}
         <div className="hidden items-center space-x-12 md:flex">
           {navLinks.map((link) => (
-            <Link
+            <NextLink
               key={link.href}
               href={link.href}
               className="group relative text-xs font-semibold uppercase tracking-[0.2em] text-gray-900 transition-colors hover:text-gray-600 dark:text-gray-100 dark:hover:text-gray-300"
             >
               {link.label}
               <span className="absolute -bottom-1 left-0 h-0.5 w-0 bg-primary transition-all duration-300 group-hover:w-full"></span>
-            </Link>
+            </NextLink>
           ))}
         </div>
 
@@ -117,29 +92,8 @@ export default function Header() {
             <ThemeSwitcher />
           </div>
 
-          {/* Search Icon */}
-          <button
-            onClick={() => setIsSearchOpen(!isSearchOpen)}
-            className="hidden text-gray-700 transition-colors hover:text-black dark:text-gray-300 dark:hover:text-white md:block"
-            aria-label="Search"
-          >
-            <svg
-              className="h-5 w-5"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={1.5}
-                d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
-              />
-            </svg>
-          </button>
-
           {/* Wishlist Icon */}
-          <Link
+          <NextLink
             href="/wishlist"
             className="hidden text-gray-700 transition-colors hover:text-black dark:text-gray-300 dark:hover:text-white md:block"
             aria-label="Wishlist"
@@ -157,7 +111,7 @@ export default function Header() {
                 d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"
               />
             </svg>
-          </Link>
+          </NextLink>
 
           {/* Cart Icon */}
           <div className="relative">
@@ -219,69 +173,24 @@ export default function Header() {
         </div>
       </nav>
 
-      {/* Search Bar */}
-      {isSearchOpen && (
-        <div className="border-t border-gray-200 bg-white dark:border-gray-800 dark:bg-gray-900">
-          <div className="w-full px-4 py-4 sm:px-6 lg:px-8">
-            <div className="relative" ref={searchRef}>
-              <input
-                type="text"
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                onKeyDown={(e) => {
-                  if (e.key === "Enter" && searchQuery.trim().length > 0) {
-                    // Save to history
-                    const history = JSON.parse(localStorage.getItem('searchHistory') || '[]');
-                    const newHistory = [searchQuery.trim(), ...history.filter((h: string) => h !== searchQuery.trim())].slice(0, 5);
-                    localStorage.setItem('searchHistory', JSON.stringify(newHistory));
-
-                    window.location.href = `/search?q=${encodeURIComponent(searchQuery)}`;
-                    setIsSearchOpen(false);
-                  }
-                }}
-                onFocus={() => setIsSearchOpen(true)}
-                placeholder="Search products, blog posts..."
-                className="w-full rounded-lg border border-gray-300 bg-white px-4 py-2 pl-10 pr-4 text-gray-900 placeholder-gray-500 focus:border-gray-900 focus:outline-none focus:ring-2 focus:ring-gray-900 dark:border-gray-700 dark:bg-gray-800 !dark:text-white dark:placeholder-gray-400 dark:focus:border-gray-600"
-                autoFocus
-              />
-              <svg
-                className="absolute left-3 top-2.5 h-5 w-5 text-gray-400"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
-                />
-              </svg>
-              {/* Search Results */}
-              <SearchResults query={searchQuery} onClose={() => setIsSearchOpen(false)} />
-            </div>
-          </div>
-        </div>
-      )}
-
       {/* Mobile Menu */}
       {isMenuOpen && (
         <div className="border-t border-gray-200 bg-white dark:border-gray-800 dark:bg-gray-900 md:hidden">
           <div className="space-y-1 px-4 pb-4 pt-2">
             {navLinks.map((link) => (
-              <Link
+              <NextLink
                 key={link.href}
                 href={link.href}
                 className="block rounded-md px-3 py-2 text-base font-medium text-gray-700 hover:bg-gray-50 hover:text-gray-900 dark:text-gray-300 dark:hover:bg-gray-800 dark:hover:text-white"
                 onClick={() => setIsMenuOpen(false)}
               >
                 {link.label}
-              </Link>
+              </NextLink>
             ))}
 
             {/* Admin Link - Mobile Only */}
             {mounted && user?.role === 'ADMIN' && (
-              <Link
+              <NextLink
                 href="/admin"
                 className="flex items-center justify-between rounded-md px-3 py-2 text-base font-medium text-gray-900 hover:bg-gray-50 dark:text-gray-100 dark:hover:bg-gray-800"
                 onClick={() => setIsMenuOpen(false)}
@@ -291,11 +200,11 @@ export default function Header() {
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
                 </svg>
-              </Link>
+              </NextLink>
             )}
 
             {/* Wishlist Mobile Link */}
-            <Link
+            <NextLink
               href="/wishlist"
               className="flex items-center justify-between rounded-md px-3 py-2 text-base font-medium text-gray-700 hover:bg-gray-50 hover:text-gray-900 dark:text-gray-300 dark:hover:bg-gray-800 dark:hover:text-white"
               onClick={() => setIsMenuOpen(false)}
@@ -304,19 +213,19 @@ export default function Header() {
               <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
               </svg>
-            </Link>
+            </NextLink>
 
             {/* Login/Signup Button - Mobile Only */}
             <div className="mt-4 space-y-2">
               {mounted && isAuthenticated ? (
                 <>
-                  <Link
+                  <NextLink
                     href="/profile"
                     className="block rounded-lg bg-black px-4 py-3 text-center text-sm font-semibold text-white hover:bg-gray-800 dark:bg-white dark:text-black dark:hover:bg-gray-200"
                     onClick={() => setIsMenuOpen(false)}
                   >
                     My Account
-                  </Link>
+                  </NextLink>
                   <button
                     onClick={() => {
                       logout();
@@ -329,20 +238,20 @@ export default function Header() {
                 </>
               ) : (
                 <div className="flex gap-2">
-                  <Link
+                  <NextLink
                     href="/login"
                     className="flex-1 rounded-lg border border-gray-300 px-4 py-3 text-center text-sm font-semibold text-gray-900 hover:bg-gray-50 dark:border-gray-700 dark:text-white dark:hover:bg-gray-800"
                     onClick={() => setIsMenuOpen(false)}
                   >
                     Login
-                  </Link>
-                  <Link
+                  </NextLink>
+                  <NextLink
                     href="/signup"
                     className="flex-1 rounded-lg bg-black px-4 py-3 text-center text-sm font-semibold text-white hover:bg-gray-800 dark:bg-white dark:text-black dark:hover:bg-gray-200"
                     onClick={() => setIsMenuOpen(false)}
                   >
                     Sign Up
-                  </Link>
+                  </NextLink>
                 </div>
               )}
             </div>

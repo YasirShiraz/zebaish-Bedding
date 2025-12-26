@@ -24,6 +24,7 @@ interface CartContextType {
   getTotalItems: () => number;
   getTotalPrice: () => number;
   isInCart: (id: string) => boolean;
+  isLoading: boolean;
 }
 
 const CartContext = createContext<CartContextType | undefined>(undefined);
@@ -166,6 +167,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
         getTotalItems,
         getTotalPrice,
         isInCart,
+        isLoading: !mounted, // Expose loading state (true until mounted and loaded)
       }}
     >
       {children}

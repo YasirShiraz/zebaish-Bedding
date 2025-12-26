@@ -56,12 +56,12 @@ export default function Contact() {
           className="grayscale"
         />
         <a
-          href="https://maps.app.goo.gl/HaemA3F4vls8cEz9L"
+          href="https://maps.app.goo.gl/Xdi3EjYM8FVtt5ji7"
           target="_blank"
           rel="noopener noreferrer"
           className="absolute top-4 left-4 bg-white dark:bg-gray-900 px-4 py-2 rounded-lg shadow-md text-sm font-medium text-gray-900 dark:text-white hover:bg-gray-50 dark:hover:bg-gray-800"
         >
-          View larger map
+          📍 Open in Google Maps
         </a>
       </div>
 

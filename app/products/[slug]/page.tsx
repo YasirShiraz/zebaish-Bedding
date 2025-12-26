@@ -71,6 +71,7 @@ export default async function ProductPage({
     where: { slug },
     include: {
       category: true,
+      variants: true,
       reviews: {
         include: {
           user: {
@@ -105,13 +106,15 @@ export default async function ProductPage({
 
   const mappedProduct = {
     ...product,
-    code: product.id,
-    image: getValidImage(product.images as string),
     category: product.category?.name || 'Uncategorized',
-    link: `/products/${product.slug}`,
-    brand: "Zebaish",
-    features: [],
-    specifications: {}
+    reviews: product.reviews.map(r => ({
+      ...r,
+      createdAt: r.createdAt.toISOString(),
+      user: {
+        name: r.user.name,
+        image: r.user.image
+      }
+    }))
   };
 
   // Get related products
@@ -120,18 +123,15 @@ export default async function ProductPage({
       categoryId: product.categoryId,
       slug: { not: slug }
     },
-    take: 3
+    take: 4
   });
 
   const relatedProducts = relatedDbProducts.map((p: any) => ({
     ...p,
-    code: p.id,
     image: getValidImage(p.images as string),
     category: "Related",
-    link: `/products/${p.slug}`,
-    brand: "Zebaish",
     price: p.price
   }));
 
-  return <ProductDetails product={mappedProduct} relatedProducts={relatedProducts} />;
+  return <ProductDetails product={mappedProduct as any} relatedProducts={relatedProducts} />;
 }

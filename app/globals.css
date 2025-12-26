@@ -116,6 +116,7 @@ html {
 
 /* Desktop: Scrollbar starts from hero section, not header */
 @media (min-width: 1024px) {
+
   /* Header is fixed, scrollbar naturally starts below it */
   html {
     scrollbar-gutter: stable;
@@ -163,6 +164,7 @@ button {
     opacity: 0;
     transform: translateY(30px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);
@@ -336,6 +338,7 @@ button {
   0% {
     transform: translateX(0);
   }
+
   100% {
     transform: translateX(-33.333%);
   }
@@ -348,12 +351,28 @@ button {
 
 /* Hide scrollbar for marquee */
 .scrollbar-hide {
-  -ms-overflow-style: none;  /* IE and Edge */
-  scrollbar-width: none;  /* Firefox */
+  -ms-overflow-style: none;
+  /* IE and Edge */
+  scrollbar-width: none;
+  /* Firefox */
 }
 
 .scrollbar-hide::-webkit-scrollbar {
-  display: none;  /* Chrome, Safari, Opera */
+  display: none;
+  /* Chrome, Safari, Opera */
+}
+
+/* Hide scrollbar for Chrome, Safari and Opera */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+/* Hide scrollbar for IE, Edge and Firefox */
+.no-scrollbar {
+  -ms-overflow-style: none;
+  /* IE and Edge */
+  scrollbar-width: none;
+  /* Firefox */
 }
 
 /* Hide scrollbar on mobile devices */
@@ -363,14 +382,41 @@ button {
     width: 0;
     height: 0;
   }
-  
+
   * {
     -ms-overflow-style: none;
     scrollbar-width: none;
   }
-  
-  html, body {
+
+  html,
+  body {
     overflow-x: hidden;
     -webkit-overflow-scrolling: touch;
   }
+}
+
+/* Range Slider Styles */
+.range-slider-thumb::-webkit-slider-thumb {
+  pointer-events: auto;
+  appearance: none;
+  height: 20px;
+  width: 20px;
+  border-radius: 50%;
+  background: #ffffff;
+  border: 2px solid #3b82f6;
+  /* blue-500 */
+  cursor: pointer;
+  box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.1);
+  margin-top: -8px;
+  /* Correct vertical alignment */
+}
+
+.range-slider-thumb::-moz-range-thumb {
+  pointer-events: auto;
+  height: 20px;
+  width: 20px;
+  border-radius: 50%;
+  background: #ffffff;
+  border: 2px solid #3b82f6;
+  cursor: pointer;
 }

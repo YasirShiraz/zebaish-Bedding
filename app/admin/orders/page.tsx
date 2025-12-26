@@ -7,6 +7,9 @@ import Link from 'next/link';
 interface Order {
     id: string;
     customerName: string;
+    phone: string;
+    address: string;
+    city: string;
     total: number;
     status: string;
     createdAt: string;
@@ -26,6 +29,48 @@ export default function AdminOrders() {
             .catch((err) => console.error(err))
             .finally(() => setIsLoading(false));
     }, []);
+
+    const generateWhatsAppLink = (order: Order) => {
+        // Format: 923xxxxxxxxx
+        let phone = order.phone?.replace(/\D/g, '') || '';
+        if (phone.startsWith('0')) phone = '92' + phone.substring(1);
+
+        const message = `🛍️ *ZEBAISH BEDDING - ORDER CONFIRMATION*
+
+━━━━━━━━━━━━━━━━━━━━━━━━
+
+📋 *Order ID:* #${order.id.slice(0, 8).toUpperCase()}
+💰 *Total Amount:* PKR ${order.total.toLocaleString()}
+
+━━━━━━━━━━━━━━━━━━━━━━━━
+
+👤 *CUSTOMER DETAILS*
+
+• *Name:* ${order.customerName}
+• *Phone:* ${order.phone}
+• *Address:* ${order.address}
+• *City:* ${order.city}
+
+━━━━━━━━━━━━━━━━━━━━━━━━
+
+📦 *ORDERED ITEMS*
+
+${order.items.map((i, idx) => `${idx + 1}. ${i.quantity} x ${i.product?.name} - PKR ${(i.price * i.quantity).toLocaleString()}`).join('\n')}
+
+━━━━━━━━━━━━━━━━━━━━━━━━
+
+✅ *PLEASE CONFIRM YOUR ORDER*
+
+Reply with:
+• *"YES"* to confirm this order
+• *"NO"* to cancel this order
+
+_We will process your order once confirmed._
+
+Thank you for shopping with Zebaish Bedding! 🌟`;
+
+        return `https://wa.me/${phone}?text=${encodeURIComponent(message)}`;
+    };
 
     const handleDelete = async (id: string) => {
         if (!confirm('Are you sure you want to delete this order? This action cannot be undone.')) return;
@@ -71,16 +116,52 @@ export default function AdminOrders() {
                                     <td className="px-6 py-4 text-gray-600 dark:text-gray-300">{new Date(order.createdAt).toLocaleDateString()}</td>
                                     <td className="px-6 py-4 font-bold text-gray-900 dark:text-white">Rs {order.total.toFixed(2)}</td>
                                     <td className="px-6 py-4">
-                                        <span className={`px-2 py-1 text-xs rounded-full font-medium
-                        ${order.status === 'COMPLETED' ? 'bg-green-100 text-green-700' :
-                                                order.status === 'PENDING' ? 'bg-yellow-100 text-yellow-700' : 'bg-gray-100 text-gray-700'}`}>
-                                            {order.status}
-                                        </span>
+                                        <select
+                                            value={order.status}
+                                            onChange={(e) => {
+                                                const newStatus = e.target.value;
+                                                const oldStatus = order.status;
+                                                // Optimistic update
+                                                setOrders(orders.map(o => o.id === order.id ? { ...o, status: newStatus } : o));
+
+                                                fetch(`/api/orders/${order.id}`, {
+                                                    method: 'PATCH',
+                                                    headers: { 'Content-Type': 'application/json' },
+                                                    body: JSON.stringify({ status: newStatus })
+                                                }).catch(() => {
+                                                    alert('Failed to update status');
+                                                    setOrders(orders.map(o => o.id === order.id ? { ...o, status: oldStatus } : o));
+                                                });
+                                            }}
+                                            className={`px-2 py-1 text-xs rounded-full font-medium border-none outline-none cursor-pointer
+                                                ${order.status === 'COMPLETED' ? 'bg-green-100 text-green-700' :
+                                                    order.status === 'SHIPPED' ? 'bg-blue-100 text-blue-700' :
+                                                        order.status === 'CANCELLED' ? 'bg-red-100 text-red-700' :
+                                                            order.status === 'PROCESSING' ? 'bg-purple-100 text-purple-700' :
+                                                                'bg-yellow-100 text-yellow-700'}`}
+                                        >
+                                            <option value="PENDING">Pending</option>
+                                            <option value="PROCESSING">Processing</option>
+                                            <option value="SHIPPED">Shipped</option>
+                                            <option value="COMPLETED">Completed</option>
+                                            <option value="CANCELLED">Cancelled</option>
+                                        </select>
                                     </td>
                                     <td className="px-6 py-4 text-sm text-gray-500 max-w-xs truncate">
                                         {order.items.map(i => `${i.quantity}x ${i.product?.name}`).join(', ')}
                                     </td>
-                                    <td className="px-6 py-4 text-right space-x-3">
+                                    <td className="px-6 py-4 text-right space-x-3 flex justify-end items-center">
+                                        <a
+                                            href={generateWhatsAppLink(order)}
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                            className="text-green-600 hover:text-green-800 bg-green-100 hover:bg-green-200 dark:bg-green-900/30 dark:hover:bg-green-900/50 p-2 rounded-lg transition-colors"
+                                            title="Confirm on WhatsApp"
+                                        >
+                                            <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                                                <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z" />
+                                            </svg>
+                                        </a>
                                         <Link href={`/admin/orders/${order.id}`} className="text-blue-600 hover:text-blue-800 font-medium text-sm">
                                             View
                                         </Link>

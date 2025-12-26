@@ -14,7 +14,8 @@ async function getDashboardStats() {
         totalProducts,
         recentOrders,
         lowStockProducts,
-        recentReviews
+        recentReviews,
+        recentSales
     ] = await Promise.all([
         prisma.order.aggregate({
             _sum: {
@@ -65,8 +66,44 @@ async function getDashboardStats() {
                 user: true,
                 product: true
             }
+        }),
+        // Fetch last 7 days revenue
+        prisma.order.findMany({
+            where: {
+                createdAt: {
+                    gte: new Date(new Date().setDate(new Date().getDate() - 7))
+                },
+                status: {
+                    not: 'CANCELLED'
+                }
+            },
+            select: {
+                total: true,
+                createdAt: true
+            }
         })
     ]);
+
+    // Process sales data for chart
+    const salesDataRaw = Array.from({ length: 7 }, (_, i) => {
+        const date = new Date();
+        date.setDate(date.getDate() - i);
+        return {
+            date: date.toLocaleDateString('en-US', { weekday: 'short' }),
+            fullDate: date.toISOString().split('T')[0],
+            value: 0
+        };
+    }).reverse();
+
+    const salesHistory = salesDataRaw.map(day => {
+        const dayTotal = (recentSales || []).filter((order: any) =>
+            order.createdAt.toISOString().split('T')[0] === day.fullDate
+        ).reduce((sum: number, order: any) => sum + order.total, 0);
+        return {
+            day: day.date,
+            value: dayTotal
+        };
+    });
 
     return {
         stats: {
@@ -77,14 +114,15 @@ async function getDashboardStats() {
         },
         recentOrders,
         lowStockProducts,
-        recentReviews
+        recentReviews,
+        salesHistory
     };
 }
 
 import SalesChart from './components/SalesChart';
 
 export default async function AdminDashboard() {
-    const { stats, recentOrders, lowStockProducts, recentReviews } = await getDashboardStats();
+    const { stats, recentOrders, lowStockProducts, recentReviews, salesHistory } = await getDashboardStats();
 
     return (
         <div className="p-8 max-w-7xl mx-auto">
@@ -108,7 +146,7 @@ export default async function AdminDashboard() {
 
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-8">
                 <div className="lg:col-span-2">
-                    <SalesChart />
+                    <SalesChart data={salesHistory} />
                 </div>
                 <div>
                     <RecentReviews reviews={recentReviews} />
