@@ -53,13 +53,15 @@ export default async function SearchPage({
         id: p.slug,
         name: p.name,
         price: p.salePrice || p.price,
+        oldPrice: p.salePrice ? p.price : undefined,
         image: getProductImage(p),
         category: p.category.name,
+        discountBadge: p.salePrice ? `-${Math.round(((p.price - p.salePrice) / p.price) * 100)}%` : undefined
     }));
 
     return (
-        <div className="pt-8 pb-16 min-h-screen">
-            <div className="bg-gray-50 dark:bg-gray-900 py-8 mb-8">
+        <div className="bg-white dark:bg-black min-h-screen">
+            <div className="bg-gray-50 dark:bg-gray-900/50 py-10 md:py-16 border-b border-gray-100 dark:border-gray-800">
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
                     <h1 className="text-3xl font-serif text-gray-900 dark:text-white">
                         Search Results

@@ -8,21 +8,12 @@ import { useCart } from "@/contexts/CartContext";
 import WhatsAppButton from "@/components/WhatsAppButton";
 import PriceRangeFilter from "@/components/PriceRangeFilter";
 
-const categories = [
-  "All Categories",
-  "Bed Sheets",
-  "Duvet Sets",
-  "Comforters",
-  "Pillows",
-  "Kids Bedding",
-  "Bridal Bedding",
-  "Sofa Covers",
-];
 
 type SortOption = "default" | "name-asc" | "name-desc" | "price-asc" | "price-desc";
 
 export default function Products() {
   const { addToCart } = useCart();
+  const [categories, setCategories] = useState<string[]>(["All Categories"]);
   const [selectedCategory, setSelectedCategory] = useState("All Categories");
   const [sortBy, setSortBy] = useState<SortOption>("default");
   const [showFilters, setShowFilters] = useState(false);
@@ -70,6 +61,15 @@ export default function Products() {
       })
       .catch(err => console.error("Failed to load products", err))
       .finally(() => setLoading(false));
+
+    fetch('/api/categories')
+      .then(res => res.json())
+      .then(data => {
+        if (Array.isArray(data)) {
+          setCategories(["All Categories", ...data.map((c: any) => c.name)]);
+        }
+      })
+      .catch(err => console.error("Failed to load categories", err));
   }, []);
 
   const filteredAndSortedProducts = useMemo(() => {

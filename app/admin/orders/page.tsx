@@ -13,7 +13,7 @@ interface Order {
     total: number;
     status: string;
     createdAt: string;
-    items: { product: { name: string }; quantity: number }[];
+    items: { product: { name: string }; quantity: number; price: number }[];
 }
 
 export default function AdminOrders() {

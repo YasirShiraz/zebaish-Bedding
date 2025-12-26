@@ -29,7 +29,7 @@ export default function ProductGrid({ title, products, viewAllLink }: ProductGri
                     <div className="absolute w-full h-[1px] bg-gray-300 dark:bg-gray-700 top-1/2 left-0 -z-0"></div>
                 </div>
 
-                <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-x-6 gap-y-10">
+                <div className="grid grid-cols-2 lg:grid-cols-4 gap-x-4 gap-y-8 sm:gap-6 md:gap-x-6 md:gap-y-10">
                     {products.map((product) => (
                         <div key={product.id} className="group relative">
                             {/* Image Container */}
@@ -66,11 +66,11 @@ export default function ProductGrid({ title, products, viewAllLink }: ProductGri
                                 </h3>
                                 <div className="mt-1 flex items-center justify-center gap-2">
                                     <p className="text-sm font-bold text-gray-900 dark:text-white">
-                                        ${product.price.toFixed(2)}
+                                        Rs {product.price.toLocaleString()}
                                     </p>
                                     {product.oldPrice && (
                                         <p className="text-sm text-gray-500 line-through">
-                                            ${product.oldPrice.toFixed(2)}
+                                            Rs {product.oldPrice.toLocaleString()}
                                         </p>
                                     )}
                                 </div>
