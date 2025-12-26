@@ -192,8 +192,16 @@ export default function Login() {
                     }
                   } catch (error: any) {
                     console.error("Google sign in error", error);
-                    const errorMsg = error.message || "Failed to sign in with Google";
-                    setErrors({ submit: errorMsg });
+
+                    // Specific handling for popup closed or blocked
+                    if (error.code === 'auth/popup-closed-by-user' || error.code === 'auth/popup-blocked') {
+                      setErrors({
+                        submit: "Login window was closed. Please try again or ensure popups are allowed for this site."
+                      });
+                    } else {
+                      const errorMsg = error.message || "Failed to sign in with Google";
+                      setErrors({ submit: errorMsg });
+                    }
                   }
                 }}
                 className="group relative flex items-center justify-center gap-3 rounded-full border border-gray-300 bg-white px-4 py-3 text-sm font-medium text-gray-800 shadow-sm hover:bg-gray-50 hover:border-gray-400 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-900 transition-all dark:bg-black dark:text-gray-100 dark:border-gray-700 dark:hover:bg-gray-900"

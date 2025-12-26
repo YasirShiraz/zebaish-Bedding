@@ -17,7 +17,7 @@ export interface CartItem {
 
 interface CartContextType {
   items: CartItem[];
-  addToCart: (product: Omit<CartItem, "quantity">) => void;
+  addToCart: (product: Omit<CartItem, "quantity">, quantity?: number) => void;
   removeFromCart: (id: string) => void;
   updateQuantity: (id: string, quantity: number) => void;
   clearCart: () => void;
@@ -105,19 +105,19 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
     }
   }, [items, mounted, user]);
 
-  const addToCart = (product: Omit<CartItem, "quantity">) => {
+  const addToCart = (product: Omit<CartItem, "quantity">, quantity: number = 1) => {
     setItems((prevItems) => {
       const existingItem = prevItems.find((item) => item.id === product.id);
       if (existingItem) {
-        // If item exists, increase quantity
+        // If item exists, increase quantity by the specified amount
         return prevItems.map((item) =>
           item.id === product.id
-            ? { ...item, quantity: item.quantity + 1, price: product.price }
+            ? { ...item, quantity: item.quantity + quantity, price: product.price }
             : item
         );
       } else {
-        // If item doesn't exist, add it with quantity 1
-        return [...prevItems, { ...product, quantity: 1 }];
+        // If item doesn't exist, add it with the specified quantity
+        return [...prevItems, { ...product, quantity }];
       }
     });
   };
