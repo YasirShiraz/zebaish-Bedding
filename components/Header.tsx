@@ -13,6 +13,8 @@ export default function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
   const [isCartOpen, setIsCartOpen] = useState(false);
+  const [isSearchOpen, setIsSearchOpen] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
   const [settings, setSettings] = useState<Record<string, string>>({});
   const [mounted, setMounted] = useState(false);
 
@@ -87,6 +89,51 @@ export default function Header() {
 
         {/* Right Side Actions */}
         <div className="flex items-center space-x-6">
+          {/* Search Icon */}
+          <div className="relative">
+            {isSearchOpen ? (
+              <div className="absolute right-0 top-1/2 -translate-y-1/2 flex items-center bg-gray-100 dark:bg-gray-800 rounded-lg px-2 py-1 shadow-md w-48 sm:w-64 z-50">
+                <input
+                  type="text"
+                  placeholder="Search..."
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter') {
+                      setIsSearchOpen(false);
+                      if (searchQuery.trim()) {
+                        window.location.href = `/search?q=${encodeURIComponent(searchQuery)}`;
+                      }
+                    }
+                  }}
+                  className="bg-transparent border-none outline-none text-sm w-full text-gray-900 dark:text-white placeholder-gray-500"
+                  autoFocus
+                />
+                <button
+                  onClick={() => setIsSearchOpen(false)}
+                  className="ml-2 text-gray-500 hover:text-red-500"
+                >
+                  <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                  </svg>
+                </button>
+              </div>
+            ) : (
+              <button
+                onClick={() => {
+                  setIsSearchOpen(true);
+                  setSearchQuery("");
+                }}
+                className="text-gray-700 transition-colors hover:text-black dark:text-gray-300 dark:hover:text-white"
+                aria-label="Search"
+              >
+                <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                </svg>
+              </button>
+            )}
+          </div>
+
           {/* Theme Switcher */}
           <div className="hidden sm:block">
             <ThemeSwitcher />

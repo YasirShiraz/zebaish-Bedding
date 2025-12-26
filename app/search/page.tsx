@@ -1,10 +1,24 @@
-import { allCollections } from "@/lib/products";
 import ProductGrid from "@/components/home/ProductGrid";
 import { Metadata } from "next";
+import { prisma } from "@/lib/prisma";
 
 export const metadata: Metadata = {
     title: "Search Results - Zebaish Bedding",
     description: "Search results for your query",
+};
+
+// Helper to get image
+const getProductImage = (product: any): string => {
+    if (product.image && typeof product.image === "string") return product.image;
+    if (product.images && typeof product.images === "string") {
+        try {
+            const parsed = JSON.parse(product.images);
+            return Array.isArray(parsed) && parsed[0] ? parsed[0] : "/images/placeholder.jpg";
+        } catch {
+            return "/images/placeholder.jpg";
+        }
+    }
+    return "/images/placeholder.jpg";
 };
 
 export default async function SearchPage({
@@ -16,19 +30,31 @@ export default async function SearchPage({
     const query = q || "";
     const searchTerm = query.toLowerCase().trim();
 
-    // Filter products
-    const filteredProducts = allCollections.filter((product) =>
-        product.name.toLowerCase().includes(searchTerm) ||
-        product.category.toLowerCase().includes(searchTerm) ||
-        product.description.toLowerCase().includes(searchTerm)
-    );
+    // Fetch products from DB
+    const dbProducts = await prisma.product.findMany({
+        where: {
+            OR: [
+                { name: { contains: searchTerm, mode: 'insensitive' } },
+                { description: { contains: searchTerm, mode: 'insensitive' } },
+                {
+                    category: {
+                        name: { contains: searchTerm, mode: 'insensitive' }
+                    }
+                }
+            ]
+        },
+        include: {
+            category: true
+        }
+    });
 
     // Map to ProductGrid format
-    const gridProducts = filteredProducts.map((p) => ({
+    const gridProducts = dbProducts.map((p) => ({
         id: p.slug,
         name: p.name,
-        price: p.price,
-        image: p.image,
+        price: p.salePrice || p.price,
+        image: getProductImage(p),
+        category: p.category.name,
     }));
 
     return (
