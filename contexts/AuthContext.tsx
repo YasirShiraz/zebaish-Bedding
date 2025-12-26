@@ -122,8 +122,12 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     try {
       await fetch("/api/auth/logout", { method: "POST" });
       setUser(null);
+      window.location.href = "/login";
     } catch (error) {
       console.error("Logout error", error);
+      // Fallback
+      setUser(null);
+      window.location.href = "/login";
     }
   };
 

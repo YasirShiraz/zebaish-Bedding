@@ -51,5 +51,9 @@ export async function login(token: string) {
 
 export async function logout() {
     const cookieStore = await cookies();
-    cookieStore.delete('token');
+    cookieStore.set('token', '', {
+        path: '/',
+        maxAge: 0,
+        expires: new Date(0)
+    });
 }

@@ -164,7 +164,7 @@ export default function Login() {
           </div>
 
           <div className="space-y-6 px-6 pb-6 sm:px-8 sm:pb-8">
-          {/* Google Login */}
+            {/* Google Login */}
             {/* Social auth */}
             <div className="grid grid-cols-1 gap-3">
               <button
@@ -190,9 +190,10 @@ export default function Login() {
                     } else {
                       setErrors({ submit: "Failed to sync with server" });
                     }
-                  } catch (error) {
+                  } catch (error: any) {
                     console.error("Google sign in error", error);
-                    setErrors({ submit: "Failed to sign in with Google" });
+                    const errorMsg = error.message || "Failed to sign in with Google";
+                    setErrors({ submit: errorMsg });
                   }
                 }}
                 className="group relative flex items-center justify-center gap-3 rounded-full border border-gray-300 bg-white px-4 py-3 text-sm font-medium text-gray-800 shadow-sm hover:bg-gray-50 hover:border-gray-400 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-900 transition-all dark:bg-black dark:text-gray-100 dark:border-gray-700 dark:hover:bg-gray-900"
