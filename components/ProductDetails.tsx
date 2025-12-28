@@ -213,7 +213,7 @@ export default function ProductDetails({
 
                             <div className="flex items-center gap-4 mb-6 md:mb-8">
                                 <span className="text-2xl md:text-3xl font-bold text-blue-600 dark:text-blue-400">
-                                    Rs {effectivePrice.toLocaleString()}
+                                    Rs {Math.round(effectivePrice).toLocaleString()}
                                 </span>
                                 {product.salePrice && product.salePrice < product.price && !selectedVariant?.price && (
                                     <span className="text-base md:text-lg text-gray-400 line-through">

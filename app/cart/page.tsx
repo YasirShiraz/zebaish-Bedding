@@ -1,6 +1,7 @@
 "use client";
 
 import { useCart } from "@/contexts/CartContext";
+import { useAuth } from "@/contexts/AuthContext";
 import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useState } from "react";
@@ -13,6 +14,7 @@ export default function CartPage() {
         getTotalPrice,
         clearCart,
     } = useCart();
+    const { isAuthenticated } = useAuth();
     const [mounted, setMounted] = useState(false);
 
     useEffect(() => {
@@ -72,7 +74,7 @@ export default function CartPage() {
                                 {items.map((item) => (
                                     <div
                                         key={item.id}
-                                        className="flex gap-6 p-6 rounded-2xl bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 shadow-sm transition-shadow hover:shadow-md"
+                                        className="flex gap-4 sm:gap-6 p-4 sm:p-6 rounded-2xl bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 shadow-sm transition-shadow hover:shadow-md"
                                     >
                                         {/* Product Image */}
                                         <div className="relative h-24 w-24 sm:h-32 sm:w-32 flex-shrink-0 rounded-xl overflow-hidden bg-gray-100 dark:bg-gray-800">
@@ -101,19 +103,22 @@ export default function CartPage() {
                                                     </div>
                                                     <button
                                                         onClick={() => removeFromCart(item.id)}
-                                                        className="text-gray-400 hover:text-red-500 transition-colors p-1"
+                                                        className="flex flex-col items-center gap-1 text-gray-400 hover:text-red-500 transition-colors group/remove"
                                                         aria-label="Remove item"
                                                     >
-                                                        <svg className="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-                                                        </svg>
+                                                        <div className="p-2 mr-[-10px] mt-[-10px] rounded-full hover:bg-red-50 dark:hover:bg-red-900/20">
+                                                            <svg className="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                                                            </svg>
+                                                        </div>
+                                                        <span className="text-[10px] font-bold uppercase tracking-wider group-hover/remove:text-red-600 mr-[-10px]">Remove</span>
                                                     </button>
                                                 </div>
                                             </div>
 
-                                            <div className="flex items-center justify-between mt-4">
+                                            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mt-6">
                                                 <div className="flex items-center gap-3">
-                                                    <div className="flex items-center rounded-lg border border-gray-200 dark:border-gray-700 p-1">
+                                                    <div className="flex items-center rounded-lg border border-gray-200 dark:border-gray-700 p-1 w-fit">
                                                         <button
                                                             onClick={() => updateQuantity(item.id, item.quantity - 1)}
                                                             className="p-1 hover:bg-gray-100 dark:hover:bg-gray-800 rounded transition-colors"
@@ -136,8 +141,8 @@ export default function CartPage() {
                                                         </button>
                                                     </div>
                                                 </div>
-                                                <p className="text-xl font-bold text-gray-900 dark:text-white">
-                                                    Rs {(item.price * item.quantity).toLocaleString()}
+                                                <p className="text-xl font-bold text-gray-900 dark:text-white whitespace-nowrap">
+                                                    Rs {Math.round(item.price * item.quantity).toLocaleString('en-PK')}
                                                 </p>
                                             </div>
                                         </div>
@@ -156,7 +161,7 @@ export default function CartPage() {
                                 <div className="space-y-4 text-sm">
                                     <div className="flex justify-between text-gray-600 dark:text-gray-400">
                                         <span>Subtotal</span>
-                                        <span>Rs {getTotalPrice().toLocaleString()}</span>
+                                        <span>Rs {Math.round(getTotalPrice()).toLocaleString()}</span>
                                     </div>
                                     <div className="flex justify-between text-gray-600 dark:text-gray-400">
                                         <span>Shipping</span>
@@ -164,17 +169,26 @@ export default function CartPage() {
                                     </div>
                                     <div className="border-t border-gray-200 dark:border-gray-700 pt-4 flex justify-between items-center text-lg font-bold text-gray-900 dark:text-white">
                                         <span>Total</span>
-                                        <span>Rs {getTotalPrice().toLocaleString()}</span>
+                                        <span>Rs {Math.round(getTotalPrice()).toLocaleString()}</span>
                                     </div>
                                 </div>
 
                                 <div className="mt-8 space-y-4">
-                                    <Link
-                                        href="/checkout"
-                                        className="block w-full rounded-xl bg-[var(--primary)] px-6 py-4 text-center text-base font-semibold text-white shadow-lg hover:bg-[var(--primary-hover)] transition-all hover:scale-[1.02]"
-                                    >
-                                        Proceed to Checkout
-                                    </Link>
+                                    {isAuthenticated ? (
+                                        <Link
+                                            href="/checkout"
+                                            className="block w-full rounded-xl bg-[var(--primary)] px-6 py-4 text-center text-base font-semibold text-white shadow-lg hover:bg-[var(--primary-hover)] transition-all hover:scale-[1.02]"
+                                        >
+                                            Proceed to Checkout
+                                        </Link>
+                                    ) : (
+                                        <Link
+                                            href="/login?redirect=/checkout"
+                                            className="block w-full rounded-xl bg-gray-900 px-6 py-4 text-center text-base font-semibold text-white shadow-lg hover:bg-black transition-all hover:scale-[1.02] dark:bg-white dark:text-black dark:hover:bg-gray-200"
+                                        >
+                                            Login to Checkout
+                                        </Link>
+                                    )}
                                     <button
                                         onClick={clearCart}
                                         className="block w-full rounded-xl border border-gray-200 dark:border-gray-700 px-6 py-4 text-center text-base font-semibold text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors"

@@ -1,6 +1,7 @@
 "use client";
 
 import { useCart } from "@/contexts/CartContext";
+import { useAuth } from "@/contexts/AuthContext";
 import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useState } from "react";
@@ -12,6 +13,7 @@ interface CartProps {
 
 export default function Cart({ isOpen, onClose }: CartProps) {
     const { items, removeFromCart, updateQuantity, getTotalPrice } = useCart();
+    const { isAuthenticated } = useAuth();
     const [mounted, setMounted] = useState(false);
 
     useEffect(() => {
@@ -92,29 +94,35 @@ export default function Cart({ isOpen, onClose }: CartProps) {
                                         </div>
                                         <div className="flex flex-1 flex-col justify-between py-0.5">
                                             <div>
-                                                <div className="flex justify-between items-start gap-2">
-                                                    <Link
-                                                        href={`/products/${item.slug}`}
-                                                        className="text-sm font-bold text-gray-900 dark:text-white hover:text-[var(--primary)] transition-colors line-clamp-1"
-                                                        onClick={onClose}
-                                                    >
-                                                        {item.name}
-                                                    </Link>
+                                                <div className="flex justify-between items-start">
+                                                    <div className="flex-1 min-w-0 pr-4">
+                                                        <Link
+                                                            href={`/products/${item.slug}`}
+                                                            className="text-sm font-bold text-gray-900 dark:text-white hover:text-[var(--primary)] transition-colors line-clamp-2"
+                                                            onClick={onClose}
+                                                        >
+                                                            {item.name}
+                                                        </Link>
+                                                        <p className="mt-0.5 text-xs text-gray-500 dark:text-gray-400">
+                                                            {item.category}
+                                                        </p>
+                                                    </div>
                                                     <button
                                                         onClick={() => removeFromCart(item.id)}
-                                                        className="text-gray-400 hover:text-red-500 transition-colors"
+                                                        className="flex flex-col items-center gap-0.5 text-gray-400 hover:text-red-600 transition-colors group/remove"
+                                                        aria-label="Remove item"
                                                     >
-                                                        <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-                                                        </svg>
+                                                        <div className="p-1 rounded-full hover:bg-red-50 dark:hover:bg-red-900/20">
+                                                            <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                                                            </svg>
+                                                        </div>
+                                                        <span className="text-[10px] font-bold uppercase tracking-wider group-hover/remove:text-red-600">Remove</span>
                                                     </button>
                                                 </div>
-                                                <p className="mt-0.5 text-xs text-gray-500 dark:text-gray-400">
-                                                    {item.category}
-                                                </p>
                                             </div>
-                                            <div className="flex items-center justify-between">
-                                                <div className="flex items-center rounded-lg border border-gray-100 dark:border-gray-800 bg-gray-50 dark:bg-gray-800/50 p-1">
+                                            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mt-4">
+                                                <div className="flex items-center rounded-lg border border-gray-100 dark:border-gray-800 bg-gray-50 dark:bg-gray-800/50 p-1 w-fit">
                                                     <button
                                                         onClick={() => updateQuantity(item.id, item.quantity - 1)}
                                                         className="p-1 hover:bg-white dark:hover:bg-gray-700 rounded transition-colors"
@@ -123,7 +131,7 @@ export default function Cart({ isOpen, onClose }: CartProps) {
                                                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20 12H4" />
                                                         </svg>
                                                     </button>
-                                                    <span className="w-6 text-center text-xs font-bold text-gray-700 dark:text-gray-300">
+                                                    <span className="w-8 text-center text-xs font-bold text-gray-700 dark:text-gray-300">
                                                         {item.quantity}
                                                     </span>
                                                     <button
@@ -135,8 +143,8 @@ export default function Cart({ isOpen, onClose }: CartProps) {
                                                         </svg>
                                                     </button>
                                                 </div>
-                                                <p className="text-sm font-bold text-gray-900 dark:text-white">
-                                                    Rs {(item.price * item.quantity).toFixed(0)}
+                                                <p className="text-base font-bold text-gray-900 dark:text-white whitespace-nowrap">
+                                                    Rs {Math.round(item.price * item.quantity).toLocaleString('en-PK')}
                                                 </p>
                                             </div>
                                         </div>
@@ -151,16 +159,26 @@ export default function Cart({ isOpen, onClose }: CartProps) {
                         <div className="border-t border-gray-100 bg-gray-50/50 px-6 py-8 dark:border-gray-800 dark:bg-gray-900/50">
                             <div className="mb-6 flex items-center justify-between">
                                 <span className="text-base font-medium text-gray-600 dark:text-gray-400">Subtotal</span>
-                                <span className="text-xl font-bold text-gray-900 dark:text-white">Rs {getTotalPrice().toFixed(0)}</span>
+                                <span className="text-xl font-bold text-gray-900 dark:text-white">Rs {Math.round(getTotalPrice()).toLocaleString()}</span>
                             </div>
                             <div className="space-y-4">
-                                <Link
-                                    href="/checkout"
-                                    onClick={onClose}
-                                    className="block w-full rounded-xl bg-gradient-to-r from-[#667eea] to-[#764ba2] py-4 text-center text-sm font-bold text-white shadow-lg shadow-purple-200 dark:shadow-none transition-all hover:scale-[1.02] active:scale-95"
-                                >
-                                    Proceed to Checkout
-                                </Link>
+                                {isAuthenticated ? (
+                                    <Link
+                                        href="/checkout"
+                                        onClick={onClose}
+                                        className="block w-full rounded-xl bg-gradient-to-r from-[#667eea] to-[#764ba2] py-4 text-center text-sm font-bold text-white shadow-lg shadow-purple-200 dark:shadow-none transition-all hover:scale-[1.02] active:scale-95"
+                                    >
+                                        Proceed to Checkout
+                                    </Link>
+                                ) : (
+                                    <Link
+                                        href="/login?redirect=/checkout"
+                                        onClick={onClose}
+                                        className="block w-full rounded-xl bg-gray-900 py-4 text-center text-sm font-bold text-white shadow-lg transition-all hover:scale-[1.02] active:scale-95 dark:bg-white dark:text-black dark:hover:bg-gray-200"
+                                    >
+                                        Login to Checkout
+                                    </Link>
+                                )}
                                 <Link
                                     href="/cart"
                                     onClick={onClose}

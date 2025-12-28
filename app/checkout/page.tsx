@@ -10,7 +10,7 @@ import { toast } from 'react-hot-toast';
 export default function CheckoutPage() {
     const router = useRouter();
     const { items: cart, clearCart } = useCart();
-    const { user } = useAuth();
+    const { user, isAuthenticated, isLoading } = useAuth();
     const [isSubmitting, setIsSubmitting] = useState(false);
 
     const [formData, setFormData] = useState({
@@ -24,10 +24,23 @@ export default function CheckoutPage() {
     });
 
     useEffect(() => {
+        if (!isLoading && !isAuthenticated) {
+            toast.error('Please log in to proceed with checkout');
+            router.push('/login?redirect=/checkout');
+            return;
+        }
         if (!cart || cart.length === 0) {
             router.push('/cart');
         }
-    }, [cart, router]);
+    }, [cart, router, isAuthenticated, isLoading]);
+
+    if (isLoading || !isAuthenticated) {
+        return (
+            <div className="min-h-screen bg-gray-50 dark:bg-black flex items-center justify-center">
+                <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
+            </div>
+        );
+    }
 
     const subtotal = (cart || []).reduce((sum, item) => sum + (item.price * item.quantity), 0);
     const shippingCost = subtotal >= 3500 ? 0 : 250;
@@ -285,8 +298,8 @@ export default function CheckoutPage() {
                                         <div className="flex-1 min-w-0">
                                             <h3 className="text-sm font-bold text-gray-900 dark:text-white truncate">{item.name}</h3>
                                             <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">{item.category}</p>
-                                            <p className="text-sm font-bold text-blue-600 dark:text-blue-400 mt-2">
-                                                Rs {(item.price * item.quantity).toLocaleString()}
+                                            <p className="text-sm font-bold text-blue-600 dark:text-blue-400 mt-2 whitespace-nowrap">
+                                                Rs {Math.round(item.price * item.quantity).toLocaleString()}
                                             </p>
                                         </div>
                                     </div>
@@ -296,7 +309,7 @@ export default function CheckoutPage() {
                             <div className="border-t border-gray-200 dark:border-gray-800 pt-4 space-y-3">
                                 <div className="flex justify-between text-sm">
                                     <span className="text-gray-600 dark:text-gray-400">Subtotal</span>
-                                    <span className="font-bold text-gray-900 dark:text-white">Rs {subtotal.toLocaleString()}</span>
+                                    <span className="font-bold text-gray-900 dark:text-white">Rs {Math.round(subtotal).toLocaleString()}</span>
                                 </div>
                                 <div className="flex justify-between text-sm">
                                     <span className="text-gray-600 dark:text-gray-400">Shipping</span>
@@ -306,12 +319,12 @@ export default function CheckoutPage() {
                                 </div>
                                 {subtotal < 3500 && (
                                     <div className="text-xs text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-900/10 p-2 rounded-lg">
-                                        Add Rs {(3500 - subtotal).toLocaleString()} more for free shipping!
+                                        Add Rs {Math.round(3500 - subtotal).toLocaleString()} more for free shipping!
                                     </div>
                                 )}
                                 <div className="flex justify-between text-lg font-bold pt-3 border-t border-gray-200 dark:border-gray-800">
                                     <span className="text-gray-900 dark:text-white">Total</span>
-                                    <span className="text-blue-600 dark:text-blue-400">Rs {total.toLocaleString()}</span>
+                                    <span className="text-blue-600 dark:text-blue-400">Rs {Math.round(total).toLocaleString()}</span>
                                 </div>
                             </div>
 

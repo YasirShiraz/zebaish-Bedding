@@ -98,28 +98,28 @@ export default function Home() {
     homeSections && homeSections.length === 3
       ? homeSections
       : [
-          {
-            id: "bridal",
-            title: "Bridal Bedding",
-            category: "bridal-bedding",
-            limit: 8,
-            enabled: true,
-          },
-          {
-            id: "kitchen",
-            title: "Home & Kitchen",
-            category: "mats",
-            limit: 8,
-            enabled: true,
-          },
-          {
-            id: "beauty",
-            title: "Towels & Bath Shawls",
-            category: "towels",
-            limit: 8,
-            enabled: true,
-          },
-        ];
+        {
+          id: "bridal",
+          title: "Bridal Bedding",
+          category: "bridal-bedding",
+          limit: 8,
+          enabled: true,
+        },
+        {
+          id: "kitchen",
+          title: "Home & Kitchen",
+          category: "mats",
+          limit: 8,
+          enabled: true,
+        },
+        {
+          id: "beauty",
+          title: "Towels & Bath Shawls",
+          category: "towels",
+          limit: 8,
+          enabled: true,
+        },
+      ];
 
   const getIcon = (key: string) => {
     switch (key) {
@@ -156,27 +156,27 @@ export default function Home() {
     services && services.length > 0
       ? services.slice(0, 4)
       : [
-          {
-            title: "Premium Quality",
-            description: "Soft, durable fabrics selected for everyday comfort.",
-            icon: "shield",
-          },
-          {
-            title: "Fast Delivery",
-            description: "Quick dispatch across Pakistan with safe packaging.",
-            icon: "truck",
-          },
-          {
-            title: "Easy Exchange",
-            description: "Simple return & exchange policy on eligible orders.",
-            icon: "refresh",
-          },
-          {
-            title: "Gift Ready",
-            description: "Perfect for bridal trousseau & special occasions.",
-            icon: "gift",
-          },
-        ];
+        {
+          title: "Premium Quality",
+          description: "Soft, durable fabrics selected for everyday comfort.",
+          icon: "shield",
+        },
+        {
+          title: "Fast Delivery",
+          description: "Quick dispatch across Pakistan with safe packaging.",
+          icon: "truck",
+        },
+        {
+          title: "Easy Exchange",
+          description: "Simple return & exchange policy on eligible orders.",
+          icon: "refresh",
+        },
+        {
+          title: "Gift Ready",
+          description: "Perfect for bridal trousseau & special occasions.",
+          icon: "gift",
+        },
+      ];
 
   return (
     <div className="bg-white dark:bg-slate-950 text-slate-900 dark:text-slate-100 transition-colors duration-300 font-sans">
@@ -317,7 +317,7 @@ function NewArrivalsSection() {
                     {product.name}
                   </h3>
                   <p className="text-xs font-medium text-slate-900 dark:text-slate-50">
-                    Rs. {product.salePrice ?? product.price}
+                    Rs. {Math.round(product.salePrice ?? product.price).toLocaleString()}
                   </p>
                 </div>
               </Link>
@@ -408,7 +408,7 @@ function CategorySection({ config }: CategorySectionProps) {
                     {product.name}
                   </h3>
                   <p className="text-xs font-medium text-gray-900 dark:text-white">
-                    Rs. {product.salePrice ?? product.price}
+                    Rs. {Math.round(product.salePrice ?? product.price).toLocaleString()}
                   </p>
                 </div>
               </Link>

@@ -47,9 +47,9 @@ export default function Header() {
     <header className="fixed top-0 left-0 right-0 z-40 w-full border-b border-gray-200 bg-white shadow-sm dark:border-gray-800 dark:bg-gray-900">
       {/* Promotional Banner (configurable from CMS) */}
       {showTopBanner && (
-        <div className="bg-black text-white py-2.5 px-4 text-xs sm:text-sm font-medium tracking-wide overflow-hidden overflow-x-hidden relative scrollbar-hide">
-          <div className="flex animate-marquee whitespace-nowrap">
-            <span className="text-white/95 inline-block mr-8 sm:mr-12 md:mr-16">{topBannerText}</span>
+        <div className="bg-black text-white py-2 px-4 text-[10px] sm:text-xs font-medium tracking-wide overflow-hidden relative">
+          <div className="flex animate-marquee whitespace-nowrap py-1">
+            <span className="text-white/95 inline-block mr-12">{topBannerText}</span>
             <span className="text-white/95 inline-block mr-8 sm:mr-12 md:mr-16">{topBannerText}</span>
             <span className="text-white/95 inline-block mr-8 sm:mr-12 md:mr-16">{topBannerText}</span>
           </div>
@@ -66,9 +66,9 @@ export default function Header() {
           <Image
             src="/images/logo-brand.png"
             alt="Zebaish Corner"
-            width={160}
-            height={50}
-            className="h-10 w-auto md:h-12 object-contain"
+            width={120}
+            height={40}
+            className="h-8 w-auto sm:h-10 md:h-12 object-contain"
             priority
           />
         </NextLink>
@@ -195,14 +195,14 @@ export default function Header() {
             <UserMenu isOpen={isUserMenuOpen} onClose={() => setIsUserMenuOpen(false)} />
           </div>
 
-          {/* Mobile Menu Button */}
+          {/* Mobile Menu Button - Ensure it's large enough for tapping */}
           <button
-            className="md:hidden"
+            className="md:hidden p-2 -mr-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
             onClick={() => setIsMenuOpen(!isMenuOpen)}
             aria-label="Toggle menu"
           >
             <svg
-              className="h-6 w-6 text-gray-900 dark:text-white"
+              className="h-7 w-7 text-gray-900 dark:text-white"
               fill="none"
               strokeLinecap="round"
               strokeLinejoin="round"

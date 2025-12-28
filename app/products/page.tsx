@@ -428,10 +428,10 @@ export default function Products() {
                               {product.salePrice && product.salePrice < product.price ? (
                                 <>
                                   <p className="text-base font-bold text-gray-900 dark:text-white">
-                                    Rs {product.salePrice.toLocaleString()}
+                                    Rs {Math.round(product.salePrice).toLocaleString()}
                                   </p>
                                   <p className="text-xs text-gray-500 line-through">
-                                    Rs {product.price.toLocaleString()}
+                                    Rs {Math.round(product.price).toLocaleString()}
                                   </p>
                                   <span className="text-[10px] font-bold text-red-600 bg-red-100 px-1.5 py-0.5 rounded-sm dark:bg-red-900/30 dark:text-red-400">
                                     SAVE {Math.round(((product.price - product.salePrice) / product.price) * 100)}%
@@ -439,7 +439,7 @@ export default function Products() {
                                 </>
                               ) : (
                                 <p className="text-base font-bold text-gray-900 dark:text-white">
-                                  Rs {product.price.toLocaleString()}
+                                  Rs {Math.round(product.price).toLocaleString()}
                                 </p>
                               )}
                             </div>

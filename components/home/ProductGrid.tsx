@@ -66,11 +66,11 @@ export default function ProductGrid({ title, products, viewAllLink }: ProductGri
                                 </h3>
                                 <div className="mt-1 flex items-center justify-center gap-2">
                                     <p className="text-sm font-bold text-gray-900 dark:text-white">
-                                        Rs {product.price.toLocaleString()}
+                                        Rs {Math.round(product.price).toLocaleString()}
                                     </p>
                                     {product.oldPrice && (
                                         <p className="text-sm text-gray-500 line-through">
-                                            Rs {product.oldPrice.toLocaleString()}
+                                            Rs {Math.round(product.oldPrice).toLocaleString()}
                                         </p>
                                     )}
                                 </div>

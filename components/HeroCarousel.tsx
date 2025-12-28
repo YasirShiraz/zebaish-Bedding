@@ -59,13 +59,13 @@ export default function HeroCarousel() {
     };
 
     if (loading) {
-        return <div className="h-[600px] w-full bg-gray-900 animate-pulse" />;
+        return <div className="h-[400px] sm:h-[600px] w-full bg-gray-900 animate-pulse" />;
     }
 
     if (slides.length === 0) return null;
 
     return (
-        <div className="relative h-[600px] w-full overflow-hidden bg-gray-900">
+        <div className="relative h-[400px] sm:h-[600px] w-full overflow-hidden bg-gray-900 hover:shadow-2xl transition-shadow duration-500 rounded-2xl sm:rounded-3xl">
             {/* Slides */}
             {slides.map((slide, index) => (
                 <div
@@ -88,10 +88,10 @@ export default function HeroCarousel() {
                     {/* Content */}
                     <div className="relative flex h-full items-center justify-center text-center">
                         <div className="max-w-4xl px-4 sm:px-6 lg:px-8">
-                            <h1 className="text-4xl font-bold tracking-tight text-white sm:text-5xl md:text-6xl drop-shadow-lg animate-fade-in-up font-serif">
+                            <h1 className="text-3xl font-bold tracking-tight text-white sm:text-5xl md:text-6xl drop-shadow-lg animate-fade-in-up font-serif px-2">
                                 {slide.title}
                             </h1>
-                            <p className="mx-auto mt-6 max-w-2xl text-lg text-white/95 drop-shadow-md animate-fade-in-up-delay">
+                            <p className="mx-auto mt-4 max-w-2xl text-base sm:text-lg text-white/95 drop-shadow-md animate-fade-in-up-delay line-clamp-3 sm:line-clamp-none">
                                 {slide.description}
                             </p>
                             <div className="mt-10 flex items-center justify-center gap-x-6 animate-fade-in-up-delay-2">
